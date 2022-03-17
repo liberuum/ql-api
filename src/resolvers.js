@@ -8,6 +8,11 @@ const resolvers = {
             return await dataSources.db.getCoreUnitById(Code)
         }
     },
+    Mutation: {
+        addCoreUnit: async (_, { Code, Name }, { dataSources }) => {
+            return await dataSources.db.addCoreUnit(Code, Name)
+        }
+    }
 }
 
 export default resolvers;
