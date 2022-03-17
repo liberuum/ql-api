@@ -7,6 +7,10 @@ const typeDefs = gql`
         Code: String
         "The name of the Core Unit"
         Name: String
+        "Roadmap ID of Core Unit"
+        Roadmap_ID: String
+        "Roadmap name for Core Unit"
+        Roadmap_Name: String
     }
 
     type Query {

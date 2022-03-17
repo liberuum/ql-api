@@ -12,7 +12,11 @@ class EcosystemDatabase extends SQLDataSource {
     };
 
     getCoreUnitById(code) {
-        return this.knex('Core_Unit').where({ Code: code })
+        return this.knex
+            .select('*')
+            .from('Core_Unit')
+            .where({ Code: code })
+            .join('Roadmap', 'Core_Unit.Code', '=', 'Roadmap.Owner_CU_Code')
     }
 
     addCoreUnit(code, name) {
