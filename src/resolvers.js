@@ -4,13 +4,13 @@ const resolvers = {
         coreUnits: async (_, __, { dataSources }) => {
             return await dataSources.db.getCoreUnits();
         },
-        coreUnit: async (_, { Code }, { dataSources }) => {
-            return await dataSources.db.getCoreUnitById(Code)
+        coreUnit: async (_, { code }, { dataSources }) => {
+            return await dataSources.db.getCoreUnitById(code)
         }
     },
     Mutation: {
-        addCoreUnit: async (_, { Code, Name }, { dataSources }) => {
-            return await dataSources.db.addCoreUnit(Code, Name)
+        addCoreUnit: async (_, { code, name }, { dataSources }) => {
+            return await dataSources.db.addCoreUnit(code, name)
         }
     }
 }

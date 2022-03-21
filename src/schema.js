@@ -3,17 +3,30 @@ import { gql } from 'apollo-server-core'
 const typeDefs = gql`
 
     type CoreUnit {
-        Code: String
-        Name: String
+        code: String
+        name: String
+        # socialMediaChannels: SocialMediaChannels
+    }
+
+    type SocialMediaChannels {
+     id: Int!   
+    }
+
+    # 
+    type BudgetStatement {
+        id: Int!
+        coreUnit: [CoreUnit]
+        # // add all subtypes
     }
 
     type Query {
         coreUnits: [CoreUnit],
-        coreUnit(Code: String): [CoreUnit]
+        coreUnit(code: String): [CoreUnit],
+        budgetStatements(month: String): [BudgetStatement]
     }
 
     type Mutation {
-        addCoreUnit(Code: String, Name: String): String
+        addCoreUnit(code: String, name: String): [CoreUnit]
     }
 `;
 
