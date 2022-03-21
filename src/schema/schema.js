@@ -1,4 +1,14 @@
 import { gql } from 'apollo-server-core'
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import _ from 'lodash'
+import {
+    typeDefs as CoreUnit,
+    resolvers as CoreUnitResolvers
+} from './coreUnit.js';
+import {
+    typeDefs as BudgetStatement,
+    resolvers as BudgetStatementResolvers
+} from './budgetStatement.js'
 
 const typeDefs = gql`
 
@@ -31,4 +41,19 @@ const typeDefs = gql`
     }
 `;
 
-export default typeDefs;
+const Query = gql`
+    type Query
+`
+
+const resolvers = {
+    Query: {
+
+    }
+}
+
+const schema = makeExecutableSchema({
+    typeDefs: [Query, CoreUnit, BudgetStatement],
+    resolvers: _.merge(resolvers, CoreUnitResolvers, BudgetStatementResolvers)
+})
+
+export default schema;
