@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@graphql-tools/schema": "^8.3.3",
     "apollo-server-core": "^3.6.3",
     "apollo-server-express": "^3.6.3",
     "datasource-sql": "^1.6.0",
@@ -22,6 +23,6 @@
     "pg": "^8.7.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "nodemon": "^1.11.1"
   }
 }

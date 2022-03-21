@@ -2,10 +2,11 @@ import { gql } from 'apollo-server-core'
 
 const typeDefs = gql`
 
+    # Root Data Type. From here all other types connect. 
     type CoreUnit {
         code: String
         name: String
-        # socialMediaChannels: SocialMediaChannels
+        socialMediaChannels: SocialMediaChannels
     }
 
     type SocialMediaChannels {
