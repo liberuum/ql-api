@@ -3,7 +3,7 @@ import { gql } from "apollo-server-core";
 export const typeDefs = gql`
 
     type Roadmap {
-        id: Int!
+        id: ID!
         ownerCuCode: String
         roadMapCode: String
         roadMapName: String

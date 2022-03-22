@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-core';
 export const typeDefs = gql`
 
     type BudgetStatement {
-        id: Int!
+        id: ID!
         cuCode: String!
         month: String!
         comments: String
@@ -17,15 +17,15 @@ export const typeDefs = gql`
     } 
 
     type BudgetStatementFTEs {
-        id: Int!
-        budgetStatementId: Int!
+        id: ID!
+        budgetStatementId: ID!
         month: String!
         ftes: Float!
     }
 
     type BudgetStatementMKRVest {
-        id: Int!
-        budgetStatementId: Int!
+        id: ID!
+        budgetStatementId: ID!
         vestingDate: String!
         mkrAmount: Float
         mkrAmountOld: Float
@@ -33,8 +33,8 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementWallet {
-        id: Int!
-        budgetStatementId: Int!
+        id: ID!
+        budgetStatementId: ID!
         name: String
         address: String
         currentBalance: Float
@@ -43,8 +43,8 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementLineItem {
-        id: Int!
-        budgetStatementWalletId: Int!
+        id: ID!
+        budgetStatementWalletId: ID!
         month: String!
         position: Int!
         group: String
@@ -55,8 +55,8 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementPayments {
-        id: Int!
-        budgetStatementWalletId: Int!
+        id: ID!
+        budgetStatementWalletId: ID!
         transactionDate: String!
         transactionId: String
         budgetStatementLineItemId: Int

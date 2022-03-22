@@ -3,7 +3,7 @@ import { gql } from 'apollo-server-core';
 export const typeDefs = gql`
 
     type CoreUnit {
-        id: Int!
+        id: ID!
         code: String
         name: String
         socialMediaChannels: SocialMediaChannels

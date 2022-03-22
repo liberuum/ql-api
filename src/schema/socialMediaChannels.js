@@ -3,7 +3,7 @@ import { gql } from "apollo-server-core";
 export const typeDefs = gql`
 
     type SocialMediaChannels {
-        id: Int!
+        id: ID!
         cuCode: String!
         forumTag: String!
         twiter: String!

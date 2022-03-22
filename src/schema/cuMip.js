@@ -3,9 +3,9 @@ import { gql } from "apollo-server-core";
 export const typeDefs = gql`
 
     type CuMip {
-        id: Int!
+        id: ID!
         mipCode: String!
-        coreUnitId: Int!
+        coreUnitId: ID!
         coreUnitCode: String!
         rfc: String!
         formalSubmission: String!

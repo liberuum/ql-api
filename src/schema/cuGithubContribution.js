@@ -3,10 +3,10 @@ import { gql } from "apollo-server-core";
 export const typeDefs = gql`
 
     type CuGithubContribution {
-        id: Int!
+        id: ID!
         cuCode: String!
-        orgId: Int!
-        repoId: Int
+        orgId: ID!
+        repoId: ID
     }
 
     type Query {

@@ -3,9 +3,9 @@ import { gql } from "apollo-server-core";
 export const typeDefs = gql`
 
     type ContributorCommitment {
-        id: Int!
+        id: ID!
         cuCode: String!
-        contributorId: Int!
+        contributorId: ID!
         startDate: String!
         commitment: COMMITMENT
     }
