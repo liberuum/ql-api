@@ -9,13 +9,59 @@ export const typeDefs = gql`
         comments: String
         budgetStatus: STATUS
         publicationURL: String!
-        coreUnit: [CoreUnit]
     }
 
     enum STATUS {
         DRAFT
         FINAL
     } 
+
+    type BudgetStatementFTEs {
+        id: Int!
+        budgetStatementId: Int!
+        month: String!
+        ftes: Float!
+    }
+
+    type BudgetStatementMKRVest {
+        id: Int!
+        budgetStatementId: Int!
+        vestingDate: String!
+        mkrAmount: Float
+        mkrAmountOld: Float
+        comments: String
+    }
+
+    type BudgetStatementWallet {
+        id: Int!
+        budgetStatementId: Int!
+        name: String
+        address: String
+        currentBalance: Float
+        topupTransfer: Float
+        comments: String
+    }
+
+    type BudgetStatementLineItem {
+        id: Int!
+        budgetStatementWalletId: Int!
+        month: String!
+        position: Int!
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+    }
+
+    type BudgetStatementPayments {
+        id: Int!
+        budgetStatementWalletId: Int!
+        transactionDate: String!
+        transactionId: String
+        budgetStatementLineItemId: Int
+        comments: String
+    }
 
     extend type Query {
         budgetStatements(month: String): [BudgetStatement]
