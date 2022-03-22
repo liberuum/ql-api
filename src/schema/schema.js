@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-core'
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import _ from 'lodash'
+
 import {
     typeDefs as CoreUnit,
     resolvers as CoreUnitResolvers
@@ -8,38 +9,27 @@ import {
 import {
     typeDefs as BudgetStatement,
     resolvers as BudgetStatementResolvers
-} from './budgetStatement.js'
-
-const typeDefs = gql`
-
-    # Root Data Type. From here all other types connect. 
-    type CoreUnit {
-        code: String
-        name: String
-        socialMediaChannels: SocialMediaChannels
-    }
-
-    type SocialMediaChannels {
-     id: Int!   
-    }
-
-    # 
-    type BudgetStatement {
-        id: Int!
-        coreUnit: [CoreUnit]
-        # // add all subtypes
-    }
-
-    type Query {
-        coreUnits: [CoreUnit],
-        coreUnit(code: String): [CoreUnit],
-        budgetStatements(month: String): [BudgetStatement]
-    }
-
-    type Mutation {
-        addCoreUnit(code: String, name: String): [CoreUnit]
-    }
-`;
+} from './budgetStatement.js';
+import {
+    typeDefs as CuMip,
+    resolvers as CuMipResolvers
+} from './cuMip.js';
+import {
+    typeDefs as SocialMediaChannels,
+    resolvers as SocialMediaChannelsResolvers
+} from './socialMediaChannels.js';
+import {
+    typeDefs as ContributorCommitment,
+    resolvers as ContributorCommitmentResolvers
+} from './contributorCommitment.js'
+import {
+    typeDefs as CuGithubContribution,
+    resolvers as CuGithubContributionResolvers
+}from './cuGithubContribution.js'
+import {
+    typeDefs as Roadmap, 
+    resolvers as RoadmapResolvers
+}from './roadmap.js'
 
 const Query = gql`
     type Query
@@ -52,8 +42,26 @@ const resolvers = {
 }
 
 const schema = makeExecutableSchema({
-    typeDefs: [Query, CoreUnit, BudgetStatement],
-    resolvers: _.merge(resolvers, CoreUnitResolvers, BudgetStatementResolvers)
+    typeDefs: [
+        Query,
+        CoreUnit,
+        BudgetStatement,
+        CuMip,
+        SocialMediaChannels,
+        ContributorCommitment,
+        CuGithubContribution,
+        Roadmap
+    ],
+    resolvers: _.merge(
+        resolvers,
+        CoreUnitResolvers,
+        BudgetStatementResolvers,
+        CuMipResolvers,
+        SocialMediaChannelsResolvers,
+        ContributorCommitmentResolvers,
+        CuGithubContributionResolvers,
+        RoadmapResolvers
+    )
 })
 
 export default schema;

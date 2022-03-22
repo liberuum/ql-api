@@ -3,15 +3,15 @@ import { gql } from 'apollo-server-core';
 export const typeDefs = gql`
 
     type CoreUnit {
+        id: Int!
         code: String
         name: String
-        # socialMediaChannels: SocialMediaChannels
+        socialMediaChannels: SocialMediaChannels
     }
 
     extend type Query {
         coreUnits: [CoreUnit],
         coreUnit(code: String): [CoreUnit],
-        # budgetStatements(month: String): [BudgetStatement]
     }
 
     type Mutation {
