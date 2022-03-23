@@ -7,7 +7,7 @@ export const typeDefs = gql`
         ownerCuCode: String
         roadMapCode: String
         roadMapName: String
-        roadMapStatus: STATUS
+        roadMapStatus: RoadmapStatus
     }
 
     enum RoadmapStatus {
