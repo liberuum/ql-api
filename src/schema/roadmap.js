@@ -10,7 +10,7 @@ export const typeDefs = gql`
         roadMapStatus: STATUS
     }
 
-    enum STATUS {
+    enum RoadmapStatus {
         TODO
         INPROGRESS
         DONE

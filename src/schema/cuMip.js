@@ -12,10 +12,10 @@ export const typeDefs = gql`
         accepted: String!
         rejected: String!
         Obsolete: String!
-        mipStataus: STATUS!
+        mipStataus: CuMipStatus!
     }
 
-    enum STATUS {
+    enum CuMipStatus {
         RFC
         FORMAL_SUBMISSION
         ACCEPTED

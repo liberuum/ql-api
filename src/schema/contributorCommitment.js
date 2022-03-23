@@ -7,10 +7,10 @@ export const typeDefs = gql`
         cuCode: String!
         contributorId: ID!
         startDate: String!
-        commitment: COMMITMENT
+        commitment: Commitment
     }
 
-    enum COMMITMENT {
+    enum Commitment {
         FULLTIME
         PARTTIME
         VARIABLE

@@ -7,11 +7,11 @@ export const typeDefs = gql`
         cuCode: String!
         month: String!
         comments: String
-        budgetStatus: STATUS
+        budgetStatus: BudgetStatementStatus
         publicationURL: String!
     }
 
-    enum STATUS {
+    enum BudgetStatementStatus {
         DRAFT
         FINAL
     } 
