@@ -12,6 +12,22 @@ export const typeDefs = gql`
         linkedId: String!
     }
 
+    type TwitterFollowers {
+        id: ID!
+        twitterAccountId: Int!
+        twitterAccount: String!
+        month: String!
+        followerCount: Int!
+    }
+
+    type YoutubeFollowers {
+        id: ID!
+        youtubeId: Int!
+        youtubeAccount: String!
+        month: String!
+        followerCount: Int!
+    }
+
     extend type Query {
         socialMediaChannels: [SocialMediaChannels],
         socialMediaChannels(cuCode: String): [SocialMediaChannels]
