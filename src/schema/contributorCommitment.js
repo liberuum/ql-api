@@ -17,6 +17,15 @@ export const typeDefs = gql`
         INACTIVE
     }
 
+    type Contributor {
+        id: ID!
+        name: String!
+        forumHandle: String!
+        discordHandle: String!
+        twitterHandle: String!
+        email: String!
+    }
+
     type Query {
         contributorCommitments: [ContributorCommitment]
         contributorCommitment(cuCode: String): [ContributorCommitment]
