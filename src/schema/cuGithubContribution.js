@@ -9,6 +9,33 @@ export const typeDefs = gql`
         repoId: ID
     }
 
+    type GithubOrg {
+        id: ID!
+        orgId: Int!
+        org: String!
+        githubUrl: String!
+    }
+
+    type GithubRepo {
+        id: ID!
+        orgId: Int!
+        repo: String!
+        githubUrl: String!
+    }
+
+    type MakerGithubEcosystem {
+        id: ID!
+        makerRepoId: Int!
+        cuGithubRepoId: Int!
+        date: String!
+        url: String!
+        org: Int!
+        repo: Int!
+        uniqueContributors: Int!
+        commits4w: Int!
+        totalStars: Int!
+    }
+
     type Query {
         cuGithubContribution: [CuGithubContribution]
     }
@@ -17,7 +44,7 @@ export const typeDefs = gql`
 
 export const resolvers = {
     Query: {
-        cuGithubContribution: (_, __, {}) => {
+        cuGithubContribution: (_, __, { }) => {
             return null;
         }
     }
