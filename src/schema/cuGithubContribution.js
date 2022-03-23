@@ -6,27 +6,27 @@ export const typeDefs = gql`
         id: ID!
         cuCode: String!
         orgId: ID!
-        repoId: ID
+        repoId: ID!
     }
 
     type GithubOrg {
         id: ID!
-        orgId: Int!
+        orgId: ID!
         org: String!
         githubUrl: String!
     }
 
     type GithubRepo {
         id: ID!
-        orgId: Int!
+        orgId: ID!
         repo: String!
         githubUrl: String!
     }
 
     type MakerGithubEcosystem {
         id: ID!
-        makerRepoId: Int!
-        cuGithubRepoId: Int!
+        makerRepoId: ID!
+        cuGithubRepoId: ID!
         date: String!
         url: String!
         org: Int!

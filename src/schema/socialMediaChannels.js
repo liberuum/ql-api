@@ -14,7 +14,7 @@ export const typeDefs = gql`
 
     type TwitterFollowers {
         id: ID!
-        twitterAccountId: Int!
+        twitterAccountId: ID!
         twitterAccount: String!
         month: String!
         followerCount: Int!
@@ -22,7 +22,7 @@ export const typeDefs = gql`
 
     type YoutubeFollowers {
         id: ID!
-        youtubeId: Int!
+        youtubeId: ID!
         youtubeAccount: String!
         month: String!
         followerCount: Int!

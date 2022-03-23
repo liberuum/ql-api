@@ -19,14 +19,14 @@ export const typeDefs = gql`
 
     type RoadmapStakeholder {
         id: ID!
-        roadMapId: Int!
-        stakeholderRoleId: Int!
+        roadMapId: ID!
+        stakeholderRoleId: ID!
     }
 
     type Stakeholder {
         id: ID!
         name: String!
-        stakeholderContributorId: Int!
+        stakeholderContributorId: ID!
         stakeholderCuCode: String!
     }
 
@@ -38,22 +38,22 @@ export const typeDefs = gql`
     type Output {
         id: ID!
         outPutName: String!
-        roadMapId: Int!
+        roadMapId: ID!
         outputUrl: String!
     }
 
     type Milestone {
         id: ID!
-        roadMapId: Int!
+        roadMapId: ID!
         outputUrl: String!
     }
 
     type Task {
         id: ID!
-        parentId: Int!
+        parentId: ID!
         taskName: String!
         taskStatus: TaskStatus!
-        ownerStakeholderId: Int!
+        ownerStakeholderId: ID!
         startDate: String!
         target: String!
         completedPercentage: Float!
@@ -77,13 +77,13 @@ export const typeDefs = gql`
 
     type TaskOutput {
         id: ID!
-        taskId: Int!
+        taskId: ID!
         outputUrl: String!
     }
 
     type Review {
         id: ID!
-        taskId: Int!
+        taskId: ID!
         reviewDate: String!
         reviewOutcome: ReviewOutcome!
     }
