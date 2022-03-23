@@ -54,7 +54,7 @@ export const typeDefs = gql`
         comments: String
     }
 
-    type BudgetStatementPayments {
+    type BudgetStatementPayment {
         id: ID!
         budgetStatementWalletId: ID!
         transactionDate: String!
