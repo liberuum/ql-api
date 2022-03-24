@@ -21,15 +21,19 @@ import {
 import {
     typeDefs as ContributorCommitment,
     resolvers as ContributorCommitmentResolvers
-} from './contributorCommitment.js'
+} from './contributorCommitment.js';
 import {
     typeDefs as CuGithubContribution,
     resolvers as CuGithubContributionResolvers
-}from './cuGithubContribution.js'
+}from './cuGithubContribution.js';
 import {
     typeDefs as Roadmap, 
     resolvers as RoadmapResolvers
-}from './roadmap.js'
+}from './roadmap.js';
+import {
+    typeDefs as Utils,
+    resolvers as UtilsResolvers
+}from './utilTypes.js';
 
 const Query = gql`
     type Query
@@ -50,7 +54,8 @@ const schema = makeExecutableSchema({
         SocialMediaChannels,
         ContributorCommitment,
         CuGithubContribution,
-        Roadmap
+        Roadmap,
+        Utils,
     ],
     resolvers: _.merge(
         resolvers,
@@ -60,7 +65,8 @@ const schema = makeExecutableSchema({
         SocialMediaChannelsResolvers,
         ContributorCommitmentResolvers,
         CuGithubContributionResolvers,
-        RoadmapResolvers
+        RoadmapResolvers,
+        UtilsResolvers
     )
 })
 
