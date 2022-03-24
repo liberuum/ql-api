@@ -18,6 +18,14 @@ class EcosystemDatabase extends SQLDataSource {
     addCoreUnit(code, name) {
         return this.knex('CoreUnit').insert({ code: code, name: name })
     }
+
+    getBudgetStatements() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatement')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;

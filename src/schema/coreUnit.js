@@ -7,6 +7,7 @@ export const typeDefs = gql`
         code: String
         name: String
         socialMediaChannels: SocialMediaChannels
+        budgetStatement: [BudgetStatement!]
     }
 
     extend type Query {
@@ -24,6 +25,7 @@ export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
         coreUnits: async (_, __, { dataSources }) => {
+            // console.log(await dataSources.db.getBudgetStatements())
             return await dataSources.db.getCoreUnits();
         },
         coreUnit: async (_, { code }, { dataSources }) => {

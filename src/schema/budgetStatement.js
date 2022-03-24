@@ -4,16 +4,17 @@ export const typeDefs = gql`
 
     type BudgetStatement {
         id: ID!
-        cuCode: String!
+        coreUnitId: ID!
         month: String!
         comments: String
         budgetStatus: BudgetStatementStatus
-        publicationURL: String!
+        publicationUrl: String!
+        cuCode: String!
     }
 
     enum BudgetStatementStatus {
-        DRAFT
-        FINAL
+        Final
+        Draft
     } 
 
     type BudgetStatementFTEs {
@@ -64,7 +65,9 @@ export const typeDefs = gql`
     }
 
     extend type Query {
-        budgetStatements(month: String): [BudgetStatement]
+        budgetStatements(month: String): [BudgetStatement!]
+        budgetStatements: [BudgetStatement!]
+    
     }
 
 `;
@@ -72,8 +75,9 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
-        budgetStatements: async (_, __, { }) => {
-            return null
+        budgetStatements: async (_, __, { dataSources }) => {
+            // console.log(await dataSources.db.getBudgetStatements())
+            return await dataSources.db.getBudgetStatements()
         }
 
     }
