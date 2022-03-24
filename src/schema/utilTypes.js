@@ -6,8 +6,18 @@ export const typeDefs = gql`
         message: String!
     }
 
+    extend type Query {
+        currentTime: String!
+    }
+
 `
 
 export const resolvers = {
-    
+    Query: {
+        currentTime: (_, __, { }) => {
+            const isoString = new Date().toISOString();
+            return isoString.slice(11, 19);
+        }
+
+    }
 };

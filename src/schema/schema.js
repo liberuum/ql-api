@@ -25,15 +25,15 @@ import {
 import {
     typeDefs as CuGithubContribution,
     resolvers as CuGithubContributionResolvers
-}from './cuGithubContribution.js';
+} from './cuGithubContribution.js';
 import {
-    typeDefs as Roadmap, 
+    typeDefs as Roadmap,
     resolvers as RoadmapResolvers
-}from './roadmap.js';
+} from './roadmap.js';
 import {
     typeDefs as Utils,
     resolvers as UtilsResolvers
-}from './utilTypes.js';
+} from './utilTypes.js';
 
 const Query = gql`
     type Query
