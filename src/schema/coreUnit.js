@@ -6,8 +6,11 @@ export const typeDefs = gql`
         id: ID!
         code: String
         name: String
-        socialMediaChannels: SocialMediaChannels
-        budgetStatement: [BudgetStatement!]
+    }
+
+    type CoreUnitPayload {
+        errorrs: [Error!]!
+        coreUnit: CoreUnit
     }
 
     extend type Query {
@@ -16,7 +19,12 @@ export const typeDefs = gql`
     }
 
     type Mutation {
-        addCoreUnit(code: String, name: String): [CoreUnit]
+        addCoreUnit(input: CoreUnitInput!): CoreUnitPayload!
+    }
+
+    input CoreUnitInput {
+        code: String!
+        name: String!
     }
 
 `;
@@ -33,8 +41,18 @@ export const resolvers = {
         }
     },
     Mutation: {
-        addCoreUnit: async (_, { code, name }, { dataSources }) => {
-            return await dataSources.db.addCoreUnit(code, name)
+        addCoreUnit: async (_, { input }, { dataSources }) => {
+            let errors;
+            let coreUnit;
+            try {
+                await dataSources.db.addCoreUnit(input.code, input.name)
+                coreUnit = await dataSources.db.getCoreUnitById(input.code);
+                return { errors, coreUnit: coreUnit[0] }
+            } catch (error) {
+                errors = error
+                return { errors, coreUnit: '' }
+            }
+
         }
     }
 };
