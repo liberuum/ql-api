@@ -5,14 +5,15 @@ import http from 'http';
 import dotenv from 'dotenv';
 dotenv.config()
 
-import typeDefs from './schema.js';
-import resolvers from './resolvers.js'
+// import typeDefs from './schema/schema.js';
+// import resolvers from './schema/resolvers.js'
+import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
 
 
 const knexConfig = {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING
+    connection: process.env.PG_CONNECTION_STRING,
 };
 
 
@@ -22,8 +23,7 @@ async function startApolloServer(typeDefs, resolvers) {
     const app = express();
     const httpServer = http.createServer(app);
     const server = new ApolloServer({
-        typeDefs,
-        resolvers,
+        schema,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
         dataSources: () => ({ db })
     });
@@ -34,4 +34,4 @@ async function startApolloServer(typeDefs, resolvers) {
     console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
 };
 
-startApolloServer(typeDefs, resolvers)
+startApolloServer(schema)
