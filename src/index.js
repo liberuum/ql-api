@@ -19,7 +19,7 @@ const knexConfig = {
 
 const db = new EcosystemDatabase(knexConfig);
 
-async function startApolloServer(typeDefs, resolvers) {
+async function startApolloServer() {
     const app = express();
     const httpServer = http.createServer(app);
     const server = new ApolloServer({
