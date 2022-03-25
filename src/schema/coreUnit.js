@@ -7,6 +7,7 @@ export const typeDefs = gql`
         id: ID!
         code: String
         name: String
+        budgetStatements: [BudgetStatement]
     }
 
     type CoreUnitPayload {
@@ -40,7 +41,17 @@ export const resolvers = {
             return await dataSources.db.getCoreUnits();
         },
         coreUnit: async (_, { code }, { dataSources }) => {
-            return await dataSources.db.getCoreUnitById(code)
+            return await dataSources.db.getCoreUnitByCode(code)
+        }
+    },
+    CoreUnit: {
+        budgetStatements: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getBudgetStatements();
+            const budgetStatements = result.filter(statement => {
+                return statement.coreUnitId === id;
+            })
+            return budgetStatements;
         }
     },
     Mutation: {
@@ -57,9 +68,13 @@ export const resolvers = {
             }
         },
 
-        coreUnitDelete: async (_, __, {}) => {
+        coreUnitDelete: async (_, __, { }) => {
             return null;
         }
 
     }
 };
+
+const getBudgetStatementsById = (id) => {
+
+}

@@ -11,7 +11,7 @@ class EcosystemDatabase extends SQLDataSource {
             .cache(MINUTE)
     };
 
-    getCoreUnitById(code) {
+    getCoreUnitByCode(code) {
         return this.knex('CoreUnit').where({ code: code })
     }
 
