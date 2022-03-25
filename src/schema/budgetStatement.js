@@ -95,7 +95,6 @@ export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
         budgetStatements: async (_, __, { dataSources }) => {
-            // console.log(await dataSources.db.getBudgetStatements())
             return await dataSources.db.getBudgetStatements()
         }
 
