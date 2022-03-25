@@ -70,6 +70,25 @@ export const typeDefs = gql`
     
     }
 
+    type BudgetStatementPayload {
+        errors: [Error!]!
+        budgetStatement: BudgetStatement
+    }
+
+    type Mutation {
+        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
+        budgetStatementDelete: ID!
+    }
+
+    input BudgetStatementInput {
+        coreUnitId: ID!
+        month: String!
+        comments: String
+        budgetStatus: BudgetStatementStatus
+        publicationUrl: String!
+        cuCode: String!
+    }
+
 `;
 
 export const resolvers = {
@@ -80,5 +99,13 @@ export const resolvers = {
             return await dataSources.db.getBudgetStatements()
         }
 
+    },
+    Mutation: {
+        budgetStatementAdd: async (_, __, { dataSources }) => {
+            return null;
+        },
+        budgetStatementDelete: async (_, __, { dataSources }) => {
+            return null;
+        }
     }
 }
