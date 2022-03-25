@@ -74,7 +74,3 @@ export const resolvers = {
 
     }
 };
-
-const getBudgetStatementsById = (id) => {
-
-}
