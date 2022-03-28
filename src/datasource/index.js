@@ -26,6 +26,13 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+    getCoreUnitMips() {
+        return this.knex
+            .select('*')
+            .from('CuMip')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;

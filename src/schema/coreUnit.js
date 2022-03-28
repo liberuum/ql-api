@@ -7,7 +7,12 @@ export const typeDefs = gql`
         id: ID!
         code: String
         name: String
+        cuMip: [CuMip]
         budgetStatements: [BudgetStatement]
+        socialMediaChannels: [SocialMediaChannels]
+        contributorCommitment: [ContributorCommitment]
+        cuGithubContribution: [CuGithubContribution]
+        roadMap: [Roadmap]
     }
 
     type CoreUnitPayload {
@@ -52,6 +57,14 @@ export const resolvers = {
                 return statement.coreUnitId === id;
             })
             return budgetStatements;
+        },
+        cuMip: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getCoreUnitMips();
+            const cuMips = result.filter(cuMip => {
+                return cuMip.cuId === id;
+            })
+            return cuMips;
         }
     },
     Mutation: {

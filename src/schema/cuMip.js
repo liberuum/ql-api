@@ -4,23 +4,22 @@ export const typeDefs = gql`
 
     type CuMip {
         id: ID!
-        mipCode: String!
-        coreUnitId: ID!
-        coreUnitCode: String!
-        rfc: String!
-        formalSubmission: String!
-        accepted: String!
-        rejected: String!
-        Obsolete: String!
-        mipStataus: CuMipStatus!
+        mipCode: String
+        cuId: ID
+        rfc: String
+        formalSubmission: String
+        accepted: String
+        rejected: String
+        obsolete: String
+        mipStataus: CuMipStatus
     }
 
     enum CuMipStatus {
         RFC
-        FORMAL_SUBMISSION
-        ACCEPTED
-        REJECTED
-        OBSOLETE
+        FORMAL SUBMISSION
+        Accepted
+        Rejected
+        Obsolete
     }
 
     type Mip39 {
