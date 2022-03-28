@@ -73,6 +73,14 @@ export const resolvers = {
                 return coreUnit.cuId === id;
             })
             return socialMediaChannels;
+        },
+        contributorCommitment: async (parent, __, {dataSources}) => {
+            const {id} = parent;
+            const result = await dataSources.db.getContributorCommitments();
+            const contributorCommitments = result.filter(commitment => {
+                return commitment.cuId === id;
+            })
+            return contributorCommitments;
         }
     },
     Mutation: {

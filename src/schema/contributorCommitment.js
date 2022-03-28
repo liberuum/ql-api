@@ -4,17 +4,18 @@ export const typeDefs = gql`
 
     type ContributorCommitment {
         id: ID!
-        cuCode: String!
+        cuId: ID!
         contributorId: ID!
         startDate: String!
         commitment: Commitment
+        cuCode: String!
     }
 
     enum Commitment {
-        FULLTIME
-        PARTTIME
-        VARIABLE
-        INACTIVE
+        FullTime
+        PartTime
+        Variable
+        Inactive
     }
 
     type Contributor {
