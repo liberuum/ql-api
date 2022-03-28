@@ -4,12 +4,12 @@ export const typeDefs = gql`
 
     type SocialMediaChannels {
         id: ID!
-        cuCode: String!
-        forumTag: String!
-        twiter: String!
-        youtube: String!
-        discord: String!
-        linkedId: String!
+        cuCode: String
+        forumTag: String
+        twiter: String
+        youtube: String
+        discord: String
+        linkedIn: String
     }
 
     type TwitterFollowers {

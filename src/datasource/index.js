@@ -26,10 +26,17 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
-    getCoreUnitMips() {
+    getMips() {
         return this.knex
             .select('*')
             .from('CuMip')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+    getSocialMediaChannels() {
+        return this.knex
+            .select('*')
+            .from('SocialMediaChannels')
             .orderBy('id')
             .cache(MINUTE)
     }

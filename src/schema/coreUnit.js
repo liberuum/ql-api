@@ -60,11 +60,19 @@ export const resolvers = {
         },
         cuMip: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getCoreUnitMips();
+            const result = await dataSources.db.getMips();
             const cuMips = result.filter(cuMip => {
                 return cuMip.cuId === id;
             })
             return cuMips;
+        },
+        socialMediaChannels: async (parent, __, {dataSources}) => {
+            const {id} = parent;
+            const result = await dataSources.db.getSocialMediaChannels();
+            const socialMediaChannels = result.filter(coreUnit => {
+                return coreUnit.cuId === id;
+            })
+            return socialMediaChannels;
         }
     },
     Mutation: {
