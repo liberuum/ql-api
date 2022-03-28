@@ -6,7 +6,7 @@ export const typeDefs = gql`
         id: ID!
         cuCode: String
         forumTag: String
-        twiter: String
+        twitter: String
         youtube: String
         discord: String
         linkedIn: String

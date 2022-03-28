@@ -11,7 +11,7 @@ export const typeDefs = gql`
         accepted: String
         rejected: String
         obsolete: String
-        mipStataus: CuMipStatus
+        mipStatus: CuMipStatus
     }
 
     enum CuMipStatus {
