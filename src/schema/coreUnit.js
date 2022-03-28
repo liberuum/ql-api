@@ -54,7 +54,7 @@ export const resolvers = {
             const { id } = parent;
             const result = await dataSources.db.getBudgetStatements();
             const budgetStatements = result.filter(statement => {
-                return statement.coreUnitId === id;
+                return statement.cuId === id;
             })
             return budgetStatements;
         },

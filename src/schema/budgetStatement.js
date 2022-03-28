@@ -4,7 +4,7 @@ export const typeDefs = gql`
 
     type BudgetStatement {
         id: ID!
-        coreUnitId: ID!
+        cuId: ID!
         month: String!
         comments: String
         budgetStatus: BudgetStatementStatus
@@ -81,7 +81,7 @@ export const typeDefs = gql`
     }
 
     input BudgetStatementInput {
-        coreUnitId: ID!
+        cuId: ID!
         month: String!
         comments: String
         budgetStatus: BudgetStatementStatus
