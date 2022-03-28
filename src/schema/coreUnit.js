@@ -89,6 +89,14 @@ export const resolvers = {
                 return contribution.cuId === id;
             })
             return githubContributions;
+        },
+        roadMap: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getRoadmaps();
+            const roadmaps = result.filter(roadmap => {
+                return roadmap.ownerCuId === id;
+            })
+            return roadmaps;
         }
     },
     Mutation: {

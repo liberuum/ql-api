@@ -54,6 +54,13 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+    getRoadmaps() {
+        return this.knex
+            .select('*')
+            .from('Roadmap')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;

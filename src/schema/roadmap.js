@@ -4,16 +4,17 @@ export const typeDefs = gql`
 
     type Roadmap {
         id: ID!
-        ownerCuCode: String
-        roadMapCode: String
-        roadMapName: String
-        roadMapStatus: RoadmapStatus
+        ownerCuId: ID
+        roadmapCode: String
+        roadmapName: String
+        comments: String
+        roadmapStatus: RoadmapStatus
     }
 
     enum RoadmapStatus {
-        TODO
-        INPROGRESS
-        DONE
+        Todo
+        InProgress
+        Done
     }
 
 
