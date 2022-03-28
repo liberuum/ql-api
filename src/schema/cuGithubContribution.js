@@ -4,21 +4,19 @@ export const typeDefs = gql`
 
     type CuGithubContribution {
         id: ID!
-        cuCode: String!
-        orgId: ID!
-        repoId: ID!
+        cuId: ID!
+        orgId: ID
+        repoId: ID
     }
 
     type GithubOrg {
         id: ID!
-        orgId: ID!
         org: String!
         githubUrl: String!
     }
 
     type GithubRepo {
         id: ID!
-        orgId: ID!
         repo: String!
         githubUrl: String!
     }

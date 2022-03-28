@@ -47,6 +47,13 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+    getCuGithubContributions() {
+        return this.knex
+            .select('*')
+            .from('ContributorCommitment')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;

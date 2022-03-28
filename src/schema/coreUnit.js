@@ -66,21 +66,29 @@ export const resolvers = {
             })
             return cuMips;
         },
-        socialMediaChannels: async (parent, __, {dataSources}) => {
-            const {id} = parent;
+        socialMediaChannels: async (parent, __, { dataSources }) => {
+            const { id } = parent;
             const result = await dataSources.db.getSocialMediaChannels();
             const socialMediaChannels = result.filter(coreUnit => {
                 return coreUnit.cuId === id;
             })
             return socialMediaChannels;
         },
-        contributorCommitment: async (parent, __, {dataSources}) => {
-            const {id} = parent;
+        contributorCommitment: async (parent, __, { dataSources }) => {
+            const { id } = parent;
             const result = await dataSources.db.getContributorCommitments();
             const contributorCommitments = result.filter(commitment => {
                 return commitment.cuId === id;
             })
             return contributorCommitments;
+        },
+        cuGithubContribution: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getCuGithubContributions();
+            const githubContributions = result.filter(contribution => {
+                return contribution.cuId === id;
+            })
+            return githubContributions;
         }
     },
     Mutation: {
