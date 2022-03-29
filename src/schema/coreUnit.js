@@ -22,7 +22,7 @@ export const typeDefs = gql`
 
     extend type Query {
         coreUnits: [CoreUnit],
-        coreUnit(code: String): [CoreUnit],
+        coreUnit(filter: CoreUnitFilter): [CoreUnit],
     }
 
     # Using form <model>Action e.g. coreUnitAdd for better grouping in the API browser
@@ -36,6 +36,12 @@ export const typeDefs = gql`
         name: String!
     }
 
+    input CoreUnitFilter {
+        id: ID
+        code: String
+        name: String
+    }
+
 `;
 
 export const resolvers = {
@@ -45,8 +51,14 @@ export const resolvers = {
             // console.log(await dataSources.db.getBudgetStatements())
             return await dataSources.db.getCoreUnits();
         },
-        coreUnit: async (_, { code }, { dataSources }) => {
-            return await dataSources.db.getCoreUnitByCode(code)
+        coreUnit: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getCoreUnit(paramName, paramValue)
         }
     },
     CoreUnit: {
