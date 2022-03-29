@@ -61,6 +61,13 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+    getContributors() {
+        return this.knex
+            .select('*')
+            .from('Contributor')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;

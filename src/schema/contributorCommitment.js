@@ -9,6 +9,7 @@ export const typeDefs = gql`
         startDate: String!
         commitment: Commitment
         cuCode: String!
+        contributor: [Contributor]
     }
 
     enum Commitment {
@@ -39,8 +40,18 @@ export const resolvers = {
         contributorCommitments: async (_, __, { }) => {
             return null;
         },
-        contributorCommitment: async (_, {cuCode}, {}) => {
+        contributorCommitment: async (_, { cuCode }, { }) => {
             return null;
+        }
+    },
+    ContributorCommitment: {
+        contributor: async (parent, __, { dataSources }) => {
+            const { contributorId } = parent;
+            const result = await dataSources.db.getContributors();
+            const contributor = result.filter(contributor => {
+                return contributor.id === contributorId
+            })
+            return contributor;
         }
     }
 }
