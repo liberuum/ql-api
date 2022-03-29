@@ -10,6 +10,9 @@ export const typeDefs = gql`
         budgetStatus: BudgetStatementStatus
         publicationUrl: String!
         cuCode: String!
+        budgetStatementFTEs: [BudgetStatementFTEs]
+        budgetStatementMKRVest: [BudgetStatementMKRVest]
+        budgetStatementWallet: [BudgetStatementWallet]
     }
 
     enum BudgetStatementStatus {
@@ -41,6 +44,9 @@ export const typeDefs = gql`
         currentBalance: Float
         topupTransfer: Float
         comments: String
+        budgetStatementLineItem: [BudgetStatementLineItem]
+        budgetStatementPayment: [BudgetStatementPayment]
+
     }
 
     type BudgetStatementLineItem {
@@ -65,7 +71,7 @@ export const typeDefs = gql`
     }
 
     extend type Query {
-        budgetStatements(month: String): [BudgetStatement!]
+        budgetStatement(filter: BudgetStatementFilter): [BudgetStatement]
         budgetStatements: [BudgetStatement!]
     
     }
@@ -89,6 +95,16 @@ export const typeDefs = gql`
         cuCode: String!
     }
 
+    input BudgetStatementFilter {
+        id: ID
+        cuId: ID
+        month: String
+        comments: String
+        budgetStatus: BudgetStatementStatus
+        publicationUrl: String
+        cuCode: String
+    }
+
 `;
 
 export const resolvers = {
@@ -96,7 +112,19 @@ export const resolvers = {
         // coreUnits: (parent, args, context, info) => {}
         budgetStatements: async (_, __, { dataSources }) => {
             return await dataSources.db.getBudgetStatements()
+        },
+        budgetStatement: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getBudgetStatement(paramName, paramValue)
         }
+
+    },
+    BudgetStatement: {
 
     },
     Mutation: {
