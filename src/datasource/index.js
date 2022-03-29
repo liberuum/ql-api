@@ -47,6 +47,9 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+    getContributorCommitment(paramName, paramValue){
+        return this.knex('ContributorCommitment').where(`${paramName}`, paramValue)
+    }
     getCuGithubContributions() {
         return this.knex
             .select('*')

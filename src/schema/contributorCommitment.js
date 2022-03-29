@@ -30,18 +30,34 @@ export const typeDefs = gql`
 
     type Query {
         contributorCommitments: [ContributorCommitment]
-        contributorCommitment(cuCode: String): [ContributorCommitment]
+        contributorCommitment(filter: ContributorCommitmentFilter): [ContributorCommitment]
+    }
+
+    "Choose only one parameter from this list. Here you have the versatility of choosing the right argument according to your needs"
+    input ContributorCommitmentFilter {
+        id: ID
+        cuId: ID
+        contributorId: ID
+        startDate: String
+        commitment: Commitment
+        cuCode: String
     }
 
 `;
 
 export const resolvers = {
     Query: {
-        contributorCommitments: async (_, __, { }) => {
-            return null;
+        contributorCommitments: async (_, __, { dataSources }) => {
+            return await dataSources.db.getContributorCommitments();
         },
-        contributorCommitment: async (_, { cuCode }, { }) => {
-            return null;
+        contributorCommitment: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getContributorCommitment(paramName, paramValue)
         }
     },
     ContributorCommitment: {
