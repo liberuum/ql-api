@@ -29,6 +29,67 @@ class EcosystemDatabase extends SQLDataSource {
     getBudgetStatement(paramName, paramValue) {
         return this.knex('BudgetStatement').where(`${paramName}`, paramValue)
     }
+
+    getBudgetStatementFTEs() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatementFtes')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getBudgetStatementFTE(paramName, paramValue) {
+        return this.knex('BudgetStatementFtes').where(`${paramName}`, paramValue)
+    }
+
+    getBudgetStatementMKRVests() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatementMkrVest')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getBudgetStatementMKRVest(paramName, paramValue) {
+        return this.knex('BudgetStatementMkrVest').where(`${paramName}`, paramValue)
+    }
+
+    getBudgetStatementWallets() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatementWallet')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getBudgetStatementWallet(paramName, paramValue) {
+        return this.knex('BudgetStatementWallet').where(`${paramName}`, paramValue)
+    }
+
+    getBudgetStatementLineItems() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatementLineItem')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getBudgetStatementLineItem(paramName, paramValue) {
+        return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue)
+    }
+
+    getBudgetStatementPayments() {
+        return this.knex
+            .select('*')
+            .from('BudgetStatementPayment')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getBudgetStatementPayment(paramName, paramValue) {
+        return this.knex('BudgetStatementPayment').where(`${paramName}`, paramValue)
+    }
+
     getMips() {
         return this.knex
             .select('*')
