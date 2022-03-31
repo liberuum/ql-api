@@ -3,15 +3,25 @@ import { gql } from 'apollo-server-core';
 export const typeDefs = gql`
 
     type BudgetStatement {
+        "Auto generated id field"
         id: ID!
+        "Auto generated id field from Core Unit table"
         cuId: ID!
+        "Month of corresponding budget statement"
         month: String!
+        "Optional comments field"
         comments: String
+        "Status of the budgest statement (Draft/Final)"
         budgetStatus: BudgetStatementStatus
+        "Link to the complete publication of the budget statement"
         publicationUrl: String!
+        "Core Unit code as defined with the Core Units' MIP39"
         cuCode: String!
+        "Number of full-time employees in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
+        "Details on the amount of MKR vested in the corresponding budget statement"
         budgetStatementMKRVest: [BudgetStatementMKRVest]
+        "Details on the wallets used for budget statement wallets"
         budgetStatementWallet: [BudgetStatementWallet]
     }
 
