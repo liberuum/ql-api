@@ -38,14 +38,17 @@ export const typeDefs = gql`
     type Mip40 { 
         id: ID!
         cuMipId: ID!
+        mip40BudgetPeriod: [Mip40BudgetPeriod]
+        mip40Wallet: [Mip40Wallet]
     }
 
     type Mip40BudgetPeriod {
         id: ID!
-        mip40Spn: Int!
+        mip40Id: ID!
         budgetPeriodStart: String!
         budgetPeriodEnd: String!
         ftes: Int!
+        mip40BudgetLineItem: [Mip40BudgetLineItem]
     }
 
     type Mip40BudgetLineItem {
@@ -58,12 +61,12 @@ export const typeDefs = gql`
 
     type Mip40Wallet {
         id: ID!
-        mip40Spn: Int!
+        mip40Id: ID!
         address: String!
         name: String!
         signersTotal: Int!
         signersRequired: Int!
-        clawBackLimit: Float!
+        clawbackLimit: Float
     }
 
     type Mip41 {
@@ -88,9 +91,72 @@ export const typeDefs = gql`
         mipStatus: CuMipStatus
     }
 
+    input Mip39Filter {
+        id: ID
+        mipId: ID
+        mip39Spn: Int
+        mipCode: String
+        cuName: String
+        sentenceSummary: String
+        paragraphSummary: String
+    }
+
+    input Mip40Filter {
+        id: ID
+        cuMipId: ID
+    }
+
+    input Mip40BudgetPeriodFilter {
+        id: ID
+        mip40Id: ID
+        budgetPeriodStart: String
+        budgetPeriodEnd: String
+        ftes: Int
+    }
+
+    input Mip40BudgetLineItemFilter {
+        id: ID
+        budgetPeriodId: ID
+        position: Int
+        budgetCategory: String
+        budgetCap: Float
+    }
+
+    input Mip40WalletFilter{
+        id: ID
+        mip40Id: ID
+        address: String
+        name: String
+        signersTotal: Int
+        signersRequired: Int
+        clawbackLimit: Float
+    }
+
+    input Mip41Filter {
+        id: ID
+        cuMipId: ID
+        facilitatorName: String
+        discordHandle: String
+        twitterHandle: String
+        forumHandle: String
+        github: String
+    }
+
     extend type Query {
         cuMips: [CuMip]
         cuMip(filter: CuMipFilter): [CuMip]
+        mip39s: [Mip39]
+        mip39(filter: Mip39Filter): [Mip39]
+        mip40s: [Mip40]
+        mip40(filter: Mip40Filter): [Mip40]
+        mip40BudgetPeriods: [Mip40BudgetPeriod]
+        mip40BudgetPeriod(filter: Mip40BudgetPeriodFilter): [Mip40BudgetPeriod]
+        mip40BudgetLineItems: [Mip40BudgetLineItem]
+        mip40BudgetLineItem(filter: Mip40BudgetLineItemFilter): [Mip40BudgetLineItem]
+        mip40Wallets: [Mip40Wallet]
+        mip40Wallet(filter: Mip40WalletFilter): [Mip40Wallet]
+        mip41s: [Mip41],
+        mip41(filter: Mip41Filter): [Mip41]
     }
 `;
 
@@ -109,6 +175,78 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getMip(paramName, paramValue)
         },
+        mip39s: async (_, __, { dataSources }) => {
+            return await dataSources.db.getMip39s()
+        },
+        mip39: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip39(paramName, paramValue)
+        },
+        mip40s: async (_, __, { dataSources }) => {
+            return dataSources.db.getMip40s()
+        },
+        mip40: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip40(paramName, paramValue)
+        },
+        mip40BudgetPeriods: async (_, __, { dataSources }) => {
+            return dataSources.db.getMip40BudgetPeriods()
+        },
+        mip40BudgetPeriod: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip40BudgetPeriod(paramName, paramValue)
+        },
+        mip40BudgetLineItems: async (_, __, { dataSources }) => {
+            return await dataSources.db.getMip40BudgetLineItems()
+        },
+        mip40BudgetLineItem: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip40BudgetLineItem(paramName, paramValue)
+        },
+        mip40Wallets: async (_, __, { dataSources }) => {
+            return await dataSources.db.getMip40Wallets()
+        },
+        mip40Wallet: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip40Wallet(paramName, paramValue)
+        },
+        mip41s: async (_, __, { dataSources }) => {
+            return await dataSources.db.getMip41s()
+        },
+        mip41: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMip41(paramName, paramValue)
+        }
 
     },
     CuMip: {
@@ -135,6 +273,35 @@ export const resolvers = {
                 return mip.cuMipId === id;
             })
             return mips;
+
+        }
+    },
+    Mip40: {
+        mip40BudgetPeriod: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getMip40BudgetPeriods();
+            const mip40BudgetPeriods = result.filter(budgetPeriod => {
+                return budgetPeriod.mip40Id === id;
+            })
+            return mip40BudgetPeriods;
+        },
+        mip40Wallet: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getMip40Wallets();
+            const mip40Wallets = result.filter(mip40wallet => {
+                return mip40wallet.mip40Id === id;
+            })
+            return mip40Wallets;
+        }
+    },
+    Mip40BudgetPeriod: {
+        mip40BudgetLineItem: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getMip40BudgetLineItems()
+            const lineItems = result.filter(lineItem => {
+                return lineItem.budgetPeriodId === id;
+            })
+            return lineItems;
 
         }
     }

@@ -110,6 +110,10 @@ class EcosystemDatabase extends SQLDataSource {
             .cache(MINUTE)
     }
 
+    getMip39(paramName, paramValue) {
+        return this.knex('Mip39').where(`${paramName}`, paramValue)
+    }
+
     getMip40s() {
         return this.knex
             .select('*')
@@ -118,12 +122,56 @@ class EcosystemDatabase extends SQLDataSource {
             .cache(MINUTE)
     }
 
+    getMip40(paramName, paramValue) {
+        return this.knex('Mip40').where(`${paramName}`, paramValue)
+    }
+
+    getMip40BudgetPeriods() {
+        return this.knex
+            .select('*')
+            .from('Mip40BudgetPeriod')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMip40BudgetPeriod(paramName, paramValue) {
+        return this.knex('Mip40BudgetPeriod').where(`${paramName}`, paramValue)
+    }
+
+    getMip40Wallets() {
+        return this.knex
+            .select('*')
+            .from('Mip40Wallet')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMip40Wallet(paramName, paramValue) {
+        return this.knex('Mip40Wallet').where(`${paramName}`, paramValue)
+    }
+
+    getMip40BudgetLineItems() {
+        return this.knex
+            .select('*')
+            .from('Mip40BudgetLineItem')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMip40BudgetLineItem(paramName, paramValue) {
+        return this.knex('Mip40BudgetLineItem').where(`${paramName}`, paramValue)
+    }
+
     getMip41s() {
         return this.knex
             .select('*')
             .from('Mip41')
             .orderBy('id')
             .cache(MINUTE)
+    }
+
+    getMip41(paramName, paramValue) {
+        return this.knex('Mip41').where(`${paramName}`, paramValue)
     }
 
     getSocialMediaChannels() {
