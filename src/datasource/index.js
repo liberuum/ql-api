@@ -199,10 +199,15 @@ class EcosystemDatabase extends SQLDataSource {
     getCuGithubContributions() {
         return this.knex
             .select('*')
-            .from('ContributorCommitment')
+            .from('CuGithubContribution')
             .orderBy('id')
             .cache(MINUTE)
     }
+
+    getCuGithubContribution(paramName, paramValue) {
+        return this.knex('CuGithubContribution').where(`${paramName}`, paramValue)
+    }
+
     getRoadmaps() {
         return this.knex
             .select('*')
@@ -220,6 +225,42 @@ class EcosystemDatabase extends SQLDataSource {
 
     getContributor(paramName, paramValue) {
         return this.knex('Contributor').where(`${paramName}`, paramValue)
+    }
+
+    getGithubOrgs() {
+        return this.knex
+            .select('*')
+            .from('GithubOrg')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getGithubOrg(paramName, paramValue) {
+        return this.knex('GithubOrg').where(`${paramName}`, paramValue)
+    }
+
+    getGithubRepos() {
+        return this.knex
+            .select('*')
+            .from('GithubRepo')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getGithubRepo(paramName, paramValue) {
+        return this.knex('GithubRepo').where(`${paramName}`, paramValue)
+    }
+
+    getMakerGithubEcosystemAll() {
+        return this.knex
+            .select('*')
+            .from('MakerGithubEcosystem')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMakerGithubEcosystem(paramName, paramValue) {
+        return this.knex('MakerGithubEcosystem').where(`${paramName}`, paramValue)
     }
 }
 
