@@ -181,6 +181,11 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+
+    getSocialMediaChannel(paramName, paramValue) {
+        return this.knex('SocialMediaChannels').where(`${paramName}`, paramValue)
+    }
+
     getContributorCommitments() {
         return this.knex
             .select('*')
