@@ -97,6 +97,35 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+
+    getMip(paramName, paramValue) {
+        return this.knex('CuMip').where(`${paramName}`, paramValue)
+    }
+
+    getMip39s() {
+        return this.knex
+            .select('*')
+            .from('Mip39')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMip40s() {
+        return this.knex
+            .select('*')
+            .from('Mip40')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMip41s() {
+        return this.knex
+            .select('*')
+            .from('Mip41')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
     getSocialMediaChannels() {
         return this.knex
             .select('*')
