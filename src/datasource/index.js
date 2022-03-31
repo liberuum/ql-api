@@ -217,6 +217,10 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+
+    getContributor(paramName, paramValue) {
+        return this.knex('Contributor').where(`${paramName}`, paramValue)
+    }
 }
 
 export default EcosystemDatabase;
