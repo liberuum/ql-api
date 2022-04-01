@@ -215,6 +215,63 @@ class EcosystemDatabase extends SQLDataSource {
             .orderBy('id')
             .cache(MINUTE)
     }
+
+    getRoadmap(paramName, paramValue) {
+        return this.knex('Roadmap').where(`${paramName}`, paramValue)
+    }
+
+    getRoadmapStakeholders() {
+        return this.knex
+            .select('*')
+            .from('RoadmapStakeholder')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getRoadmapStakeholder(paramName, paramValue) {
+        return this.knex('RoadmapStakeholder').where(`${paramName}`, paramValue)
+    }
+
+    getStakeholderRoles() {
+        return this.knex
+            .select('*')
+            .from('StakeholderRole')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getStakeholderRole(paramName, paramValue) {
+        return this.knex('StakeholderRole').where(`${paramName}`, paramValue)
+    }
+
+    getStakeholders() {
+        return this.knex
+            .select('*')
+            .from('Stakeholder')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getStakeholder(paramName, paramValue) {
+        return this.knex('Stakeholder').where(`${paramName}`, paramValue)
+    }
+
+    getOutputs() {
+        return this.knex
+            .select('*')
+            .from('Output')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMilestones() {
+        return this.knex
+            .select('*')
+            .from('Milestone')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
     getContributors() {
         return this.knex
             .select('*')
