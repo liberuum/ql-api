@@ -134,11 +134,21 @@ export const resolvers = {
         }
     },
     CuGithubContribution: {
-        githubOrg: async (_, __, { dataSources }) => {
-            return await dataSources.db.getGithubOrgs()
+        githubOrg: async (parent, __, { dataSources }) => {
+            const { orgId } = parent;
+            const result = await dataSources.db.getGithubOrgs();
+            const githubOrgs = result.filter(githubOrg => {
+                return githubOrg.id === orgId
+            })
+            return githubOrgs
         },
-        githubRepo: async (_, __, { dataSources }) => {
-            return await dataSources.db.getGithubRepos()
+        githubRepo: async (parent, __, { dataSources }) => {
+            const { repoId } = parent;
+            const result = await dataSources.db.getGithubRepos();
+            const githubRepos = result.filter(githubRepo => {
+                return githubRepo.id === repoId
+            })
+            return githubRepos;
         }
 
 
