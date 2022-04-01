@@ -53,33 +53,34 @@ export const typeDefs = gql`
         id: ID!
         roadmapId: ID!
         taskId: ID!
+        task: [Task]
     }
 
     type Task {
         id: ID!
-        parentId: ID!
-        taskName: String!
-        taskStatus: TaskStatus!
-        ownerStakeholderId: ID!
-        startDate: String!
-        target: String!
-        completedPercentage: Float!
-        confidenceLevel: ConfidenceLevel!
-        comments: String!
+        parentId: ID
+        taskName: String
+        taskStatus: TaskStatus
+        ownerStakeholderId: ID
+        startDate: String
+        target: String
+        completedPercentage: Float
+        confidenceLevel: ConfidenceLevel
+        comments: String
     }
 
     enum TaskStatus {
-        TO_DO
-        IN_PROGRESS
-        DONE
-        WONT_DO
-        BLOCKED
+        ToDo
+        InProgress
+        Done
+        WontDo
+        Blocked
     }
     
     enum ConfidenceLevel {
-        HIGH
-        MEDIUM
-        LOW
+        High
+        Medium
+        Low
     }
 
     type TaskOutput {
@@ -147,6 +148,7 @@ export const typeDefs = gql`
         stakeholderRole(filter: StakeholderRoleFilter): [StakeholderRole]
         outputs: [Output]
         output(filter: OutputFilter): [Output]
+        milestones: [Milestone]
     }
 
 `;
@@ -212,7 +214,11 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getOutput(paramName, paramValue);
+        },
+        milestones: async (_, __, { dataSources }) => {
+            return dataSources.db.getMilestones()
         }
+
 
     },
     Roadmap: {
@@ -259,6 +265,16 @@ export const resolvers = {
                 return roadmapStakeholder.stakeholderId === id;
             });
             return roadmapStakeholders
+        }
+    },
+    Milestone: {
+        task: async (parent, __, { dataSources }) => {
+            const { taskId } = parent;
+            const result = await dataSources.db.getTasks()
+            const tasks = result.filter(task => {
+                return task.id === taskId;
+            })
+            return tasks;
         }
     }
 }

@@ -323,6 +323,14 @@ class EcosystemDatabase extends SQLDataSource {
     getMakerGithubEcosystem(paramName, paramValue) {
         return this.knex('MakerGithubEcosystem').where(`${paramName}`, paramValue)
     }
+
+    getTasks() {
+        return this.knex
+            .select('*')
+            .from('Task')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
 }
 
 export default EcosystemDatabase;
