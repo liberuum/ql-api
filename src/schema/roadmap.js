@@ -129,6 +129,13 @@ export const typeDefs = gql`
         stakeholderRoleName: String
     }
 
+    input OutputFilter {
+        id: ID
+        name: String
+        roadmapId: ID
+        outputUrl: String
+    }
+
     type Query {
         roadmaps: [Roadmap]
         roadmap(filter: RoadmapFilter): [Roadmap]
@@ -138,6 +145,8 @@ export const typeDefs = gql`
         stakeholder(filter: StakeholderFilter): [Stakeholder]
         stakeholderRoles: [StakeholderRole]
         stakeholderRole(filter: StakeholderRoleFilter): [StakeholderRole]
+        outputs: [Output]
+        output(filter: OutputFilter): [Output]
     }
 
 `;
@@ -191,6 +200,18 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getStakeholderRole(paramName, paramValue);
+        },
+        outputs: async (_, __, { dataSources }) => {
+            return await dataSources.db.getOutputs()
+        },
+        output: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getOutput(paramName, paramValue);
         }
 
     },

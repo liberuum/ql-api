@@ -264,6 +264,10 @@ class EcosystemDatabase extends SQLDataSource {
             .cache(MINUTE)
     }
 
+    getOutput(paramName, paramValue) {
+        return this.knex('Output').where(`${paramName}`, paramValue)
+    }
+
     getMilestones() {
         return this.knex
             .select('*')
