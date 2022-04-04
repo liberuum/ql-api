@@ -15,6 +15,7 @@ export const typeDefs = gql`
         budgetStatements: [BudgetStatement]
         "Access details on the social media channels of a Core Unit"
         socialMediaChannels: [SocialMediaChannels]
+        "Work basis of the FTE's within a Core Unit, use this field to access details of the FTE's contributing to a Core Unit"
         contributorCommitment: [ContributorCommitment]
         "Access details on the relevant GitHub contributions of a Core Unit"
         cuGithubContribution: [CuGithubContribution]
