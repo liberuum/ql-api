@@ -19,6 +19,10 @@ const knexConfig = {
 
 const db = new EcosystemDatabase(knexConfig);
 
+const options = {
+    port: process.env.PORT || 4000
+}
+
 async function startApolloServer() {
     const app = express();
     const httpServer = http.createServer(app);
@@ -30,8 +34,8 @@ async function startApolloServer() {
 
     await server.start();
     server.applyMiddleware({ app });
-    await new Promise(resolve => httpServer.listen({ port: 4000 }, resolve));
-    console.log(`Server ready at http://localhost:4000${server.graphqlPath}`)
+    await new Promise(resolve => httpServer.listen(options, resolve));
+    console.log(`Server ready at http://localhost:${options.port}${server.graphqlPath}`)
 };
 
 startApolloServer(schema)
