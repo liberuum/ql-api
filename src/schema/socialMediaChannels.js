@@ -28,22 +28,36 @@ export const typeDefs = gql`
         followerCount: Int!
     }
 
+    input SocialMediaChannelsFilter {
+        id: ID
+        cuCode: String
+        forumTag: String
+        twitter: String
+        youtube: String
+        discord: String
+        linkedIn: String
+    }
+
     extend type Query {
         socialMediaChannels: [SocialMediaChannels],
-        socialMediaChannels(cuCode: String): [SocialMediaChannels]
+        socialMediaChannel(filter: SocialMediaChannelsFilter): [SocialMediaChannels]
     }
 
 `;
 
 export const resolvers = {
     Query: {
-        socialMediaChannels: async (_, __, {}) => {
-            // return all social media channels from every cu
-            return null
+        socialMediaChannels: async (_, __, { dataSources }) => {
+            return await dataSources.db.getSocialMediaChannels()
         },
-        socialMediaChannels: async (_, {cuCode}, { }) => {
-            // return social media channels of cuCode
-            return null
+        socialMediaChannel: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose only one parameter"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getSocialMediaChannel(paramName, paramValue)
         }
     }
 }

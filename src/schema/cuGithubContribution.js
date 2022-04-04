@@ -4,9 +4,11 @@ export const typeDefs = gql`
 
     type CuGithubContribution {
         id: ID!
-        cuId: ID!
+        cuId: ID
         orgId: ID
         repoId: ID
+        githubOrg: [GithubOrg]
+        githubRepo: [GithubRepo]
     }
 
     type GithubOrg {
@@ -34,16 +36,121 @@ export const typeDefs = gql`
         totalStars: Int!
     }
 
+    input CuGithubContributionFilter {
+        id: ID!
+        cuId: ID
+        orgId: ID
+        repoId: ID
+    }
+
+    input GithubOrgFilter {
+        id: ID
+        org: String
+        githubUrl: String
+    }
+
+    input GithubRepoFilter {
+        id: ID
+        repo: String
+        githubUrl: String
+    }
+
+    input MakerGithubEcosystemFilter {
+        id: ID
+        makerRepoId: ID
+        cuGithubRepoId: ID
+        date: String
+        url: String
+        org: Int
+        repo: Int
+        uniqueContributors: Int
+        commits4w: Int
+        totalStars: Int
+    }
+
     type Query {
-        cuGithubContribution: [CuGithubContribution]
+        cuGithubContributions: [CuGithubContribution]
+        cuGithubContribution(filter: CuGithubContributionFilter): [CuGithubContribution]
+        githubOrgs: [GithubOrg]
+        githubOrg(filter: GithubOrgFilter): [GithubOrg]
+        githubRepos: [GithubRepo]
+        githubRepo(filter: GithubRepoFilter): [GithubRepo]
+        makerGithubEcosystemAll: [MakerGithubEcosystem]
+        makerGithubEcosystem(filter: MakerGithubEcosystemFilter): [MakerGithubEcosystem]
+
     }
 
 `;
 
 export const resolvers = {
     Query: {
-        cuGithubContribution: (_, __, { }) => {
-            return null;
+        cuGithubContributions: async (_, __, { dataSources }) => {
+            return await dataSources.db.getCuGithubContributions()
+        },
+        cuGithubContribution: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getCuGithubContribution(paramName, paramValue)
+        },
+        githubOrgs: async (_, __, { dataSources }) => {
+            return dataSources.db.getGithubOrgs()
+        },
+        githubOrg: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getGithubOrg(paramName, paramValue)
+        },
+        githubRepos: async (_, __, { dataSources }) => {
+            return await dataSources.db.getGithubRepos()
+        },
+        githubRepo: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getGithubRepo(paramName, paramValue)
+        },
+        makerGithubEcosystemAll: async (_, __, { dataSources }) => {
+            return await dataSources.db.getMakerGithubEcosystemAll()
+        },
+        makerGithubEcosystem: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMakerGithubEcosystem(paramName, paramValue)
         }
+    },
+    CuGithubContribution: {
+        githubOrg: async (parent, __, { dataSources }) => {
+            const { orgId } = parent;
+            const result = await dataSources.db.getGithubOrgs();
+            const githubOrgs = result.filter(githubOrg => {
+                return githubOrg.id === orgId
+            })
+            return githubOrgs
+        },
+        githubRepo: async (parent, __, { dataSources }) => {
+            const { repoId } = parent;
+            const result = await dataSources.db.getGithubRepos();
+            const githubRepos = result.filter(githubRepo => {
+                return githubRepo.id === repoId
+            })
+            return githubRepos;
+        }
+
+
     }
 }
