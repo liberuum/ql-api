@@ -117,7 +117,7 @@ export const resolvers = {
             let coreUnit;
             try {
                 await dataSources.db.addCoreUnit(input.code, input.name)
-                coreUnit = await dataSources.db.getCoreUnitById(input.code);
+                coreUnit = await dataSources.db.getCoreUnit('code', input.code)
                 return { errors, coreUnit: coreUnit[0] }
             } catch (error) {
                 errors = error
