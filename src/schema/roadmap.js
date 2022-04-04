@@ -67,6 +67,8 @@ export const typeDefs = gql`
         completedPercentage: Float
         confidenceLevel: ConfidenceLevel
         comments: String
+        taskOutput: [TaskOutput]
+        review: [Review]
     }
 
     enum TaskStatus {
@@ -97,9 +99,9 @@ export const typeDefs = gql`
     }
 
     enum ReviewOutcome {
-        RED
-        YELLOW
-        GREEN
+        Red
+        Yellow
+        Green
     }
 
     input RoadmapFilter {
@@ -137,6 +139,37 @@ export const typeDefs = gql`
         outputUrl: String
     }
 
+    input MilestoneFilter {
+        id: ID
+        roadmapId: ID
+        taskId: ID
+    }
+
+    input TaskFilter {
+        id: ID
+        parentId: ID
+        taskName: String
+        taskStatus: TaskStatus
+        ownerStakeholderId: ID
+        startDate: String
+        target: String
+        completedPercentage: Float
+        confidenceLevel: ConfidenceLevel
+    }
+
+    input TaskOutputFilter {
+        id: ID
+        taskId: ID
+        outputUrl: String
+    }
+
+    input ReviewFilter {
+        id: ID
+        taskId: ID
+        reviewDate: String
+        reviewOutcome: ReviewOutcome
+    }
+
     type Query {
         roadmaps: [Roadmap]
         roadmap(filter: RoadmapFilter): [Roadmap]
@@ -149,6 +182,13 @@ export const typeDefs = gql`
         outputs: [Output]
         output(filter: OutputFilter): [Output]
         milestones: [Milestone]
+        milestone(filter: MilestoneFilter): [Milestone]
+        tasks: [Task],
+        task(filter: TaskFilter): [Task]
+        taskOutputs: [TaskOutput]
+        taskOutput(filter: TaskOutputFilter): [TaskOutput]
+        reviews: [Review]
+        review(filter: ReviewFilter): [Review]
     }
 
 `;
@@ -217,6 +257,51 @@ export const resolvers = {
         },
         milestones: async (_, __, { dataSources }) => {
             return dataSources.db.getMilestones()
+        },
+        milestone: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getMilestone(paramName, paramValue);
+        },
+        tasks: async (_, __, { dataSources }) => {
+            return await dataSources.db.getTasks();
+        },
+        task: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getTask(paramName, paramValue);
+        },
+        taskOutputs: async (_, __, { dataSources }) => {
+            return dataSources.db.getTaskOutputs()
+        },
+        taskOutput: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getTaskOutput(paramName, paramValue);
+        },
+        reviews: async (_, __, { dataSources }) => {
+            return dataSources.db.getReviews()
+        },
+        review: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getReview(paramName, paramValue);
         }
 
 
@@ -275,6 +360,24 @@ export const resolvers = {
                 return task.id === taskId;
             })
             return tasks;
+        }
+    },
+    Task: {
+        taskOutput: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getTaskOutputs();
+            const taskOutputs = result.filter(taskOutput => {
+                return taskOutput.taskId === id;
+            })
+            return taskOutputs;
+        },
+        review: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getReviews();
+            const reviews = result.filter(review => {
+                return review.taskId === id
+            })
+            return reviews
         }
     }
 }

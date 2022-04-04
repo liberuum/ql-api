@@ -276,6 +276,10 @@ class EcosystemDatabase extends SQLDataSource {
             .cache(MINUTE)
     }
 
+    getMilestone(paramName, paramValue) {
+        return this.knex('Milestone').where(`${paramName}`, paramValue)
+    }
+
     getContributors() {
         return this.knex
             .select('*')
@@ -330,6 +334,34 @@ class EcosystemDatabase extends SQLDataSource {
             .from('Task')
             .orderBy('id')
             .cache(MINUTE)
+    }
+
+    getTask(paramName, paramValue) {
+        return this.knex('Task').where(`${paramName}`, paramValue)
+    }
+
+    getTaskOutputs() {
+        return this.knex
+            .select('*')
+            .from('TaskOutput')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getTaskOutput(paramName, paramValue) {
+        return this.knex('TaskOutput').where(`${paramName}`, paramValue)
+    }
+
+    getReviews() {
+        return this.knex
+            .select('*')
+            .from('Review')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getReview(paramName, paramValue) {
+        return this.knex('Review').where(`${paramName}`, paramValue)
     }
 }
 
