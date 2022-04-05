@@ -3,15 +3,25 @@ import { gql } from 'apollo-server-core';
 export const typeDefs = gql`
 
     type BudgetStatement {
+        "Auto generated id field"
         id: ID!
+        "Auto generated id field from Core Unit table"
         cuId: ID!
+        "Month of corresponding budget statement"
         month: String!
+        "Optional comments field"
         comments: String
+        "Status of the budgest statement (Draft/Final)"
         budgetStatus: BudgetStatementStatus
+        "Link to the complete publication of the budget statement"
         publicationUrl: String!
+        "Core Unit code as defined with the Core Units' MIP39"
         cuCode: String!
+        "Number of full-time employees in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
+        "Details on the amount of MKR vested in the corresponding budget statement"
         budgetStatementMKRVest: [BudgetStatementMKRVest]
+        "Details on the wallets used for budget statement wallets"
         budgetStatementWallet: [BudgetStatementWallet]
     }
 
@@ -24,6 +34,7 @@ export const typeDefs = gql`
         id: ID!
         budgetStatementId: ID
         month: String
+        "Full-time employees"
         ftes: Float
     }
 
@@ -31,7 +42,9 @@ export const typeDefs = gql`
         id: ID!
         budgetStatementId: ID!
         vestingDate: String!
+        "Current MKR amount"
         mkrAmount: Float
+        "Previous MKR amount"
         mkrAmountOld: Float
         comments: String
     }
@@ -39,12 +52,17 @@ export const typeDefs = gql`
     type BudgetStatementWallet {
         id: ID!
         budgetStatementId: ID!
+        "Wallet name"
         name: String
+        "Wallet address"
         address: String
+        "Current wallet balance (as defined within the budget statement"
         currentBalance: Float
         topupTransfer: Float
         comments: String
+        "Retrieve breakdown of the line items that make up the corresponding budget statement"
         budgetStatementLineItem: [BudgetStatementLineItem]
+        "Retrieve payment information for corresponding budget statement"
         budgetStatementPayment: [BudgetStatementPayment]
 
     }
