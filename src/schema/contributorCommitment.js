@@ -10,6 +10,7 @@ export const typeDefs = gql`
         commitment: Commitment
         cuCode: String!
         contributor: [Contributor]
+        jobTitle: String
     }
 
     enum Commitment {
@@ -36,6 +37,7 @@ export const typeDefs = gql`
         startDate: String
         commitment: Commitment
         cuCode: String
+        jobTitle: String
     }
 
     input ContributorFilter {
