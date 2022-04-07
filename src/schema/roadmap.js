@@ -2,15 +2,24 @@ import { gql } from "apollo-server-core";
 
 export const typeDefs = gql`
 
+    "Core Unit or Cross Core Unit Intitiatives"
     type Roadmap {
+        "Auto generated id field"
         id: ID!
+        "Roadmap owner. Null value is for Cross Core Unit Initiative"
         ownerCuId: ID
+        "An alphanumeric code representing the roadmap. Ex: SES-Q2-O3 SES Quarter 2 Objective 3"
         roadmapCode: String
+        "Identifying name of a roadmap"
         roadmapName: String
         comments: String
+        "Todo, InProgress or Done"
         roadmapStatus: RoadmapStatus
+        "Involved stakehodlders in the roadmap"
         roadmapStakeholder: [RoadmapStakeholder]
+        "Links to documents showcasing the results of the roadmap"
         output: [Output]
+        "Major tasks under the current roadmap"
         milestone: [Milestone]
     }
 
@@ -21,6 +30,7 @@ export const typeDefs = gql`
     }
 
 
+    "Roadmap stakeholders can be independent contributors or core unit contributors"
     type RoadmapStakeholder {
         id: ID!
         stakeholderId: ID!
@@ -29,6 +39,7 @@ export const typeDefs = gql`
         stakeholderRole: [StakeholderRole]
     }
 
+    "Individual stakehodlers that can be under a core unit, or independent."
     type Stakeholder {
         id: ID!
         name: String
@@ -42,6 +53,7 @@ export const typeDefs = gql`
         stakeholderRoleName: String!
     }
 
+    "Links to documents showcasing the output of a given roadmap"
     type Output {
         id: ID!
         name: String!
@@ -49,6 +61,7 @@ export const typeDefs = gql`
         outputUrl: String!
     }
 
+    "Parent task under a certain roadmap that can have many sub tasks"
     type Milestone {
         id: ID!
         roadmapId: ID!
@@ -56,8 +69,10 @@ export const typeDefs = gql`
         task: [Task]
     }
 
+    "Task under a milestone. It can also be a subtask if parentId is not null"
     type Task {
         id: ID!
+        "ParentId represents the taskId of the parent task. If parentId is present, the current task is a sub task of another task with same Id as parentID "
         parentId: ID
         taskName: String
         taskStatus: TaskStatus
@@ -67,6 +82,7 @@ export const typeDefs = gql`
         completedPercentage: Float
         confidenceLevel: ConfidenceLevel
         comments: String
+        "Links to documents showing results of the tasks"
         taskOutput: [TaskOutput]
         review: [Review]
     }
@@ -91,10 +107,12 @@ export const typeDefs = gql`
         outputUrl: String!
     }
 
+    "Review of a certain task"
     type Review {
         id: ID!
         taskId: ID!
         reviewDate: String!
+        "Red,yellow or green."
         reviewOutcome: ReviewOutcome!
     }
 
