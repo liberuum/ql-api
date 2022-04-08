@@ -9,6 +9,8 @@ export const typeDefs = gql`
         code: String
         "Core Unit name - as as defined within the Core Units' MIP39"
         name: String
+        "Logo image reference to swarm network. In case server is down, copy file reference and paste it in another swarm gateway link"
+        image: String
         "Access details on MIPs 39/40/41 of a Core Unit"
         cuMip: [CuMip]
         "Access details on the budget statements of a Core Unit"
