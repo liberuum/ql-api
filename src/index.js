@@ -5,8 +5,6 @@ import http from 'http';
 import dotenv from 'dotenv';
 dotenv.config()
 
-// import typeDefs from './schema/schema.js';
-// import resolvers from './schema/resolvers.js'
 import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
 
