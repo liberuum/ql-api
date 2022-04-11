@@ -54,13 +54,28 @@ export const typeDefs = gql`
         stakeholderRoleName: String!
     }
 
+    type RoadmapOutput {
+        id: ID!
+        outputId: ID!
+        roadmapId: ID!
+        outputTypeId: ID!
+        output: [Output]
+        outputType: [OutputType]
+    }
+
     "Links to documents showcasing the output of a given roadmap"
     type Output {
         id: ID!
-        name: String!
-        roadmapId: ID!
-        outputUrl: String!
+        name: String
+        roadmapId: ID
+        outputUrl: String
     }
+
+    type OutputType {
+        id: ID!
+        outputType: String
+    }
+
 
     "Parent task under a certain roadmap that can have many sub tasks"
     type Milestone {
@@ -132,6 +147,13 @@ export const typeDefs = gql`
         roadmapStatus: RoadmapStatus
     }
 
+    input RoadmapOutputFilter {
+        id: ID
+        outputId: ID
+        roadmapId: ID
+        outputTypeId: ID
+    }
+
     input StakeholderFilter {
         id: ID
         name: String
@@ -156,6 +178,11 @@ export const typeDefs = gql`
         name: String
         roadmapId: ID
         outputUrl: String
+    }
+
+    input OutputTypeFilter {
+        id: ID
+        outputType: String
     }
 
     input MilestoneFilter {
@@ -200,6 +227,8 @@ export const typeDefs = gql`
         stakeholderRole(filter: StakeholderRoleFilter): [StakeholderRole]
         outputs: [Output]
         output(filter: OutputFilter): [Output]
+        outputTypes: [OutputType]
+        outputType(filter: OutputTypeFilter): [OutputType]
         milestones: [Milestone]
         milestone(filter: MilestoneFilter): [Milestone]
         tasks: [Task],
@@ -208,6 +237,8 @@ export const typeDefs = gql`
         taskOutput(filter: TaskOutputFilter): [TaskOutput]
         reviews: [Review]
         review(filter: ReviewFilter): [Review]
+        roadmapOutputs: [RoadmapOutput]
+        roadmapOutput(filter: RoadmapOutputFilter): [RoadmapOutput]
     }
 
 `;
@@ -262,6 +293,18 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getStakeholderRole(paramName, paramValue);
         },
+        roadmapOutputs: async (_, __, { dataSources }) => {
+            return await dataSources.db.getRoadmapOutputs();
+        },
+        roadmapOutput: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getRoadmapOutput(paramName, paramValue);
+        },
         outputs: async (_, __, { dataSources }) => {
             return await dataSources.db.getOutputs()
         },
@@ -273,6 +316,18 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getOutput(paramName, paramValue);
+        },
+        outputTypes: async (_, __, { dataSources }) => {
+            return await dataSources.db.getOutputTypes();
+        },
+        outputType: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getOutputType(paramName, paramValue);
         },
         milestones: async (_, __, { dataSources }) => {
             return dataSources.db.getMilestones()
@@ -377,6 +432,24 @@ export const resolvers = {
                 return roadmapStakeholder.stakeholderId === id;
             });
             return roadmapStakeholders
+        }
+    },
+    RoadmapOutput: {
+        output: async (parent, __, { dataSources }) => {
+            const { outputId } = parent;
+            const result = await dataSources.db.getOutputs();
+            const outputs = result.filter(output => {
+                return output.id === outputId
+            })
+            return outputs;
+        },
+        outputType: async (parent, __, { dataSources }) => {
+            const { outputTypeId } = parent;
+            const result = await dataSources.db.getOutputTypes();
+            const outputTypes = result.filter(outputType => {
+                return outputType.id === outputTypeId
+            })
+            return outputTypes;
         }
     },
     Milestone: {

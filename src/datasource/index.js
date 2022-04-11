@@ -256,6 +256,18 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Stakeholder').where(`${paramName}`, paramValue)
     }
 
+    getRoadmapOutputs() {
+        return this.knex
+            .select('*')
+            .from('RoadmapOutput')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getRoadmapOutput(paramName, paramValue) {
+        return this.knex('RoadmapOutput').where(`${paramName}`, paramValue)
+    }
+
     getOutputs() {
         return this.knex
             .select('*')
@@ -266,6 +278,18 @@ class EcosystemDatabase extends SQLDataSource {
 
     getOutput(paramName, paramValue) {
         return this.knex('Output').where(`${paramName}`, paramValue)
+    }
+
+    getOutputTypes() {
+        return this.knex
+            .select('*')
+            .from('OutputType')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getOutputType(paramName, paramValue) {
+        return this.knex('OutputType').where(`${paramName}`, paramValue)
     }
 
     getMilestones() {
