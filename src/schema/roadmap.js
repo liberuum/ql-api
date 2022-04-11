@@ -37,6 +37,7 @@ export const typeDefs = gql`
         roadmapId: ID!
         stakeholderRoleId: ID!
         stakeholderRole: [StakeholderRole]
+        stakeholder: [Stakeholder]
     }
 
     "Individual stakehodlers that can be under a core unit, or independent."
@@ -358,6 +359,14 @@ export const resolvers = {
                 return stakeholderRole.id === stakeholderRoleId
             })
             return stakeholderRoles
+        },
+        stakeholder: async (parent, __, { dataSources }) => {
+            const { stakeholderId } = parent;
+            const result = await dataSources.db.getStakeholders();
+            const stakeholders = result.filter(stakeholder => {
+                return stakeholder.id === stakeholderId;
+            })
+            return stakeholders;
         }
     },
     Stakeholder: {
