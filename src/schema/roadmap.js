@@ -120,7 +120,8 @@ export const typeDefs = gql`
     type TaskOutput {
         id: ID!
         taskId: ID!
-        outputUrl: String!
+        outputUrl: String
+        outputName: String
     }
 
     "Review of a certain task"
@@ -207,6 +208,7 @@ export const typeDefs = gql`
         id: ID
         taskId: ID
         outputUrl: String
+        outputName: String
     }
 
     input ReviewFilter {
