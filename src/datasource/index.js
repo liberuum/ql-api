@@ -387,6 +387,21 @@ class EcosystemDatabase extends SQLDataSource {
     getReview(paramName, paramValue) {
         return this.knex('Review').where(`${paramName}`, paramValue)
     }
+
+    // ------------------- Adding data --------------------------------
+
+    addBudgetStatementLineItems(rows) {
+        const chunkSize = rows.lenght
+        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize)
+            .returning('id')
+            .then(ids => {
+                console.log('added budgetLineItems with ids', ids)
+            })
+            .catch(error => {
+                throw error
+            })
+            
+    }
 }
 
 export default EcosystemDatabase;
