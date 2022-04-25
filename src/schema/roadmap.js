@@ -107,6 +107,7 @@ export const typeDefs = gql`
         Done
         WontDo
         Blocked
+        Backlog
     }
     
     enum ConfidenceLevel {
