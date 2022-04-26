@@ -98,8 +98,6 @@ export const typeDefs = gql`
         completedPercentage: Float
         confidenceLevel: ConfidenceLevel
         comments: String
-        "Links to documents showing results of the tasks"
-        taskOutput: [TaskOutput]
         review: [Review]
     }
 
@@ -116,13 +114,6 @@ export const typeDefs = gql`
         High
         Medium
         Low
-    }
-
-    type TaskOutput {
-        id: ID!
-        taskId: ID!
-        outputUrl: String
-        outputName: String
     }
 
     "Review of a certain task"
@@ -205,13 +196,6 @@ export const typeDefs = gql`
         confidenceLevel: ConfidenceLevel
     }
 
-    input TaskOutputFilter {
-        id: ID
-        taskId: ID
-        outputUrl: String
-        outputName: String
-    }
-
     input ReviewFilter {
         id: ID
         taskId: ID
@@ -236,8 +220,6 @@ export const typeDefs = gql`
         milestone(filter: MilestoneFilter): [Milestone]
         tasks: [Task],
         task(filter: TaskFilter): [Task]
-        taskOutputs: [TaskOutput]
-        taskOutput(filter: TaskOutputFilter): [TaskOutput]
         reviews: [Review]
         review(filter: ReviewFilter): [Review]
         roadmapOutputs: [RoadmapOutput]
@@ -356,18 +338,6 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getTask(paramName, paramValue);
         },
-        taskOutputs: async (_, __, { dataSources }) => {
-            return dataSources.db.getTaskOutputs()
-        },
-        taskOutput: async (_, { filter }, { dataSources }) => {
-            const queryParams = Object.keys(filter);
-            if (queryParams.length > 1) {
-                throw "Choose one parameter only"
-            }
-            const paramName = queryParams[0];
-            const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getTaskOutput(paramName, paramValue);
-        },
         reviews: async (_, __, { dataSources }) => {
             return dataSources.db.getReviews()
         },
@@ -466,14 +436,6 @@ export const resolvers = {
         }
     },
     Task: {
-        taskOutput: async (parent, __, { dataSources }) => {
-            const { id } = parent;
-            const result = await dataSources.db.getTaskOutputs();
-            const taskOutputs = result.filter(taskOutput => {
-                return taskOutput.taskId === id;
-            })
-            return taskOutputs;
-        },
         review: async (parent, __, { dataSources }) => {
             const { id } = parent;
             const result = await dataSources.db.getReviews();
