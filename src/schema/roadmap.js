@@ -18,8 +18,7 @@ export const typeDefs = gql`
         "Involved stakehodlders in the roadmap"
         roadmapStakeholder: [RoadmapStakeholder]
         "Links to documents showcasing the results of the roadmap"
-        output: [Output]
-        "Major tasks under the current roadmap"
+        roadmapOutput: [RoadmapOutput]
         milestone: [Milestone]
     }
 
@@ -56,9 +55,9 @@ export const typeDefs = gql`
 
     type RoadmapOutput {
         id: ID!
-        outputId: ID!
-        roadmapId: ID!
-        outputTypeId: ID!
+        outputId: ID
+        roadmapId: ID
+        outputTypeId: ID
         output: [Output]
         outputType: [OutputType]
     }
@@ -67,7 +66,6 @@ export const typeDefs = gql`
     type Output {
         id: ID!
         name: String
-        roadmapId: ID
         outputUrl: String
     }
 
@@ -362,13 +360,13 @@ export const resolvers = {
             })
             return roadmapStakeholders
         },
-        output: async (parent, __, { dataSources }) => {
+        roadmapOutput: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getOutputs();
-            const outputs = result.filter(output => {
-                return output.roadmapId === id;
+            const result = await dataSources.db.getRoadmapOutputs()
+            const roadmapOutputs = result.filter(roadmapOutput => {
+                return roadmapOutput.roadmapId === id
             })
-            return outputs
+            return roadmapOutputs
         },
         milestone: async (parent, __, { dataSources }) => {
             const { id } = parent;

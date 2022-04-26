@@ -70,8 +70,8 @@ export const typeDefs = gql`
     type BudgetStatementLineItem {
         id: ID!
         budgetStatementWalletId: ID!
-        month: String!
-        position: Int!
+        month: String
+        position: Int
         group: String
         budgetCategory: String
         forecast: Float
@@ -91,11 +91,6 @@ export const typeDefs = gql`
     type BudgetStatementPayload {
         errors: [Error!]!
         budgetStatement: BudgetStatement
-    }
-
-    type Mutation {
-        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementDelete: ID!
     }
 
     input BudgetStatementInput {
@@ -177,6 +172,28 @@ export const typeDefs = gql`
         budgetStatementLineItem(filter: BudgetStatementLineItemFilter): [BudgetStatementLineItem]
         budgetStatementPayments: [BudgetStatementPayment]
         budgetStatementPayment(filter: BudgetStatementPaymentFilter): [BudgetStatementPayment]
+    }
+
+    type Mutation {
+        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload!
+        budgetStatementDelete: ID!
+    }
+
+    input BudgetStatementBatchAddInput {
+        budgetStatementWalletId: ID
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+    }
+
+    type BudgetStatementBatchAddPayload {
+        errors: [Error!]!
+        budgetStatementLineItem: [BudgetStatementLineItem]
     }
 
 `;
@@ -305,6 +322,9 @@ export const resolvers = {
     Mutation: {
         budgetStatementAdd: async (_, __, { dataSources }) => {
             return null;
+        },
+        budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
+            console.log('input', input)
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
