@@ -11,6 +11,8 @@ export const typeDefs = gql`
         name: String
         "Logo image reference to swarm network. In case server is down, copy file reference and paste it in another swarm gateway link"
         image: String
+        "Type of core unit"
+        category: [CoreUnitCategory]
         "Access details on MIPs 39/40/41 of a Core Unit"
         cuMip: [CuMip]
         "Access details on the budget statements of a Core Unit"
@@ -23,6 +25,16 @@ export const typeDefs = gql`
         cuGithubContribution: [CuGithubContribution]
         "Access details on the roadmap (work performed and planned) of a Core Unit"
         roadMap: [Roadmap]
+    }
+
+    enum CoreUnitCategory {
+        Technical
+        Support
+        Operational
+        Business
+        RWAs
+        Growth
+        Finance
     }
 
     type CoreUnitPayload {
@@ -72,6 +84,7 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
+            console.log(await dataSources.db.getCoreUnit(paramName, paramValue))
             return await dataSources.db.getCoreUnit(paramName, paramValue)
         }
     },

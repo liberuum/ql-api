@@ -15,6 +15,7 @@ export const typeDefs = gql`
         comments: String
         "Todo, InProgress or Done"
         roadmapStatus: RoadmapStatus
+        strategicInitiative: Boolean
         "Involved stakehodlders in the roadmap"
         roadmapStakeholder: [RoadmapStakeholder]
         "Links to documents showcasing the results of the roadmap"
@@ -136,6 +137,7 @@ export const typeDefs = gql`
         roadmapName: String
         comments: String
         roadmapStatus: RoadmapStatus
+        strategicInitiative: Boolean
     }
 
     input RoadmapOutputFilter {
