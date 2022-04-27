@@ -10,6 +10,7 @@ export const typeDefs = gql`
         youtube: String
         discord: String
         linkedIn: String
+        website: String
     }
 
     type TwitterFollowers {
@@ -36,6 +37,7 @@ export const typeDefs = gql`
         youtube: String
         discord: String
         linkedIn: String
+        website: String
     }
 
     extend type Query {

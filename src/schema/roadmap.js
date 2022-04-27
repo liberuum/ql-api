@@ -68,6 +68,7 @@ export const typeDefs = gql`
         id: ID!
         name: String
         outputUrl: String
+        outputDate: String
     }
 
     type OutputType {
