@@ -12,6 +12,7 @@ export const typeDefs = gql`
         rejected: String
         obsolete: String
         mipStatus: CuMipStatus
+        url: String
         mip39: [Mip39]
         mip40: [Mip40]
         mip41: [Mip41]
