@@ -12,7 +12,7 @@ export const typeDefs = gql`
         "Optional comments field"
         comments: String
         "Status of the budgest statement (Draft/Final)"
-        budgetStatus: BudgetStatementStatus
+        budgetStatus: BudgetStatus
         "Link to the complete publication of the budget statement"
         publicationUrl: String!
         "Core Unit code as defined with the Core Units' MIP39"
@@ -25,7 +25,7 @@ export const typeDefs = gql`
         budgetStatementWallet: [BudgetStatementWallet]
     }
 
-    enum BudgetStatementStatus {
+    enum BudgetStatus {
         Final
         Draft
     } 
@@ -97,7 +97,7 @@ export const typeDefs = gql`
         cuId: ID!
         month: String!
         comments: String
-        budgetStatus: BudgetStatementStatus
+        budgetStatus: BudgetStatus
         publicationUrl: String!
         cuCode: String!
     }
@@ -107,7 +107,7 @@ export const typeDefs = gql`
         cuId: ID
         month: String
         comments: String
-        budgetStatus: BudgetStatementStatus
+        budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
     }
