@@ -74,8 +74,13 @@ export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
         coreUnits: async (_, __, { dataSources }) => {
-            // console.log(await dataSources.db.getBudgetStatements())
-            return await dataSources.db.getCoreUnits();
+            const result = await dataSources.db.getCoreUnits()
+            const parsedResult = result.map(cu => {
+                const cleanCategory = cu.category.slice(1, cu.category.length - 1)
+                cu.category = cleanCategory.split(',');
+                return cu;
+            })
+            return parsedResult;
         },
         coreUnit: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -84,8 +89,13 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            console.log(await dataSources.db.getCoreUnit(paramName, paramValue))
-            return await dataSources.db.getCoreUnit(paramName, paramValue)
+            const result = await dataSources.db.getCoreUnit(paramName, paramValue)
+            const parsedResult = result.map(cu => {
+                const cleanCategory = cu.category.slice(1, cu.category.length - 1)
+                cu.category = cleanCategory.split(',');
+                return cu;
+            })
+            return result;
         }
     },
     CoreUnit: {
