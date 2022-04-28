@@ -73,6 +73,7 @@ export const typeDefs = gql`
     type Mip41 {
         id: ID!
         cuMipId: ID!
+        contributorId: ID
         facilitatorName: String
         discordHandle: String
         twitterHandle: String
@@ -136,6 +137,7 @@ export const typeDefs = gql`
     input Mip41Filter {
         id: ID
         cuMipId: ID
+        contributorId: ID
         facilitatorName: String
         discordHandle: String
         twitterHandle: String

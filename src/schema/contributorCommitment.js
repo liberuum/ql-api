@@ -23,10 +23,12 @@ export const typeDefs = gql`
     type Contributor {
         id: ID!
         name: String!
-        forumHandle: String!
-        discordHandle: String!
-        twitterHandle: String!
-        email: String!
+        forumHandle: String
+        discordHandle: String
+        twitterHandle: String
+        email: String
+        facilitatorImage: String
+
     }
 
     "Choose only one parameter from this list. Here you have the versatility of choosing the right argument according to your needs"

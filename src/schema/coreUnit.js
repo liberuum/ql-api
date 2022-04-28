@@ -95,7 +95,7 @@ export const resolvers = {
                 cu.category = cleanCategory.split(',');
                 return cu;
             })
-            return result;
+            return parsedResult;
         }
     },
     CoreUnit: {
