@@ -152,14 +152,14 @@ export const resolvers = {
         coreUnitAdd: async (_, { input }, { dataSources }) => {
             let errors;
             let coreUnit;
-            try {
-                await dataSources.db.addCoreUnit(input.code, input.name)
-                coreUnit = await dataSources.db.getCoreUnit('code', input.code)
-                return { errors, coreUnit: coreUnit[0] }
-            } catch (error) {
-                errors = error
-                return { errors, coreUnit: '' }
-            }
+            // try {
+            //     await dataSources.db.addCoreUnit(input.code, input.name)
+            //     coreUnit = await dataSources.db.getCoreUnit('code', input.code)
+            //     return { errors, coreUnit: coreUnit[0] }
+            // } catch (error) {
+            //     errors = error
+            //     return { errors, coreUnit: '' }
+            // }
         },
 
         coreUnitDelete: async (_, __, { }) => {
