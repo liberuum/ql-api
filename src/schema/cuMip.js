@@ -6,7 +6,7 @@ export const typeDefs = gql`
         id: ID!
         mipCode: String
         cuId: ID
-        rfc: String
+        rfc: Date
         formalSubmission: String
         accepted: String
         rejected: String
@@ -169,6 +169,7 @@ export const resolvers = {
     Query: {
         // name: (parent, args, context, info) => {}
         cuMips: async (_, __, { dataSources }) => {
+            // console.log(await dataSources.db.getMips())
             return await dataSources.db.getMips()
         },
         cuMip: async (_, { filter }, { dataSources }) => {

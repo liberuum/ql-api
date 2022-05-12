@@ -1,5 +1,10 @@
 import { gql } from 'apollo-server-core'
 import { makeExecutableSchema } from '@graphql-tools/schema';
+import {
+    typeDefs as scalarTypeDefs,
+    resolvers as scalarResolvers
+} from 'graphql-scalars';
+
 import _ from 'lodash'
 
 import {
@@ -47,6 +52,7 @@ const resolvers = {
 
 const schema = makeExecutableSchema({
     typeDefs: [
+        ...scalarTypeDefs,
         Query,
         CoreUnit,
         BudgetStatement,
@@ -58,6 +64,7 @@ const schema = makeExecutableSchema({
         Utils,
     ],
     resolvers: _.merge(
+        scalarResolvers,
         resolvers,
         CoreUnitResolvers,
         BudgetStatementResolvers,
