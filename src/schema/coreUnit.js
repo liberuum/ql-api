@@ -13,6 +13,9 @@ export const typeDefs = gql`
         image: String
         "Type of core unit"
         category: [CoreUnitCategory]
+        sentenceDescription: String
+        paragraphDescription: String
+        paragraphImage: String
         "Access details on MIPs 39/40/41 of a Core Unit"
         cuMip: [CuMip]
         "Access details on the budget statements of a Core Unit"
