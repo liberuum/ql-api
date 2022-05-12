@@ -1,7 +1,6 @@
 import { SQLDataSource } from "datasource-sql";
 
 const MINUTE = 60;
-
 class EcosystemDatabase extends SQLDataSource {
     getCoreUnits() {
         return this.knex

@@ -3,12 +3,15 @@ import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import dotenv from 'dotenv';
+import pkg from 'pg';
+
 dotenv.config()
 
 import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
 
-
+const { types } = pkg
+types.setTypeParser(1082, val => val); 
 const knexConfig = {
     client: 'pg',
     connection: process.env.PG_CONNECTION_STRING,
