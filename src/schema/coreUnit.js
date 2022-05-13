@@ -47,7 +47,7 @@ export const typeDefs = gql`
 
     extend type Query {
         "Use this query to retrieve information about ALL Core Units"
-        coreUnits: [CoreUnit],
+        coreUnits(limit: Int, offset: Int): [CoreUnit],
         "Use this query to retrieve information about a single Core Unit, use arguments to filter."
         coreUnit(filter: CoreUnitFilter): [CoreUnit],
     }
@@ -76,8 +76,8 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
-        coreUnits: async (_, __, { dataSources }) => {
-            const result = await dataSources.db.getCoreUnits()
+        coreUnits: async (_, filter, { dataSources }) => {
+            const result = await dataSources.db.getCoreUnits(filter.limit, filter.offset)
             const parsedResult = result.map(cu => {
                 const cleanCategory = cu.category.slice(1, cu.category.length - 1)
                 cu.category = cleanCategory.split(',');

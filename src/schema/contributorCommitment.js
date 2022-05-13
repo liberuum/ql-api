@@ -54,7 +54,7 @@ export const typeDefs = gql`
     type Query {
         contributorCommitments: [ContributorCommitment]
         contributorCommitment(filter: ContributorCommitmentFilter): [ContributorCommitment]
-        contributors: [Contributor]
+        contributors(limit: Int, offset: Int): [Contributor]
         contributor(filter: ContributorFilter): [Contributor]
     }
 
@@ -74,8 +74,8 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getContributorCommitment(paramName, paramValue)
         },
-        contributors: async (_, __, { dataSources }) => {
-            return await dataSources.db.getContributors()
+        contributors: async (_, filter, { dataSources }) => {
+            return await dataSources.db.getContributors(filter.limit, filter.offset)
         },
         contributor: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);

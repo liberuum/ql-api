@@ -61,7 +61,7 @@ export const typeDefs = gql`
         topupTransfer: Float
         comments: String
         "Retrieve breakdown of the line items that make up the corresponding budget statement"
-        budgetStatementLineItem: [BudgetStatementLineItem]
+        budgetStatementLineItem(offset: Int, limit: Int): [BudgetStatementLineItem]
         "Retrieve payment information for corresponding budget statement"
         budgetStatementPayment: [BudgetStatementPayment]
 
@@ -161,14 +161,14 @@ export const typeDefs = gql`
 
     extend type Query {
         budgetStatement(filter: BudgetStatementFilter): [BudgetStatement]
-        budgetStatements: [BudgetStatement!]
+        budgetStatements(limit: Int, offset: Int): [BudgetStatement!]
         budgetStatementFTEs: [BudgetStatementFTEs]
         budgetStatementFTE(filter: BudgetStatementFTEsFilter): [BudgetStatementFTEs]
         budgetStatementMKRVests: [BudgetStatementMKRVest]
         budgetStatementMKRVest(filter: BudgetStatementMKRVestFilter): [BudgetStatementMKRVest]
         budgetStatementWallets: [BudgetStatementWallet]
         budgetStatementWallet(filter: BudgetStatementWalletFilter): [BudgetStatementWallet]
-        budgetStatementLineItems: [BudgetStatementLineItem]
+        budgetStatementLineItems(limit: Int, offset: Int): [BudgetStatementLineItem]
         budgetStatementLineItem(filter: BudgetStatementLineItemFilter): [BudgetStatementLineItem]
         budgetStatementPayments: [BudgetStatementPayment]
         budgetStatementPayment(filter: BudgetStatementPaymentFilter): [BudgetStatementPayment]
@@ -201,8 +201,8 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
-        budgetStatements: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatements()
+        budgetStatements: async (_, filter, { dataSources }) => {
+            return await dataSources.db.getBudgetStatements(filter.limit, filter.offset)
         },
         budgetStatement: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -249,8 +249,8 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getBudgetStatementWallet(paramName, paramValue)
         },
-        budgetStatementLineItems: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementLineItems();
+        budgetStatementLineItems: async (_, filter, { dataSources }) => {
+            return await dataSources.db.getBudgetStatementLineItems(filter.limit, filter.offset);
         },
         budgetStatementLineItem: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);

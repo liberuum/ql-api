@@ -1,13 +1,24 @@
 import { SQLDataSource } from "datasource-sql";
+import e from "express";
 
 const MINUTE = 60;
 class EcosystemDatabase extends SQLDataSource {
-    getCoreUnits() {
-        return this.knex
-            .select('*')
-            .from('CoreUnit')
-            .orderBy('code')
-            .cache(MINUTE)
+    getCoreUnits(limit, offset) {
+        if (limit !== undefined && offset !== undefined) {
+            return this.knex
+                .select('')
+                .from('CoreUnit')
+                .limit(limit)
+                .offset(offset)
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex
+                .select('*')
+                .from('CoreUnit')
+                .orderBy('id')
+                .cache(MINUTE)
+        }
     };
 
     getCoreUnit(paramName, paramValue) {
@@ -15,15 +26,25 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     addCoreUnit(code, name) {
-        return this.knex('CoreUnit').insert({ code: code, name: name })
+        // return this.knex('CoreUnit').insert({ code: code, name: name })
     }
 
-    getBudgetStatements() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatement')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatements(limit, offset) {
+        if (limit !== undefined && offset !== undefined) {
+            return this.knex
+                .select()
+                .from('BudgetStatement')
+                .limit(limit)
+                .offset(offset)
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex
+                .select('*')
+                .from('BudgetStatement')
+                .orderBy('id')
+                .cache(MINUTE)
+        }
     }
     getBudgetStatement(paramName, paramValue) {
         return this.knex('BudgetStatement').where(`${paramName}`, paramValue)
@@ -65,12 +86,22 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementWallet').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementLineItems() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementLineItem')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementLineItems(limit, offset) {
+        if (offset != undefined && limit != undefined) {
+            return this.knex
+                .select()
+                .from('BudgetStatementLineItem')
+                .limit(limit)
+                .offset(offset)
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementLineItem')
+                .orderBy('id')
+                .cache(MINUTE)
+        }
     }
 
     getBudgetStatementLineItem(paramName, paramValue) {
@@ -303,12 +334,22 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Milestone').where(`${paramName}`, paramValue)
     }
 
-    getContributors() {
-        return this.knex
-            .select('*')
-            .from('Contributor')
-            .orderBy('id')
-            .cache(MINUTE)
+    getContributors(limit, offset) {
+        if (limit !== undefined && offset !== undefined) {
+            return this.knex
+                .select()
+                .from('Contributor')
+                .limit(limit)
+                .offset(offset)
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex
+                .select('*')
+                .from('Contributor')
+                .orderBy('id')
+                .cache(MINUTE)
+        }
     }
 
     getContributor(paramName, paramValue) {
@@ -399,7 +440,7 @@ class EcosystemDatabase extends SQLDataSource {
             .catch(error => {
                 throw error
             })
-            
+
     }
 }
 
