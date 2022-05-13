@@ -36,13 +36,13 @@ class EcosystemDatabase extends SQLDataSource {
                 .from('BudgetStatement')
                 .limit(limit)
                 .offset(offset)
-                .orderBy('id')
+                .orderBy('month', 'desc')
                 .cache(MINUTE)
         } else {
             return this.knex
                 .select('*')
                 .from('BudgetStatement')
-                .orderBy('id')
+                .orderBy('month', 'desc')
                 .cache(MINUTE)
         }
     }
