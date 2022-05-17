@@ -46,8 +46,12 @@ class EcosystemDatabase extends SQLDataSource {
                 .cache(MINUTE)
         }
     }
-    getBudgetStatement(paramName, paramValue) {
-        return this.knex('BudgetStatement').where(`${paramName}`, paramValue)
+    getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
+        if(secondParamName === undefined && secondParamValue === undefined) {
+            return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
+        } else {
+            return this.knex('BudgetStatement').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
+        }
     }
 
     getBudgetStatementFTEs() {

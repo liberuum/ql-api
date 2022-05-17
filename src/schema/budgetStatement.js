@@ -176,7 +176,7 @@ export const typeDefs = gql`
 
     type Mutation {
         budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload!
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
         budgetStatementDelete: ID!
     }
 
@@ -206,12 +206,14 @@ export const resolvers = {
         },
         budgetStatement: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
-            if (queryParams.length > 1) {
-                throw "Choose one parameter only"
+            if (queryParams.length > 2) {
+                throw "Choose no more than 2 parameters"
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatement(paramName, paramValue)
+            const secondParamName = queryParams[1];
+            const secondParamValue = filter[queryParams[1]]; 
+            return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
             return await dataSources.db.getBudgetStatementFTEs();
