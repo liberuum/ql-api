@@ -26,6 +26,7 @@ export const typeDefs = gql`
         Accepted
         Rejected
         Obsolete
+        Withdrawn
     }
 
     type Mip39 {

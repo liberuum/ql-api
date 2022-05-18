@@ -38,6 +38,7 @@ export const typeDefs = gql`
         RWAs
         Growth
         Finance
+        Legal
     }
 
     type CoreUnitPayload {

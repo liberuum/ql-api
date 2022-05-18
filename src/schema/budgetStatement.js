@@ -28,6 +28,8 @@ export const typeDefs = gql`
     enum BudgetStatus {
         Final
         Draft
+        SubmittedToAuditor
+        AwaitingCorrections
     } 
 
     type BudgetStatementFTEs {
