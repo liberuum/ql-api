@@ -4,6 +4,8 @@ import express from 'express';
 import http from 'http';
 import dotenv from 'dotenv';
 import pkg from 'pg';
+import { expressjwt } from "express-jwt";
+
 
 dotenv.config()
 
@@ -11,7 +13,7 @@ import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
 
 const { types } = pkg
-types.setTypeParser(1082, val => val); 
+types.setTypeParser(1082, val => val);
 const knexConfig = {
     client: 'pg',
     connection: process.env.PG_CONNECTION_STRING,
@@ -26,10 +28,21 @@ const options = {
 
 async function startApolloServer() {
     const app = express();
+    app.use(
+        expressjwt({
+            secret: 'SUPER_SECRET',
+            algorithms: ['HS256'],
+            credentialsRequired: false
+        })
+    )
     const httpServer = http.createServer(app);
     const server = new ApolloServer({
         schema,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        context: ({ req }) => {
+            const user = req.auth || null;
+            return { user }
+        },
         dataSources: () => ({ db })
     });
 

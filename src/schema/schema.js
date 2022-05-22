@@ -39,6 +39,10 @@ import {
     typeDefs as Utils,
     resolvers as UtilsResolvers
 } from './utilTypes.js';
+import {
+    typeDefs as Users,
+    resolvers as UsersResolvers
+} from './user.js';
 
 const Query = gql`
     type Query
@@ -62,6 +66,7 @@ const schema = makeExecutableSchema({
         CuGithubContribution,
         Roadmap,
         Utils,
+        Users
     ],
     resolvers: _.merge(
         scalarResolvers,
@@ -73,7 +78,8 @@ const schema = makeExecutableSchema({
         ContributorCommitmentResolvers,
         CuGithubContributionResolvers,
         RoadmapResolvers,
-        UtilsResolvers
+        UtilsResolvers,
+        UsersResolvers
     )
 })
 

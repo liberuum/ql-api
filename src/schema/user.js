@@ -1,12 +1,13 @@
-import { gql } from "apollo-server-core";
+import { gql, AuthenticationError } from "apollo-server-core";
+import { users } from './auth/data.js';
+import jwt from "jsonwebtoken";
 
 export const typeDefs = gql`
 
     type User {
-        firstName: String
-        lastName: String
+        id: ID!
+        cuId: ID!
         userName: String!
-        password: String!
     }
 
     type UserPayload {
@@ -21,21 +22,8 @@ export const typeDefs = gql`
         deletedUserId: ID
     }
 
-    type Mutation {
-        userCreate(
-            userCreate(input: UserInput): UserPayload!
-        ): UserPayload!
-
-        userLogin(
-            userLogin(input: AuthInput!): UserPayload
-        ): UserPayload!
-
-        userDelete: UserDeletePayload!
-    }
 
     input UserInput {
-        firstName: String
-        lastName: String
         userName: String!
         password: String!
     }
@@ -45,6 +33,48 @@ export const typeDefs = gql`
         password: String!
     }
 
+    type Query {
+        users: [User]
+    }
+    
+    type Mutation {
+        userCreate(input: UserInput): UserPayload!
+        # userLogin(
+        #     userLogin(input: AuthInput!): UserPayload
+        # ): UserPayload!
+        userLogin(input: AuthInput!): String
+        userDelete: UserDeletePayload!
+    }
+`;
+
+export const resolvers = {
+    Query: {
+        users: async (_, __, { user }) => {
+            console.log('user context', user);
+            if (!user) {
+                throw new AuthenticationError("Not authenticated, login for extra info")
+            }
+            return users
+
+        }
+    },
+    Mutation: {
+        userLogin: (_, { input }, { }) => {
+            try {
+                const { id, cuId, roles } = users.find(
+                    user => user.userName === input.userName && user.password === input.password
+                );
+                return jwt.sign(
+                    { cuId, roles },
+                    'SUPER_SECRET',
+                    { algorithm: "HS256", subject: id, expiresIn: "1d" }
+                )
+            } catch {
+                throw new AuthenticationError('User not signed up')
+            }
 
 
-`
+        }
+
+    }
+};
