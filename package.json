@@ -18,8 +18,10 @@
     "datasource-sql": "^1.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "express-jwt": "^7.7.2",
     "graphql": "^16.3.0",
     "graphql-scalars": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^2.0.0",
     "lodash": "^4.17.21",
     "pg": "^8.7.3"
