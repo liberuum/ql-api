@@ -324,7 +324,8 @@ export const resolvers = {
             return null;
         },
         budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
-            return dataSources.db.addBudgetStatements(input)
+            const result = await dataSources.db.addBudgetStatements(input)
+            return result;
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
