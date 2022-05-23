@@ -47,7 +47,7 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
-        if(secondParamName === undefined && secondParamValue === undefined) {
+        if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
         } else {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
@@ -444,7 +444,11 @@ class EcosystemDatabase extends SQLDataSource {
             .catch(error => {
                 throw error
             })
+    }
 
+    addBudgetStatements(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning('*');
     }
 }
 

@@ -181,19 +181,17 @@ export const typeDefs = gql`
     }
 
     input BudgetStatementBatchAddInput {
-        budgetStatementWalletId: ID
+        cuId: ID
         month: String
-        position: Int
-        group: String
-        budgetCategory: String
-        forecast: Float
-        actual: Float
         comments: String
+        budgetStatus: BudgetStatus
+        publicationUrl: String
+        cuCode: String
     }
 
     type BudgetStatementBatchAddPayload {
-        errors: [Error!]!
-        budgetStatementLineItem: [BudgetStatementLineItem]
+        errors: [Error]
+        budgetStatement: [BudgetStatement]
     }
 
 `;
@@ -212,7 +210,7 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             const secondParamName = queryParams[1];
-            const secondParamValue = filter[queryParams[1]]; 
+            const secondParamValue = filter[queryParams[1]];
             return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
@@ -326,7 +324,7 @@ export const resolvers = {
             return null;
         },
         budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
-            console.log('input', input)
+            return dataSources.db.addBudgetStatements(input)
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
