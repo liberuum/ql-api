@@ -176,8 +176,9 @@ export const typeDefs = gql`
 
     type Mutation {
         budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
         budgetStatementDelete: ID!
+        budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
     }
 
     input BudgetStatementBatchAddInput {
@@ -187,6 +188,15 @@ export const typeDefs = gql`
         budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
+    }
+
+    input BudgetStatementWalletBatchAddInput {
+        budgetStatementId: ID!
+        name: String
+        address: String
+        currentBalance: Float
+        topupTransfer: Float
+        comments: String
     }
 
     type BudgetStatementBatchAddPayload {
@@ -329,6 +339,10 @@ export const resolvers = {
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
+        },
+        budgetStatementWalletBatchAdd: async (_, { input }, { dataSources }) => {
+            console.log('budgetStatementWallets', input)
+            return await dataSources.db.addBudgetStatementWallets(input);
         }
     }
 }

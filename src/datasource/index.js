@@ -450,6 +450,11 @@ class EcosystemDatabase extends SQLDataSource {
         const chunkSize = rows.lenght;
         return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning('*');
     }
+
+    addBudgetStatementWallets(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
+    }
 }
 
 export default EcosystemDatabase;
