@@ -91,17 +91,17 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementPayload {
-        errors: [Error!]!
-        budgetStatement: BudgetStatement
+        errors: [Error]
+        budgetStatement: [BudgetStatement]
     }
 
     input BudgetStatementInput {
-        cuId: ID!
-        month: String!
+        cuId: ID
+        cuCode: String
+        month: String
         comments: String
         budgetStatus: BudgetStatus
-        publicationUrl: String!
-        cuCode: String!
+        publicationUrl: String
     }
 
     input BudgetStatementFilter {
@@ -177,12 +177,13 @@ export const typeDefs = gql`
     }
 
     type Mutation {
-        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
+        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload
+        budgetStatementsBatchAdd(input: [BudgetStatementInput]): BudgetStatementPayload
+        budgetLineItemsBatchAdd(input: [BudgetLineItemsBatchAddInput]): BudgetLineItemsBatchAddPayload
         budgetStatementDelete: ID!
     }
 
-    input BudgetStatementBatchAddInput {
+    input BudgetLineItemsBatchAddInput {
         budgetStatementWalletId: ID
         month: String
         position: Int
@@ -193,8 +194,8 @@ export const typeDefs = gql`
         comments: String
     }
 
-    type BudgetStatementBatchAddPayload {
-        errors: [Error!]!
+    type BudgetLineItemsBatchAddPayload {
+        errors: [Error]
         budgetStatementLineItem: [BudgetStatementLineItem]
     }
 
@@ -214,7 +215,7 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             const secondParamName = queryParams[1];
-            const secondParamValue = filter[queryParams[1]]; 
+            const secondParamValue = filter[queryParams[1]];
             return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
@@ -328,6 +329,31 @@ export const resolvers = {
             return null;
         },
         budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
+            if(input.length < 1) {
+                return {
+                    errors: new Error ('"No input data'),
+                    budgetStatement: null 
+                }
+            }
+
+            let statements = [];
+            for(let statement of input) {
+                statements.push(await dataSources.db.getBudgetStatement('month', statement.month))
+            }
+            if(statements[0].length > 0) {
+                return {
+                    errors: new Error ('Budget statement with this monthly already exists'),
+                    budgetStatement: null 
+                }
+            }
+
+            const result = await dataSources.db.addBatchBudgetStatements(input);
+            const response = {
+                budgetStatement: result
+            }
+            return response
+        },
+        budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => {
             console.log('input', input)
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
