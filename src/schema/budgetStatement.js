@@ -177,26 +177,33 @@ export const typeDefs = gql`
     }
 
     type Mutation {
-        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload
-        budgetStatementsBatchAdd(input: [BudgetStatementInput]): BudgetStatementPayload
-        budgetLineItemsBatchAdd(input: [BudgetLineItemsBatchAddInput]): BudgetLineItemsBatchAddPayload
+        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
         budgetStatementDelete: ID!
+        budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
     }
 
-    input BudgetLineItemsBatchAddInput {
-        budgetStatementWalletId: ID
+    input BudgetStatementBatchAddInput {
+        cuId: ID
         month: String
-        position: Int
-        group: String
-        budgetCategory: String
-        forecast: Float
-        actual: Float
+        comments: String
+        budgetStatus: BudgetStatus
+        publicationUrl: String
+        cuCode: String
+    }
+
+    input BudgetStatementWalletBatchAddInput {
+        budgetStatementId: ID!
+        name: String
+        address: String
+        currentBalance: Float
+        topupTransfer: Float
         comments: String
     }
 
-    type BudgetLineItemsBatchAddPayload {
+    type BudgetStatementBatchAddPayload {
         errors: [Error]
-        budgetStatementLineItem: [BudgetStatementLineItem]
+        budgetStatement: [BudgetStatement]
     }
 
 `;
@@ -329,35 +336,22 @@ export const resolvers = {
             return null;
         },
         budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
-            if(input.length < 1) {
-                return {
-                    errors: new Error ('"No input data'),
-                    budgetStatement: null 
-                }
+            if (input.length < 1) {
+                return new Error('"No input data')
             }
-
-            let statements = [];
-            for(let statement of input) {
-                statements.push(await dataSources.db.getBudgetStatement('month', statement.month))
-            }
-            if(statements[0].length > 0) {
-                return {
-                    errors: new Error ('Budget statement with this monthly already exists'),
-                    budgetStatement: null 
-                }
-            }
-
             const result = await dataSources.db.addBatchBudgetStatements(input);
-            const response = {
-                budgetStatement: result
-            }
-            return response
+            return result
         },
-        budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => {
-            console.log('input', input)
-        },
+        // budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => {
+        //     console.log('input', input)
+        //     const result = await dataSources.db.addBudgetStatements(input)
+        //     return result;
+        // },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
+        },
+        budgetStatementWalletBatchAdd: async (_, { input }, { dataSources }) => {
+            return await dataSources.db.addBudgetStatementWallets(input);
         }
     }
 }

@@ -1,5 +1,4 @@
 import { SQLDataSource } from "datasource-sql";
-import e from "express";
 
 const MINUTE = 60;
 class EcosystemDatabase extends SQLDataSource {
@@ -446,11 +445,16 @@ class EcosystemDatabase extends SQLDataSource {
             })
     }
 
-
     addBatchBudgetStatements(rows) {
         const chunkSize = rows.lenght;
-        return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning("*");
+        return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning('*');
     }
+
+    addBudgetStatementWallets(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
+    }
+
 
 }
 

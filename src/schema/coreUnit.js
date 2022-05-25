@@ -80,9 +80,12 @@ export const resolvers = {
         coreUnits: async (_, filter, { dataSources }) => {
             const result = await dataSources.db.getCoreUnits(filter.limit, filter.offset)
             const parsedResult = result.map(cu => {
-                const cleanCategory = cu.category.slice(1, cu.category.length - 1)
-                cu.category = cleanCategory.split(',');
-                return cu;
+                if (cu.cutegory !== undefined) {
+                    const cleanCategory = cu.category.slice(1, cu.category.length - 1)
+                    cu.category = cleanCategory.split(',');
+                    return cu;
+                }
+                return cu
             })
             return parsedResult;
         },
