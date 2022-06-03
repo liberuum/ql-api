@@ -79,6 +79,8 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
     }
 
     type BudgetStatementPayment {
@@ -180,6 +182,7 @@ export const typeDefs = gql`
         budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
         budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
         budgetLineItemsBatchAdd(input: [LineItemsBatchAddInput]): [BudgetStatementLineItem]
+        budgetLineItemsBatchUpdate(input: [LineItemsBatchUpdateInput]): [BudgetStatementLineItem]
         budgetStatementDelete: ID!
         budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
     }
@@ -193,6 +196,20 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+    }
+
+    input LineItemsBatchUpdateInput {
+        id: ID
+        budgetStatementWalletId: ID
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
     }
 
     input BudgetStatementBatchAddInput {
@@ -356,8 +373,12 @@ export const resolvers = {
         },
         budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => {
             console.log('input', input)
-            // const result = await dataSources.db.addBatchtLineItems(input)
-            // return result;
+            const result = await dataSources.db.addBatchtLineItems(input)
+            return result;
+        },
+        budgetLineItemsBatchUpdate: async (_, { input }, { dataSources }) => {
+            console.log('batchUpdate Input: ', input)
+            return await dataSources.db.batchUpdateLineItems(input)
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;

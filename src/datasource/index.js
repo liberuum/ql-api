@@ -435,14 +435,7 @@ class EcosystemDatabase extends SQLDataSource {
 
     addBatchtLineItems(rows) {
         const chunkSize = rows.lenght
-        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize)
-            .returning('id')
-            .then(ids => {
-                console.log('added budgetLineItems with ids', ids)
-            })
-            .catch(error => {
-                throw error
-            })
+        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize).returning('*');
     }
 
     addBatchBudgetStatements(rows) {
@@ -455,6 +448,26 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
     }
 
+    // ------------------- Updating data --------------------------------
+
+    async batchUpdateLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .update(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
 
 }
 
