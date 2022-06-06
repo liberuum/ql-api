@@ -176,11 +176,11 @@ export const typeDefs = gql`
         budgetStatementPayment(filter: BudgetStatementPaymentFilter): [BudgetStatementPayment]
     }
 
-    type Mutation {
-        budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
-        budgetStatementDelete: ID!
-    }
+    # type Mutation {
+        # budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
+        # budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
+        # budgetStatementDelete: ID!
+    # }
 
     input BudgetStatementBatchAddInput {
         budgetStatementWalletId: ID
@@ -323,15 +323,15 @@ export const resolvers = {
             return payments;
         }
     },
-    Mutation: {
-        budgetStatementAdd: async (_, __, { dataSources }) => {
-            return null;
-        },
-        budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
-            console.log('input', input)
-        },
-        budgetStatementDelete: async (_, __, { dataSources }) => {
-            return null;
-        }
-    }
+    // Mutation: {
+    //     budgetStatementAdd: async (_, __, { dataSources }) => {
+    //         return null;
+    //     },
+    //     budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
+    //         console.log('input', input)
+    //     },
+    //     budgetStatementDelete: async (_, __, { dataSources }) => {
+    //         return null;
+    //     }
+    // }
 }

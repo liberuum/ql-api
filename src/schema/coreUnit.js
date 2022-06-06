@@ -54,12 +54,12 @@ export const typeDefs = gql`
     }
 
     # Using form <model>Action e.g. coreUnitAdd for better grouping in the API browser
-    type Mutation {
-        "Add a Core Unit to the database"
-        coreUnitAdd(input: CoreUnitInput!): CoreUnitPayload!
-        "Delete a Core Unit from the database"
-        coreUnitDelete: ID!
-    }
+    # type Mutation {
+        # "Add a Core Unit to the database"
+        # coreUnitAdd(input: CoreUnitInput!): CoreUnitPayload!
+        # "Delete a Core Unit from the database"
+        # coreUnitDelete: ID!
+    # }
 
     input CoreUnitInput {
         code: String!
@@ -160,23 +160,23 @@ export const resolvers = {
             return roadmaps;
         }
     },
-    Mutation: {
-        coreUnitAdd: async (_, { input }, { dataSources }) => {
-            let errors;
-            let coreUnit;
-            // try {
-            //     await dataSources.db.addCoreUnit(input.code, input.name)
-            //     coreUnit = await dataSources.db.getCoreUnit('code', input.code)
-            //     return { errors, coreUnit: coreUnit[0] }
-            // } catch (error) {
-            //     errors = error
-            //     return { errors, coreUnit: '' }
-            // }
-        },
+    // Mutation: {
+    //     coreUnitAdd: async (_, { input }, { dataSources }) => {
+    //         let errors;
+    //         let coreUnit;
+    //         // try {
+    //         //     await dataSources.db.addCoreUnit(input.code, input.name)
+    //         //     coreUnit = await dataSources.db.getCoreUnit('code', input.code)
+    //         //     return { errors, coreUnit: coreUnit[0] }
+    //         // } catch (error) {
+    //         //     errors = error
+    //         //     return { errors, coreUnit: '' }
+    //         // }
+    //     },
 
-        coreUnitDelete: async (_, __, { }) => {
-            return null;
-        }
+    //     coreUnitDelete: async (_, __, { }) => {
+    //         return null;
+    //     }
 
-    }
+    // }
 };
