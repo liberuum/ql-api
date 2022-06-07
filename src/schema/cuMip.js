@@ -51,7 +51,7 @@ export const typeDefs = gql`
         mip40Id: ID!
         budgetPeriodStart: String!
         budgetPeriodEnd: String!
-        ftes: Int!
+        ftes: Float!
         mip40BudgetLineItem: [Mip40BudgetLineItem]
     }
 
