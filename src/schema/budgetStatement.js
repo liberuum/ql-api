@@ -79,6 +79,8 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
     }
 
     type BudgetStatementPayment {
