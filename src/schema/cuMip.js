@@ -148,6 +148,7 @@ export const typeDefs = gql`
         canonicalBudgetCategory: String
         group: String
         headCountExpense: Boolean
+        mip40BudgetLineItem: [Mip40BudgetLineItemFilter]
     }
 
     input Mip40WalletFilter{
