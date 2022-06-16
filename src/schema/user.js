@@ -1,17 +1,19 @@
 import { gql, AuthenticationError } from "apollo-server-core";
 import { users } from './auth/data.js';
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
+dotenv.config()
 
 export const typeDefs = gql`
 
     type User {
-        id: ID!
-        cuId: ID!
-        userName: String!
+        id: ID
+        cuId: ID
+        userName: String
     }
 
     type UserPayload {
-        errorrs: [Error!]!
         user: User
         authToken: String!
     }
@@ -24,6 +26,7 @@ export const typeDefs = gql`
 
 
     input UserInput {
+        cuId: ID!
         userName: String!
         password: String!
     }
@@ -33,17 +36,21 @@ export const typeDefs = gql`
         password: String!
     }
 
+    input UpdatePassword {
+        userName: String!
+        password: String!
+        newPassword: String!
+    }
+
     type Query {
         users: [User]
     }
     
     type Mutation {
-        userCreate(input: UserInput): UserPayload!
-        # userLogin(
-        #     userLogin(input: AuthInput!): UserPayload
-        # ): UserPayload!
-        userLogin(input: AuthInput!): String
+        userCreate(input: UserInput): User!
+        userLogin(input: AuthInput!): UserPayload!
         userDelete: UserDeletePayload!
+        userChangePassword(input: UpdatePassword!): User!
     }
 `;
 
@@ -51,7 +58,7 @@ export const resolvers = {
     Query: {
         users: async (_, __, { user }) => {
             console.log('user context', user);
-            if (!user) {
+            if (user.sub !== '0') {
                 throw new AuthenticationError("Not authenticated, login for extra info")
             }
             return users
@@ -59,21 +66,75 @@ export const resolvers = {
         }
     },
     Mutation: {
-        userLogin: (_, { input }, { }) => {
+        userLogin: async (_, { input }, { dataSources }) => {
             try {
-                const { id, cuId, roles } = users.find(
-                    user => user.userName === input.userName && user.password === input.password
-                );
-                return jwt.sign(
-                    { cuId, roles },
-                    'SUPER_SECRET',
-                    { algorithm: "HS256", subject: id, expiresIn: "1d" }
-                )
-            } catch {
-                throw new AuthenticationError('User not signed up')
+                const [user] = await dataSources.db.getUser(input.userName)
+                if (user != undefined) {
+                    const match = await bcrypt.compare(input.password, user.password);
+                    if (match === true) {
+                        const token = jwt.sign(
+                            { cuId: user.cuId, userName: user.userName },
+                            process.env.SECRET,
+                            { algorithm: "HS256", subject: `${user.id}`, expiresIn: "1d" }
+                        );
+                        return {
+                            user: {
+                                id: user.id,
+                                cuId: user.cuId,
+                                userName: user.userName
+                            },
+                            authToken: token
+                        }
+                    } else {
+                        throw new Error('wrong password? ')
+                    }
+                } else {
+                    throw new Error('no such user')
+                }
+                // const hash = await bcrypt.hash('supremeAccess999', 10);
+                // console.log('hash', hash)
+            } catch(error) {
+                throw new AuthenticationError(error ? error : 'User not signed up')
             }
-
-
+        },
+        userCreate: async (_, { input }, { user, dataSources }) => {
+            try {
+                if (user.sub === '0') {
+                    const [userObj] = await dataSources.db.getUser(input.userName)
+                    if (userObj == undefined) {
+                        const hash = await bcrypt.hash(input.password, 10);
+                        const result = await dataSources.db.createUser(input.cuId, input.userName, hash);
+                        console.log('result', result)
+                        return result;
+                    } else {
+                        throw new Error('Username already exists, try another one')
+                    }
+                } else {
+                    throw new Error('Not authorised for this step')
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'Try again once you have reached the supreme level')
+            }
+        },
+        userChangePassword: async (_, { input }, { user, dataSources }) => {
+            try {
+                if (user) {
+                    const [userObj] = await dataSources.db.getUser(input.userName)
+                    const match = await bcrypt.compare(input.password, userObj.password);
+                    if (match) {
+                        const hash = await bcrypt.hash(input.newPassword, 10);
+                        const result = await dataSources.db.changeUserPassword(input.userName, hash);
+                        console.log('result', result)
+                        return result[0];
+                    } else {
+                        throw new Error('wrong password')
+                    }
+                } else {
+                    throw new Error('Gotta be logged in first no?')
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'password is incorrect')
+            }
         }
 
     }

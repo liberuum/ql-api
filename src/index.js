@@ -30,14 +30,13 @@ async function startApolloServer() {
     const app = express();
     app.use(
         expressjwt({
-            secret: 'SUPER_SECRET',
+            secret: process.env.SECRET,
             algorithms: ['HS256'],
             credentialsRequired: false
         })
     )
     const httpServer = http.createServer(app);
     const server = new ApolloServer({
-        introspection: true,
         schema,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
         context: ({ req }) => {

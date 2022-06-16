@@ -431,6 +431,10 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Review').where(`${paramName}`, paramValue)
     }
 
+    getUser(userName) {
+        return this.knex('TempUserAuth').where('userName', userName)
+    }
+
     // ------------------- Adding data --------------------------------
 
     addBatchtLineItems(rows) {
@@ -448,7 +452,15 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
     }
 
+    createUser(cuId, userName, password) {
+        return this.knex('TempUserAuth').insert({ cuId, userName, password }).returning("*");
+    }
+
     // ------------------- Updating data --------------------------------
+
+    changeUserPassword(userName, password) {
+        return this.knex('TempUserAuth').where('userName', userName).update('password', password).returning('*')
+    }
 
     async batchUpdateLineItems(lineItems) {
         const trx = await this.knex.transaction();
