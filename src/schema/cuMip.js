@@ -62,7 +62,7 @@ export const typeDefs = gql`
         budgetCap: Float!
         canonicalBudgetCategory: CanonicalBudgetCategory
         group: String
-        headCountExpense: Boolean
+        headcountExpense: Boolean
     }
 
     enum CanonicalBudgetCategory {
@@ -147,7 +147,7 @@ export const typeDefs = gql`
         budgetCap: Int
         canonicalBudgetCategory: String
         group: String
-        headCountExpense: Boolean
+        headcountExpense: Boolean
         mip40BudgetLineItem: [Mip40BudgetLineItemFilter]
     }
 
