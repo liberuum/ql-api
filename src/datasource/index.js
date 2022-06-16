@@ -469,6 +469,25 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
 
+    async batchDeleteLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .del(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
+
 }
 
 export default EcosystemDatabase;
