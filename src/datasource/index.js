@@ -1,5 +1,4 @@
 import { SQLDataSource } from "datasource-sql";
-import e from "express";
 
 const MINUTE = 60;
 class EcosystemDatabase extends SQLDataSource {
@@ -47,7 +46,7 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
-        if(secondParamName === undefined && secondParamValue === undefined) {
+        if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
         } else {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
@@ -434,18 +433,61 @@ class EcosystemDatabase extends SQLDataSource {
 
     // ------------------- Adding data --------------------------------
 
-    addBudgetStatementLineItems(rows) {
+    addBatchtLineItems(rows) {
         const chunkSize = rows.lenght
-        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize)
-            .returning('id')
-            .then(ids => {
-                console.log('added budgetLineItems with ids', ids)
-            })
-            .catch(error => {
-                throw error
-            })
-
+        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize).returning('*');
     }
+
+    addBatchBudgetStatements(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning('*');
+    }
+
+    addBudgetStatementWallets(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
+    }
+
+    // ------------------- Updating data --------------------------------
+
+    async batchUpdateLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .update(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
+
+    async batchDeleteLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .del(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
+
 }
 
 export default EcosystemDatabase;

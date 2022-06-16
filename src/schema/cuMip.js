@@ -51,16 +51,35 @@ export const typeDefs = gql`
         mip40Id: ID!
         budgetPeriodStart: String!
         budgetPeriodEnd: String!
-        ftes: Int!
-        mip40BudgetLineItem: [Mip40BudgetLineItem]
+        ftes: Float!
     }
 
     type Mip40BudgetLineItem {
         id: ID!
-        budgetPeriodId: ID!
+        mip40WalletId: ID
         position: Int!
         budgetCategory: String!
         budgetCap: Float!
+        canonicalBudgetCategory: CanonicalBudgetCategory
+        group: String
+        headcountExpense: Boolean
+    }
+
+    enum CanonicalBudgetCategory {
+        CompensationAndBenefits
+        AdminExpense
+        TravelAndEntertainment
+        FreightAndDuties
+        GasExpense
+        GovernancePrograms
+        HardwareExpense
+        MarketingExpense
+        ProfessionalServices
+        SoftwareDevelopmentExpense
+        SoftwareExpense
+        Supplies
+        TrainingExpense
+        CommunityDevelopmentExpense
     }
 
     type Mip40Wallet {
@@ -71,6 +90,7 @@ export const typeDefs = gql`
         signersTotal: Int!
         signersRequired: Int!
         clawbackLimit: Float
+        mip40BudgetLineItem: [Mip40BudgetLineItem]
     }
 
     type Mip41 {
@@ -121,10 +141,14 @@ export const typeDefs = gql`
 
     input Mip40BudgetLineItemFilter {
         id: ID
-        budgetPeriodId: ID
+        mip40WalletId: ID
         position: Int
         budgetCategory: String
-        budgetCap: Float
+        budgetCap: Int
+        canonicalBudgetCategory: String
+        group: String
+        headcountExpense: Boolean
+        mip40BudgetLineItem: [Mip40BudgetLineItemFilter]
     }
 
     input Mip40WalletFilter{
@@ -300,12 +324,12 @@ export const resolvers = {
             return mip40Wallets;
         }
     },
-    Mip40BudgetPeriod: {
+    Mip40Wallet: {
         mip40BudgetLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
             const result = await dataSources.db.getMip40BudgetLineItems()
             const lineItems = result.filter(lineItem => {
-                return lineItem.budgetPeriodId === id;
+                return lineItem.mip40WalletId === id;
             })
             return lineItems;
 

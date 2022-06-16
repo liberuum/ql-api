@@ -79,6 +79,8 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
     }
 
     type BudgetStatementPayment {
@@ -91,17 +93,17 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementPayload {
-        errors: [Error!]!
-        budgetStatement: BudgetStatement
+        errors: [Error]
+        budgetStatement: [BudgetStatement]
     }
 
     input BudgetStatementInput {
-        cuId: ID!
-        month: String!
+        cuId: ID
+        cuCode: String
+        month: String
         comments: String
         budgetStatus: BudgetStatus
-        publicationUrl: String!
-        cuCode: String!
+        publicationUrl: String
     }
 
     input BudgetStatementFilter {
@@ -178,11 +180,29 @@ export const typeDefs = gql`
 
     type Mutation {
         budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
+        budgetLineItemsBatchAdd(input: [LineItemsBatchAddInput]): [BudgetStatementLineItem]
+        budgetLineItemsBatchUpdate(input: [LineItemsBatchUpdateInput]): [BudgetStatementLineItem]
+        budgetLineItemsBatchDelete(input: [LineItemsBatchDeleteInput]): [BudgetStatementLineItem]
         budgetStatementDelete: ID!
+        budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
     }
 
-    input BudgetStatementBatchAddInput {
+    input LineItemsBatchAddInput {
+        budgetStatementWalletId: ID!
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
+    }
+
+    input LineItemsBatchUpdateInput {
+        id: ID
         budgetStatementWalletId: ID
         month: String
         position: Int
@@ -191,11 +211,45 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
+    }
+
+    input LineItemsBatchDeleteInput {
+        id: ID
+        budgetStatementWalletId: ID
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
+    }
+
+    input BudgetStatementBatchAddInput {
+        cuId: ID
+        month: String
+        comments: String
+        budgetStatus: BudgetStatus
+        publicationUrl: String
+        cuCode: String
+    }
+
+    input BudgetStatementWalletBatchAddInput {
+        budgetStatementId: ID!
+        name: String
+        address: String
+        currentBalance: Float
+        topupTransfer: Float
+        comments: String
     }
 
     type BudgetStatementBatchAddPayload {
-        errors: [Error!]!
-        budgetStatementLineItem: [BudgetStatementLineItem]
+        errors: [Error]
+        budgetStatement: [BudgetStatement]
     }
 
 `;
@@ -214,7 +268,7 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             const secondParamName = queryParams[1];
-            const secondParamValue = filter[queryParams[1]]; 
+            const secondParamValue = filter[queryParams[1]];
             return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
@@ -328,10 +382,30 @@ export const resolvers = {
             return null;
         },
         budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
+            if (input.length < 1) {
+                return new Error('"No input data')
+            }
+            const result = await dataSources.db.addBatchBudgetStatements(input);
+            return result
+        },
+        budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => {
             console.log('input', input)
+            const result = await dataSources.db.addBatchtLineItems(input)
+            return result;
+        },
+        budgetLineItemsBatchUpdate: async (_, { input }, { dataSources }) => {
+            console.log('batchUpdate Input: ', input)
+            return await dataSources.db.batchUpdateLineItems(input)
+        },
+        budgetLineItemsBatchDelete: async (_, { input }, { dataSources }) => {
+            console.log('deleting linteItems', input);
+            return await dataSources.db.batchDeleteLineItems(input)
         },
         budgetStatementDelete: async (_, __, { dataSources }) => {
             return null;
+        },
+        budgetStatementWalletBatchAdd: async (_, { input }, { dataSources }) => {
+            return await dataSources.db.addBudgetStatementWallets(input);
         }
     }
 }
