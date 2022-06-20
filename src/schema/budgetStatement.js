@@ -80,9 +80,28 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
-        canonicalBudgetCategory: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
         headcountExpense: Boolean
         budgetCap: Float
+    }
+
+    enum CanonicalBudgetCategory {
+        CompensationAndBenefits
+        AdminExpense
+        TravelAndEntertainment
+        FreightAndDuties
+        GasExpense
+        GovernancePrograms
+        HardwareExpense
+        MarketingExpense
+        ProfessionalServices
+        SoftwareDevelopmentExpense
+        SoftwareExpense
+        Supplies
+        TrainingExpense
+        CommunityDevelopmentExpense
+        Bonus
+        ContingencyBuffer
     }
 
     type BudgetStatementPayment {
@@ -152,6 +171,7 @@ export const typeDefs = gql`
         position: Int
         group: String
         budgetCategory: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
         forecast: Float
         actual: Float
         comments: String
