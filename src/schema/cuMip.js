@@ -42,6 +42,9 @@ export const typeDefs = gql`
     type Mip40 { 
         id: ID!
         cuMipId: ID!
+        mip40Spn: String
+        mkrOnly: Boolean
+        mkrProgramLength: Float
         mip40BudgetPeriod: [Mip40BudgetPeriod]
         mip40Wallet: [Mip40Wallet]
     }
