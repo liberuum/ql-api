@@ -17,6 +17,7 @@ export const typeDefs = gql`
         sentenceDescription: String
         paragraphDescription: String
         paragraphImage: String
+        shortCode: String
         "Access details on MIPs 39/40/41 of a Core Unit"
         cuMip: [CuMip]
         "Access details on the budget statements of a Core Unit"
@@ -71,6 +72,7 @@ export const typeDefs = gql`
         id: ID
         code: String
         name: String
+        shortCode: String
     }
 
 `;

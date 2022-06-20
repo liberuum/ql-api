@@ -17,6 +17,7 @@ export const typeDefs = gql`
         publicationUrl: String!
         "Core Unit code as defined with the Core Units' MIP39"
         cuCode: String!
+        mkrProgramLength: Float
         "Number of full-time employees in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
         "Details on the amount of MKR vested in the corresponding budget statement"
@@ -81,6 +82,7 @@ export const typeDefs = gql`
         comments: String
         canonicalBudgetCategory: String
         headcountExpense: Boolean
+        budgetCap: Float
     }
 
     type BudgetStatementPayment {
@@ -114,6 +116,7 @@ export const typeDefs = gql`
         budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
+        mkrProgramLength: Float
     }
 
     input BudgetStatementFTEsFilter {
@@ -152,6 +155,7 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        budgetCap: Float
     }
 
     input BudgetStatementPaymentFilter {
