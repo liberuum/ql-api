@@ -432,7 +432,7 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     getUser(userName) {
-        return this.knex('TempUserAuth').where('userName', userName)
+        return this.knex('User').where('userName', userName)
     }
 
     // ------------------- Adding data --------------------------------
@@ -453,13 +453,13 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     createUser(cuId, userName, password) {
-        return this.knex('TempUserAuth').insert({ cuId, userName, password }).returning("*");
+        return this.knex('User').insert({ cuId, userName, password }).returning("*");
     }
 
     // ------------------- Updating data --------------------------------
 
     changeUserPassword(userName, password) {
-        return this.knex('TempUserAuth').where('userName', userName).update('password', password).returning('*')
+        return this.knex('User').where('userName', userName).update('password', password).returning('*')
     }
 
     async batchUpdateLineItems(lineItems) {
