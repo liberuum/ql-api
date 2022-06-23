@@ -1,4 +1,4 @@
-const  ResourceType =  {
+const ResourceType = {
     System: "System",
     CoreUnit: "CoreUnit",
 }
@@ -6,11 +6,11 @@ const  ResourceType =  {
 export class Authorization {
     userId;
     initialized = false;
-    db; 
+    db;
 
-    constructor(userId, db) {
+    constructor(db, userId) {
         this.db = db;
-        this.userId  = userId;
+        this.userId = userId;
     }
 
     /**
@@ -27,10 +27,12 @@ export class Authorization {
      */
 
     // Todo
-    canCreate()
-    canUpdate()
-    canDelete()
-    canManage()
+    // canCreate()
+    async canUpdate(resourceType, resourceId) {
+        return await this.db.canUpdate(this.userId, resourceType, resourceId)
+    }
+    // canDelete()
+    // canManage()
 
     async can(permission, resourceType, resourceId = null) {
         /**

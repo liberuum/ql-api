@@ -5,12 +5,10 @@ import http from 'http';
 import dotenv from 'dotenv';
 import pkg from 'pg';
 import { expressjwt } from "express-jwt";
-
-
 dotenv.config()
-
 import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
+import { Authorization } from './schema/auth/authorization.js';
 
 const { types } = pkg
 types.setTypeParser(1082, val => val);
@@ -41,7 +39,12 @@ async function startApolloServer() {
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
         context: ({ req }) => {
             const user = req.auth || null;
-            return { user }
+            if (user) {
+                const auth = new Authorization(db, user.id)
+                return { user, auth }
+            } else {
+                return null;
+            }
         },
         dataSources: () => ({ db })
     });

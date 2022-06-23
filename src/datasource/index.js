@@ -2,6 +2,38 @@ import { SQLDataSource } from "datasource-sql";
 
 const MINUTE = 60;
 class EcosystemDatabase extends SQLDataSource {
+
+    // ----------- User Auth Queries -----------
+
+    getResourceId(userId) {
+        return this.knex
+            .select('resourceId')
+            .from('UserRole')
+            .where('userId', userId)
+    }
+
+    canUpdate(userId, resourceType, resourceId) {
+        console.log({
+            userId, resourceType, resourceId
+        })
+        return this.knex
+            .count('*')
+            .from('UserRole')
+            .leftJoin('RolePermission', function () {
+                this
+                    .on('UserRole.roleId', '=', 'RolePermission.roleId')
+                    .andOn('UserRole.resource', '=', 'RolePermission.resource')
+            })
+            .where({
+                userId: userId,
+                'RolePermission.permission': 'Update',
+                'RolePermission.resource': resourceType,
+            })
+            .orWhere({ resourceId: null, resourceId: resourceId })
+
+    }
+
+    // ----------- Ecosystem Queries ----------- 
     getCoreUnits(limit, offset) {
         if (limit !== undefined && offset !== undefined) {
             return this.knex

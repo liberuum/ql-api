@@ -1,5 +1,4 @@
 import { gql, AuthenticationError } from "apollo-server-core";
-import { users } from './auth/data.js';
 import jwt from "jsonwebtoken";
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
@@ -56,12 +55,16 @@ export const typeDefs = gql`
 
 export const resolvers = {
     Query: {
-        users: async (_, __, { user }) => {
-            console.log('user context', user);
-            if (user.sub !== '0') {
+        users: async (_, __, { user, auth, dataSources }) => {
+            if (!user && !auth) {
                 throw new AuthenticationError("Not authenticated, login for extra info")
             }
-            return users
+            console.log('user context', user);
+            const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+            console.log('allwoed', allowed[0].count)
+            const [resources] = await dataSources.db.getResourceId(user.id);
+            console.log('resources', resources.resourceId)
+            return 'users'
 
         }
     },
@@ -69,18 +72,21 @@ export const resolvers = {
         userLogin: async (_, { input }, { dataSources }) => {
             try {
                 const [user] = await dataSources.db.getUser(input.userName)
-                if (user != undefined) {
+                const resources = await dataSources.db.getResourceId(user.id);
+                const [resource] = resources.filter(rs => rs !== null)
+                const resourceId = resource.resourceId
+                if (user != undefined && resourceId != undefined) {
                     const match = await bcrypt.compare(input.password, user.password);
                     if (match === true) {
                         const token = jwt.sign(
-                            { cuId: user.cuId, userName: user.userName },
+                            { id: user.id, cuId: user.cuId, userName: user.userName },
                             process.env.SECRET,
                             { algorithm: "HS256", subject: `${user.id}`, expiresIn: "1d" }
                         );
                         return {
                             user: {
                                 id: user.id,
-                                cuId: user.cuId,
+                                cuId: resourceId,
                                 userName: user.userName
                             },
                             authToken: token
@@ -93,7 +99,7 @@ export const resolvers = {
                 }
                 // const hash = await bcrypt.hash('supremeAccess999', 10);
                 // console.log('hash', hash)
-            } catch(error) {
+            } catch (error) {
                 throw new AuthenticationError(error ? error : 'User not signed up')
             }
         },
