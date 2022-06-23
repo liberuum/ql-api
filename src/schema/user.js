@@ -100,7 +100,7 @@ export const resolvers = {
                 // const hash = await bcrypt.hash('supremeAccess999', 10);
                 // console.log('hash', hash)
             } catch (error) {
-                throw new AuthenticationError(error ? error : 'User not signed up')
+                throw new AuthenticationError('User not signed up')
             }
         },
         userCreate: async (_, { input }, { user, dataSources }) => {

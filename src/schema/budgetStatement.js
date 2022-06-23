@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-core';
+import { gql, AuthenticationError } from 'apollo-server-core';
 
 export const typeDefs = gql`
 
@@ -360,24 +360,79 @@ export const resolvers = {
         }
     },
     Mutation: {
-        budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => { // this one
-            if (input.length < 1) {
-                return new Error('"No input data')
+        budgetStatementsBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatements")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        if (input.length < 1) {
+                            throw new Error('"No input data')
+                        }
+                        const result = await dataSources.db.addBatchBudgetStatements(input);
+                        return result
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatements')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatements')
             }
-            const result = await dataSources.db.addBatchBudgetStatements(input);
-            return result
+
+
         },
-        budgetLineItemsBatchAdd: async (_, { input }, { dataSources }) => { // this one
-            console.log('input', input)
-            const result = await dataSources.db.addBatchtLineItems(input)
-            return result;
+        budgetLineItemsBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetLineItems")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log('input', input)
+                        const result = await dataSources.db.addBatchtLineItems(input)
+                        return result;
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetLineItems')
+            }
         },
-        budgetLineItemsBatchDelete: async (_, { input }, { dataSources }) => { // this one
-            console.log('deleting linteItems', input);
-            return await dataSources.db.batchDeleteLineItems(input)
+        budgetLineItemsBatchDelete: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to delete budgetLineItems")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log('deleting linteItems', input);
+                        return await dataSources.db.batchDeleteLineItems(input)
+                    } else {
+                        throw new AuthenticationError('You are not authorized to delete budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to delete budgetLineItems')
+            }
+
         },
-        budgetStatementWalletBatchAdd: async (_, { input }, { dataSources }) => { // this one
-            return await dataSources.db.addBudgetStatementWallets(input);
+        budgetStatementWalletBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        return await dataSources.db.addBudgetStatementWallets(input);
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatementWallets')
+            }
         }
     }
 }
