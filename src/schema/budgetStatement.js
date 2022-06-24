@@ -370,6 +370,7 @@ export const resolvers = {
                         if (input.length < 1) {
                             throw new Error('"No input data')
                         }
+                        console.log(`adding ${input.length} budgetStatements to CU ${user.cuId}`)
                         const result = await dataSources.db.addBatchBudgetStatements(input);
                         return result
                     } else {
@@ -389,7 +390,7 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
-                        console.log('input', input)
+                        console.log(`adding ${input.length} line items to CU ${user.cuId}`, )
                         const result = await dataSources.db.addBatchtLineItems(input)
                         return result;
                     } else {
@@ -407,7 +408,7 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
-                        console.log('deleting linteItems', input);
+                        console.log(`deleting ${input.length} line items from CU ${user.cuId}`);
                         return await dataSources.db.batchDeleteLineItems(input)
                     } else {
                         throw new AuthenticationError('You are not authorized to delete budgetLineItems')
@@ -425,6 +426,7 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
+                        console.log(`Adding ${input.length} wallets to CU ${user.cuId}`)
                         return await dataSources.db.addBudgetStatementWallets(input);
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetStatementWallets')

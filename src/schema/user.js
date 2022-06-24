@@ -79,7 +79,7 @@ export const resolvers = {
                     const match = await bcrypt.compare(input.password, user.password);
                     if (match === true) {
                         const token = jwt.sign(
-                            { id: user.id, cuId: user.cuId, userName: user.userName },
+                            { id: user.id, cuId: resourceId, userName: user.userName },
                             process.env.SECRET,
                             { algorithm: "HS256", subject: `${user.id}`, expiresIn: "1d" }
                         );

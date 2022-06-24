@@ -13,9 +13,6 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     canUpdate(userId, resourceType, resourceId) {
-        console.log({
-            userId, resourceType, resourceId
-        })
         return this.knex
             .count('*')
             .from('UserRole')
