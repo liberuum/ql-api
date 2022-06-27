@@ -30,6 +30,23 @@ class EcosystemDatabase extends SQLDataSource {
 
     }
 
+    canManage(userId, resourceType) {
+        return this.knex
+            .count('*')
+            .from('UserRole')
+            .leftJoin('RolePermission', function () {
+                this
+                    .on('UserRole.roleId', '=', 'RolePermission.roleId')
+                    .andOn('UserRole.resource', '=', 'RolePermission.resource')
+            })
+            .where({
+                userId: userId,
+                'RolePermission.permission': 'Manage',
+                'RolePermission.resource': resourceType,
+                resourceId: null
+            })
+    }
+
     // ----------- Ecosystem Queries ----------- 
     getCoreUnits(limit, offset) {
         if (limit !== undefined && offset !== undefined) {
@@ -154,10 +171,10 @@ class EcosystemDatabase extends SQLDataSource {
 
     getBudgetStatementTransferRequests() {
         return this.knex
-        .select('*')
-        .from('BudgetStatementTransferRequest')
-        .orderBy('id')
-        .cache(MINUTE)
+            .select('*')
+            .from('BudgetStatementTransferRequest')
+            .orderBy('id')
+            .cache(MINUTE)
     }
 
     getBudgetStatementTransferRequest(paramName, paramValue) {
@@ -493,8 +510,15 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
     }
 
-    createUser(cuId, userName, password) {
-        return this.knex('User').insert({ cuId, userName, password }).returning("*");
+    async createUser(cuId, userName, password) {
+        const user = await this.knex('User').insert({ userName, password }).returning("*");
+        const userRole = await this.knex('UserRole').insert({userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId}).returning('*');
+        return {
+            id: user[0].id,
+            cuId: userRole[0].resourceId,
+            userName: user[0].userName
+        }
+        
     }
 
     // ------------------- Updating data --------------------------------

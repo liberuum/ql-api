@@ -32,7 +32,9 @@ export class Authorization {
         return await this.db.canUpdate(this.userId, resourceType, resourceId)
     }
     // canDelete()
-    // canManage()
+    async canManage(resourceType) {
+        return await this.db.canManage(this.userId, resourceType)
+    }
 
     async can(permission, resourceType, resourceId = null) {
         

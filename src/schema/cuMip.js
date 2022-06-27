@@ -104,7 +104,7 @@ export const typeDefs = gql`
         discordHandle: String
         twitterHandle: String
         forumHandle: String
-        github: String
+        githubAccount: String
     }
 
     input CuMipFilter {
@@ -172,7 +172,7 @@ export const typeDefs = gql`
         discordHandle: String
         twitterHandle: String
         forumHandle: String
-        github: String
+        githubAccount: String
     }
 
     extend type Query {

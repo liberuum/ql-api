@@ -51,7 +51,7 @@ export const resolvers = {
         //     if (!user && !auth) {
         //         throw new AuthenticationError("Not authenticated, login for extra info")
         //     }
-           
+
 
         // }
     },
@@ -59,12 +59,12 @@ export const resolvers = {
         userLogin: async (_, { input }, { dataSources }) => {
             try {
                 const [user] = await dataSources.db.getUser(input.userName)
-                const resources = await dataSources.db.getResourceId(user.id);
-                const [resource] = resources.filter(rs => rs !== null)
-                const resourceId = resource.resourceId
-                if (user != undefined && resourceId != undefined) {
+                if (user != undefined) {
                     const match = await bcrypt.compare(input.password, user.password);
                     if (match === true) {
+                        const resources = await dataSources.db.getResourceId(user.id);
+                        const [resource] = resources.filter(rs => rs !== null)
+                        const resourceId = resource.resourceId
                         const token = jwt.sign(
                             { id: user.id, cuId: resourceId, userName: user.userName },
                             process.env.SECRET,
@@ -84,29 +84,27 @@ export const resolvers = {
                 } else {
                     throw new Error('no such user')
                 }
-                // const hash = await bcrypt.hash('supremeAccess999', 10);
-                // console.log('hash', hash)
             } catch (error) {
                 throw new AuthenticationError('User not signed up')
             }
         },
-        userCreate: async (_, { input }, { user, dataSources }) => {
+        userCreate: async (_, { input }, { user, auth, dataSources }) => {
             try {
-                if (user.sub === '0') {
-                    const [userObj] = await dataSources.db.getUser(input.userName)
-                    if (userObj == undefined) {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login!")
+                } else {
+                    const allowed = await auth.canManage('System', user.id)
+                    if (allowed[0].count > 0) {
+                        console.log(`creating new user`, input)
                         const hash = await bcrypt.hash(input.password, 10);
-                        const result = await dataSources.db.createUser(input.cuId, input.userName, hash);
-                        console.log('result', result)
+                        const result = await dataSources.db.createUser(input.cuId, input.userName, hash)
                         return result;
                     } else {
-                        throw new Error('Username already exists, try another one')
+                        throw new AuthenticationError('You are not authorized')
                     }
-                } else {
-                    throw new Error('Not authorised for this step')
                 }
             } catch (error) {
-                throw new AuthenticationError(error ? error : 'Try again once you have reached the supreme level')
+                throw new AuthenticationError(error ? error : 'You are not authorized')
             }
         },
         userChangePassword: async (_, { input }, { user, dataSources }) => {
