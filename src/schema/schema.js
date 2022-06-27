@@ -40,6 +40,10 @@ import {
     resolvers as UtilsResolvers
 } from './utilTypes.js';
 import {
+    typeDefs as Users,
+    resolvers as UsersResolvers
+} from './user.js';
+import {
     typeDefs as ViewData,
     resolvers as ViewDataResolvers
 } from './viewData.js';
@@ -66,6 +70,7 @@ const schema = makeExecutableSchema({
         CuGithubContribution,
         Roadmap,
         Utils,
+        Users,
         ViewData
     ],
     resolvers: _.merge(
@@ -79,6 +84,7 @@ const schema = makeExecutableSchema({
         CuGithubContributionResolvers,
         RoadmapResolvers,
         UtilsResolvers,
+        UsersResolvers,
         ViewDataResolvers
     )
 })

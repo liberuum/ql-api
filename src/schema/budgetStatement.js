@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-core';
+import { gql, AuthenticationError } from 'apollo-server-core';
 
 export const typeDefs = gql`
 
@@ -123,17 +123,17 @@ export const typeDefs = gql`
     }
 
     type BudgetStatementPayload {
-        errors: [Error!]!
-        budgetStatement: BudgetStatement
+        errors: [Error]
+        budgetStatement: [BudgetStatement]
     }
 
     input BudgetStatementInput {
-        cuId: ID!
-        month: String!
+        cuId: ID
+        cuCode: String
+        month: String
         comments: String
         budgetStatus: BudgetStatus
-        publicationUrl: String!
-        cuCode: String!
+        publicationUrl: String
     }
 
     input BudgetStatementFilter {
@@ -219,13 +219,28 @@ export const typeDefs = gql`
         budgetStatementTransferRequest(filter: BudgetStatementTransferRequestFilter): [BudgetStatementTransferRequest]
     }
 
-    # type Mutation {
-        # budgetStatementAdd(input: BudgetStatementInput): BudgetStatementPayload!
-        # budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): BudgetStatementBatchAddPayload
-        # budgetStatementDelete: ID!
-    # }
+    type Mutation {
+        budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
+        budgetLineItemsBatchAdd(input: [LineItemsBatchAddInput]): [BudgetStatementLineItem]
+        budgetLineItemsBatchDelete(input: [LineItemsBatchDeleteInput]): [BudgetStatementLineItem]
+        budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
+    }
 
-    input BudgetStatementBatchAddInput {
+    input LineItemsBatchAddInput {
+        budgetStatementWalletId: ID!
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
+    }
+
+    input LineItemsBatchDeleteInput {
+        id: ID
         budgetStatementWalletId: ID
         month: String
         position: Int
@@ -234,11 +249,26 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
+        canonicalBudgetCategory: String
+        headcountExpense: Boolean
     }
 
-    type BudgetStatementBatchAddPayload {
-        errors: [Error!]!
-        budgetStatementLineItem: [BudgetStatementLineItem]
+    input BudgetStatementBatchAddInput {
+        cuId: ID
+        month: String
+        comments: String
+        budgetStatus: BudgetStatus
+        publicationUrl: String
+        cuCode: String
+    }
+
+    input BudgetStatementWalletBatchAddInput {
+        budgetStatementId: ID!
+        name: String
+        address: String
+        currentBalance: Float
+        topupTransfer: Float
+        comments: String
     }
 
 `;
@@ -386,15 +416,82 @@ export const resolvers = {
             return transferRequests;
         }
     },
-    // Mutation: {
-    //     budgetStatementAdd: async (_, __, { dataSources }) => {
-    //         return null;
-    //     },
-    //     budgetStatementsBatchAdd: async (_, { input }, { dataSources }) => {
-    //         console.log('input', input)
-    //     },
-    //     budgetStatementDelete: async (_, __, { dataSources }) => {
-    //         return null;
-    //     }
-    // }
+    Mutation: {
+        budgetStatementsBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatements")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        if (input.length < 1) {
+                            throw new Error('"No input data')
+                        }
+                        console.log(`adding ${input.length} budgetStatements to CU ${user.cuId}`)
+                        const result = await dataSources.db.addBatchBudgetStatements(input);
+                        return result
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatements')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatements')
+            }
+
+
+        },
+        budgetLineItemsBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetLineItems")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`adding ${input.length} line items to CU ${user.cuId}`, )
+                        const result = await dataSources.db.addBatchtLineItems(input)
+                        return result;
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetLineItems')
+            }
+        },
+        budgetLineItemsBatchDelete: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to delete budgetLineItems")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`deleting ${input.length} line items from CU ${user.cuId}`);
+                        return await dataSources.db.batchDeleteLineItems(input)
+                    } else {
+                        throw new AuthenticationError('You are not authorized to delete budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to delete budgetLineItems')
+            }
+
+        },
+        budgetStatementWalletBatchAdd: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`Adding ${input.length} wallets to CU ${user.cuId}`)
+                        return await dataSources.db.addBudgetStatementWallets(input);
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatementWallets')
+            }
+        }
+    }
 }

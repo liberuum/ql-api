@@ -1,8 +1,53 @@
 import { SQLDataSource } from "datasource-sql";
-import e from "express";
 
 const MINUTE = 60;
 class EcosystemDatabase extends SQLDataSource {
+
+    // ----------- User Auth Queries -----------
+
+    getResourceId(userId) {
+        return this.knex
+            .select('resourceId')
+            .from('UserRole')
+            .where('userId', userId)
+    }
+
+    canUpdate(userId, resourceType, resourceId) {
+        return this.knex
+            .count('*')
+            .from('UserRole')
+            .leftJoin('RolePermission', function () {
+                this
+                    .on('UserRole.roleId', '=', 'RolePermission.roleId')
+                    .andOn('UserRole.resource', '=', 'RolePermission.resource')
+            })
+            .where({
+                userId: userId,
+                'RolePermission.permission': 'Update',
+                'RolePermission.resource': resourceType,
+            })
+            .orWhere({ resourceId: null, resourceId: resourceId })
+
+    }
+
+    canManage(userId, resourceType) {
+        return this.knex
+            .count('*')
+            .from('UserRole')
+            .leftJoin('RolePermission', function () {
+                this
+                    .on('UserRole.roleId', '=', 'RolePermission.roleId')
+                    .andOn('UserRole.resource', '=', 'RolePermission.resource')
+            })
+            .where({
+                userId: userId,
+                'RolePermission.permission': 'Manage',
+                'RolePermission.resource': resourceType,
+                resourceId: null
+            })
+    }
+
+    // ----------- Ecosystem Queries ----------- 
     getCoreUnits(limit, offset) {
         if (limit !== undefined && offset !== undefined) {
             return this.knex
@@ -47,7 +92,7 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
-        if(secondParamName === undefined && secondParamValue === undefined) {
+        if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
         } else {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
@@ -126,10 +171,10 @@ class EcosystemDatabase extends SQLDataSource {
 
     getBudgetStatementTransferRequests() {
         return this.knex
-        .select('*')
-        .from('BudgetStatementTransferRequest')
-        .orderBy('id')
-        .cache(MINUTE)
+            .select('*')
+            .from('BudgetStatementTransferRequest')
+            .orderBy('id')
+            .cache(MINUTE)
     }
 
     getBudgetStatementTransferRequest(paramName, paramValue) {
@@ -444,20 +489,82 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Review').where(`${paramName}`, paramValue)
     }
 
+    getUser(userName) {
+        return this.knex('User').where('userName', userName)
+    }
+
     // ------------------- Adding data --------------------------------
 
-    addBudgetStatementLineItems(rows) {
+    addBatchtLineItems(rows) {
         const chunkSize = rows.lenght
-        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize)
-            .returning('id')
-            .then(ids => {
-                console.log('added budgetLineItems with ids', ids)
-            })
-            .catch(error => {
-                throw error
-            })
-
+        return this.knex.batchInsert('BudgetStatementLineItem', rows, chunkSize).returning('*');
     }
+
+    addBatchBudgetStatements(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatement', rows, chunkSize).returning('*');
+    }
+
+    addBudgetStatementWallets(rows) {
+        const chunkSize = rows.lenght;
+        return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
+    }
+
+    async createUser(cuId, userName, password) {
+        const user = await this.knex('User').insert({ userName, password }).returning("*");
+        const userRole = await this.knex('UserRole').insert({userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId}).returning('*');
+        return {
+            id: user[0].id,
+            cuId: userRole[0].resourceId,
+            userName: user[0].userName
+        }
+        
+    }
+
+    // ------------------- Updating data --------------------------------
+
+    changeUserPassword(userName, password) {
+        return this.knex('User').where('userName', userName).update('password', password).returning('*')
+    }
+
+    async batchUpdateLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .update(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
+
+    async batchDeleteLineItems(lineItems) {
+        const trx = await this.knex.transaction();
+        try {
+            const result = await Promise.all(lineItems.map(lineItem => {
+                let id = lineItem.id;
+                delete lineItem.id
+                return this.knex('BudgetStatementLineItem')
+                    .where('id', id)
+                    .del(lineItem)
+                    .transacting(trx)
+                    .returning('*')
+            }));
+            await trx.commit()
+            return result.flat();
+        } catch (error) {
+            await trx.rollback()
+        }
+    }
+
 }
 
 export default EcosystemDatabase;
