@@ -1,4 +1,4 @@
-import { ApolloServer } from 'apollo-server-express';
+import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
@@ -38,13 +38,18 @@ async function startApolloServer() {
         schema,
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
         context: ({ req }) => {
-            const user = req.auth || null;
-            if (user) {
-                const auth = new Authorization(db, user.id)
-                return { user, auth }
-            } else {
-                return null;
+            try {
+                const user = req.auth || null;
+                if (user) {
+                    const auth = new Authorization(db, user.id)
+                    return { user, auth }
+                } else {
+                    return null;
+                }
+            } catch (error) {
+                throw new AuthenticationError(error.message)
             }
+
         },
         dataSources: () => ({ db })
     });
