@@ -67,7 +67,16 @@ export const typeDefs = gql`
         budgetStatementLineItem(offset: Int, limit: Int): [BudgetStatementLineItem]
         "Retrieve payment information for corresponding budget statement"
         budgetStatementPayment: [BudgetStatementPayment]
+        budgetStatementTransferRequest: [BudgetStatementTransferRequest]
 
+    }
+
+    type BudgetStatementTransferRequest {
+        id: ID!
+        budgetStatementWalletId: ID!
+        budgetStatementPaymentId: ID
+        requestAmount: Float
+        comments: String
     }
 
     type BudgetStatementLineItem {
@@ -80,9 +89,28 @@ export const typeDefs = gql`
         forecast: Float
         actual: Float
         comments: String
-        canonicalBudgetCategory: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
         headcountExpense: Boolean
         budgetCap: Float
+    }
+
+    enum CanonicalBudgetCategory {
+        CompensationAndBenefits
+        AdminExpense
+        TravelAndEntertainment
+        FreightAndDuties
+        GasExpense
+        GovernancePrograms
+        HardwareExpense
+        MarketingExpense
+        ProfessionalServices
+        SoftwareDevelopmentExpense
+        SoftwareExpense
+        Supplies
+        TrainingExpense
+        CommunityDevelopmentExpense
+        Bonus
+        ContingencyBuffer
     }
 
     type BudgetStatementPayment {
@@ -145,6 +173,12 @@ export const typeDefs = gql`
         comments: String
     }
 
+    input BudgetStatementTransferRequestFilter {
+        budgetStatementWalletId: ID!
+        budgetStatementPaymentId: ID
+        requestAmount: Float
+    }
+
     input BudgetStatementLineItemFilter {
         id: ID
         budgetStatementWalletId: ID
@@ -152,6 +186,7 @@ export const typeDefs = gql`
         position: Int
         group: String
         budgetCategory: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
         forecast: Float
         actual: Float
         comments: String
@@ -180,6 +215,8 @@ export const typeDefs = gql`
         budgetStatementLineItem(filter: BudgetStatementLineItemFilter): [BudgetStatementLineItem]
         budgetStatementPayments: [BudgetStatementPayment]
         budgetStatementPayment(filter: BudgetStatementPaymentFilter): [BudgetStatementPayment]
+        budgetStatementTransferRequests: [BudgetStatementTransferRequest]
+        budgetStatementTransferRequest(filter: BudgetStatementTransferRequestFilter): [BudgetStatementTransferRequest]
     }
 
     type Mutation {
@@ -312,6 +349,18 @@ export const resolvers = {
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
             return await dataSources.db.getBudgetStatementPayment(paramName, paramValue)
+        },
+        budgetStatementTransferRequests: async (_, __, { dataSources }) => {
+            return await dataSources.db.getBudgetStatementTransferRequests()
+        },
+        budgetStatementTransferRequest: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getBudgetStatementTransferRequest(paramName, paramValue)
         }
 
     },
@@ -357,6 +406,14 @@ export const resolvers = {
                 return payment.budgetStatementWalletId === id
             })
             return payments;
+        },
+        budgetStatementTransferRequest: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getBudgetStatementTransferRequests();
+            const transferRequests = result.filter(requests => {
+                return requests.budgetStatementWalletId === id
+            })
+            return transferRequests;
         }
     },
     Mutation: {

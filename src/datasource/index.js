@@ -152,6 +152,18 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementPayment').where(`${paramName}`, paramValue)
     }
 
+    getBudgetStatementTransferRequests() {
+        return this.knex
+        .select('*')
+        .from('BudgetStatementTransferRequest')
+        .orderBy('id')
+        .cache(MINUTE)
+    }
+
+    getBudgetStatementTransferRequest(paramName, paramValue) {
+        return this.knex('BudgetStatementTransferRequest').where(`${paramName}`, paramValue)
+    }
+
     getMips() {
         return this.knex
             .select('*')
