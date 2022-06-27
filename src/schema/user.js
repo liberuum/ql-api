@@ -81,7 +81,7 @@ export const resolvers = {
                         const token = jwt.sign(
                             { id: user.id, cuId: resourceId, userName: user.userName },
                             process.env.SECRET,
-                            { algorithm: "HS256", subject: `${user.id}`, expiresIn: "1d" }
+                            { algorithm: "HS256", subject: `${user.id}`, expiresIn: "7d" }
                         );
                         return {
                             user: {
