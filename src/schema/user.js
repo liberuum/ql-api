@@ -17,13 +17,6 @@ export const typeDefs = gql`
         authToken: String!
     }
 
-    # Deleting logged in user. Needs to be changed to correct definition of who can delete who. 
-    type UserDeletePayload {
-        errors: [Error!]!
-        deletedUserId: ID
-    }
-
-
     input UserInput {
         cuId: ID!
         userName: String!
@@ -41,32 +34,26 @@ export const typeDefs = gql`
         newPassword: String!
     }
 
-    type Query {
-        users: [User]
-    }
+    # type Query {
+    #     users: [User]
+    # }
     
     type Mutation {
         userCreate(input: UserInput): User!
         userLogin(input: AuthInput!): UserPayload!
-        userDelete: UserDeletePayload!
         userChangePassword(input: UpdatePassword!): User!
     }
 `;
 
 export const resolvers = {
     Query: {
-        users: async (_, __, { user, auth, dataSources }) => {
-            if (!user && !auth) {
-                throw new AuthenticationError("Not authenticated, login for extra info")
-            }
-            console.log('user context', user);
-            const allowed = await auth.canUpdate('CoreUnit', user.cuId)
-            console.log('allwoed', allowed[0].count)
-            const [resources] = await dataSources.db.getResourceId(user.id);
-            console.log('resources', resources.resourceId)
-            return 'users'
+        // users: async (_, __, { user, auth, dataSources }) => {
+        //     if (!user && !auth) {
+        //         throw new AuthenticationError("Not authenticated, login for extra info")
+        //     }
+           
 
-        }
+        // }
     },
     Mutation: {
         userLogin: async (_, { input }, { dataSources }) => {
