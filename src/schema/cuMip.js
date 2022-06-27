@@ -105,6 +105,7 @@ export const typeDefs = gql`
         twitterHandle: String
         forumHandle: String
         githubAccount: String
+        contributor: [Contributor]
     }
 
     input CuMipFilter {
@@ -325,6 +326,16 @@ export const resolvers = {
                 return mip40wallet.mip40Id === id;
             })
             return mip40Wallets;
+        }
+    },
+    Mip41: {
+        contributor: async (parent, __, { dataSources }) => {
+            const { contributorId } = parent;
+            const result = await dataSources.db.getContributors();
+            const contributor = result.filter(contributor => {
+                return contributor.id === contributorId
+            })
+            return contributor;
         }
     },
     Mip40Wallet: {
