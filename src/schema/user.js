@@ -126,6 +126,5 @@ export const resolvers = {
                 throw new AuthenticationError(error ? error : 'password is incorrect')
             }
         }
-
     }
 };
