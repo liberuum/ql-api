@@ -51,8 +51,6 @@ export const resolvers = {
         //     if (!user && !auth) {
         //         throw new AuthenticationError("Not authenticated, login for extra info")
         //     }
-
-
         // }
     },
     Mutation: {
@@ -126,6 +124,5 @@ export const resolvers = {
                 throw new AuthenticationError(error ? error : 'password is incorrect')
             }
         }
-
     }
 };
