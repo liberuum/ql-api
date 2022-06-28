@@ -51,8 +51,6 @@ export const resolvers = {
         //     if (!user && !auth) {
         //         throw new AuthenticationError("Not authenticated, login for extra info")
         //     }
-
-
         // }
     },
     Mutation: {
