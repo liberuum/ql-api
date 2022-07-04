@@ -92,6 +92,7 @@ export const typeDefs = gql`
         canonicalBudgetCategory: CanonicalBudgetCategory
         headcountExpense: Boolean
         budgetCap: Float
+        payment: Float
     }
 
     enum CanonicalBudgetCategory {
