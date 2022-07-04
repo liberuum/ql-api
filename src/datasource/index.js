@@ -82,13 +82,11 @@ class EcosystemDatabase extends SQLDataSource {
                 .limit(limit)
                 .offset(offset)
                 .orderBy('month', 'desc')
-                .cache(MINUTE)
         } else {
             return this.knex
                 .select('*')
                 .from('BudgetStatement')
                 .orderBy('month', 'desc')
-                .cache(MINUTE)
         }
     }
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
@@ -128,7 +126,6 @@ class EcosystemDatabase extends SQLDataSource {
             .select('*')
             .from('BudgetStatementWallet')
             .orderBy('id')
-            .cache(MINUTE)
     }
 
     getBudgetStatementWallet(paramName, paramValue) {
