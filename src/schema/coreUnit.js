@@ -29,6 +29,7 @@ export const typeDefs = gql`
         cuGithubContribution: [CuGithubContribution]
         "Access details on the roadmap (work performed and planned) of a Core Unit"
         roadMap: [Roadmap]
+        cuUpdates: [CuUpdate]
     }
 
     enum CoreUnitCategory {
@@ -42,6 +43,14 @@ export const typeDefs = gql`
         Legal
     }
 
+    type CuUpdate {
+        id: ID!
+        cuId: ID!
+        updateTitle: String
+        updateDate: String
+        updateUrl: String
+    }
+
     type CoreUnitPayload {
         errorrs: [Error!]!
         coreUnit: CoreUnit
@@ -52,15 +61,18 @@ export const typeDefs = gql`
         coreUnits(limit: Int, offset: Int): [CoreUnit],
         "Use this query to retrieve information about a single Core Unit, use arguments to filter."
         coreUnit(filter: CoreUnitFilter): [CoreUnit],
+        cuUpdates: [CuUpdate],
+        cuUpdate(filter: CuUpdateFilter): [CuUpdate]
     }
 
-    # Using form <model>Action e.g. coreUnitAdd for better grouping in the API browser
-    # type Mutation {
-        # "Add a Core Unit to the database"
-        # coreUnitAdd(input: CoreUnitInput!): CoreUnitPayload!
-        # "Delete a Core Unit from the database"
-        # coreUnitDelete: ID!
-    # }
+    input CuUpdateFilter {
+        id: ID
+        cuId: ID
+        updateTitle: String
+        updateDate: DateTime
+        updateUrl: String
+    }
+
 
     input CoreUnitInput {
         code: String!
@@ -110,6 +122,18 @@ export const resolvers = {
                 }
             })
             return parsedResult;
+        },
+        cuUpdates: async (_, __, { dataSources }) => {
+            return await dataSources.db.getCuUpdates();
+        },
+        cuUpdate: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getCuUpdate(paramName, paramValue)
         }
     },
     CoreUnit: {
@@ -160,25 +184,14 @@ export const resolvers = {
                 return roadmap.ownerCuId === id;
             })
             return roadmaps;
+        },
+        cuUpdates: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getCuUpdates();
+            const cuUpdates = result.filter(cuUpdate => {
+                return cuUpdate.cuId === id;
+            })
+            return cuUpdates;
         }
-    },
-    // Mutation: {
-    //     coreUnitAdd: async (_, { input }, { dataSources }) => {
-    //         let errors;
-    //         let coreUnit;
-    //         // try {
-    //         //     await dataSources.db.addCoreUnit(input.code, input.name)
-    //         //     coreUnit = await dataSources.db.getCoreUnit('code', input.code)
-    //         //     return { errors, coreUnit: coreUnit[0] }
-    //         // } catch (error) {
-    //         //     errors = error
-    //         //     return { errors, coreUnit: '' }
-    //         // }
-    //     },
-
-    //     coreUnitDelete: async (_, __, { }) => {
-    //         return null;
-    //     }
-
-    // }
+    }
 };

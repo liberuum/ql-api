@@ -74,6 +74,18 @@ class EcosystemDatabase extends SQLDataSource {
         // return this.knex('CoreUnit').insert({ code: code, name: name })
     }
 
+    getCuUpdates() {
+        return this.knex
+            .select('*')
+            .from('CuUpdate')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getCuUpdate(paramName, paramValue) {
+        return this.knex('CuUpdate').where(`${paramName}`, paramValue)
+    }
+
     getBudgetStatements(limit, offset) {
         if (limit !== undefined && offset !== undefined) {
             return this.knex
