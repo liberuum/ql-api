@@ -22,7 +22,7 @@ export const typeDefs = gql`
 
     enum CuMipStatus {
         RFC
-        FORMAL SUBMISSION
+        Formal Submission
         Accepted
         Rejected
         Obsolete
