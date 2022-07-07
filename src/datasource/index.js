@@ -214,6 +214,18 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('CuMip').where(`${paramName}`, paramValue)
     }
 
+    getMipReplaces() {
+        return this.knex
+            .select('*')
+            .from('MipReplaces')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMipReplace(paramName, paramValue) {
+        return this.knex('MipReplaces').where(`${paramName}`, paramValue);
+    }
+
     getMip39s() {
         return this.knex
             .select('*')
