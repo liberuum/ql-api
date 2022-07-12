@@ -28,7 +28,7 @@ export const typeDefs = gql`
         twitterHandle: String
         email: String
         facilitatorImage: String
-
+        githubUrl: String
     }
 
     "Choose only one parameter from this list. Here you have the versatility of choosing the right argument according to your needs"

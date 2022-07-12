@@ -74,6 +74,18 @@ class EcosystemDatabase extends SQLDataSource {
         // return this.knex('CoreUnit').insert({ code: code, name: name })
     }
 
+    getCuUpdates() {
+        return this.knex
+            .select('*')
+            .from('CuUpdate')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getCuUpdate(paramName, paramValue) {
+        return this.knex('CuUpdate').where(`${paramName}`, paramValue)
+    }
+
     getBudgetStatements(limit, offset) {
         if (limit !== undefined && offset !== undefined) {
             return this.knex
@@ -95,6 +107,18 @@ class EcosystemDatabase extends SQLDataSource {
         } else {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
         }
+    }
+
+    getAuditReports() {
+        return this.knex
+            .select('*')
+            .from('AuditReport')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getAuditReport(paramName, paramValue) {
+        return this.knex('AuditReport').where(`${paramName}`, paramValue)
     }
 
     getBudgetStatementFTEs() {
@@ -188,6 +212,18 @@ class EcosystemDatabase extends SQLDataSource {
 
     getMip(paramName, paramValue) {
         return this.knex('CuMip').where(`${paramName}`, paramValue)
+    }
+
+    getMipReplaces() {
+        return this.knex
+            .select('*')
+            .from('MipReplaces')
+            .orderBy('id')
+            .cache(MINUTE)
+    }
+
+    getMipReplace(paramName, paramValue) {
+        return this.knex('MipReplaces').where(`${paramName}`, paramValue);
     }
 
     getMip39s() {
@@ -509,13 +545,13 @@ class EcosystemDatabase extends SQLDataSource {
 
     async createUser(cuId, userName, password) {
         const user = await this.knex('User').insert({ userName, password }).returning("*");
-        const userRole = await this.knex('UserRole').insert({userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId}).returning('*');
+        const userRole = await this.knex('UserRole').insert({ userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId }).returning('*');
         return {
             id: user[0].id,
             cuId: userRole[0].resourceId,
             userName: user[0].userName
         }
-        
+
     }
 
     // ------------------- Updating data --------------------------------
