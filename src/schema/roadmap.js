@@ -16,6 +16,7 @@ export const typeDefs = gql`
         "Todo, InProgress or Done"
         roadmapStatus: RoadmapStatus
         strategicInitiative: Boolean
+        roadmapSummary: String
         "Involved stakehodlders in the roadmap"
         roadmapStakeholder: [RoadmapStakeholder]
         "Links to documents showcasing the results of the roadmap"

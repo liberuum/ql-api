@@ -14,10 +14,11 @@ export const typeDefs = gql`
         "Status of the budgest statement (Draft/Final)"
         budgetStatus: BudgetStatus
         "Link to the complete publication of the budget statement"
-        publicationUrl: String!
+        publicationUrl: String
         "Core Unit code as defined with the Core Units' MIP39"
         cuCode: String!
         mkrProgramLength: Float
+        auditReport: [AuditReport]
         "Number of full-time employees in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
         "Details on the amount of MKR vested in the corresponding budget statement"
@@ -32,6 +33,21 @@ export const typeDefs = gql`
         SubmittedToAuditor
         AwaitingCorrections
     } 
+
+    type AuditReport {
+        id: ID!
+        budgetStatementId: ID!
+        auditStatus: AuditStatus
+        reportUrl: String
+        timestamp: Timestamp
+    }
+
+    enum AuditStatus {
+        Approved
+        ApprovedWithComments
+        NeedActionsBeforeApproval
+        Escalated
+    }
 
     type BudgetStatementFTEs {
         id: ID!
@@ -148,6 +164,14 @@ export const typeDefs = gql`
         mkrProgramLength: Float
     }
 
+    input AuditReportFilter {
+        id: ID
+        budgetStatementId: ID
+        auditStatus: AuditStatus
+        reportUrl: String
+        timestamp: Timestamp
+    }
+
     input BudgetStatementFTEsFilter {
         id: ID
         budgetStatementId: ID
@@ -206,6 +230,8 @@ export const typeDefs = gql`
     extend type Query {
         budgetStatement(filter: BudgetStatementFilter): [BudgetStatement]
         budgetStatements(limit: Int, offset: Int): [BudgetStatement!]
+        auditReport(filter: AuditReportFilter): [AuditReport]
+        auditReports: [AuditReport]
         budgetStatementFTEs: [BudgetStatementFTEs]
         budgetStatementFTE(filter: BudgetStatementFTEsFilter): [BudgetStatementFTEs]
         budgetStatementMKRVests: [BudgetStatementMKRVest]
@@ -238,6 +264,8 @@ export const typeDefs = gql`
         comments: String
         canonicalBudgetCategory: String
         headcountExpense: Boolean
+        budgetCap: Float
+        payment: Float
     }
 
     input LineItemsBatchDeleteInput {
@@ -290,6 +318,18 @@ export const resolvers = {
             const secondParamName = queryParams[1];
             const secondParamValue = filter[queryParams[1]];
             return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
+        },
+        auditReports: async (_, __, { dataSources }) => {
+            return await dataSources.db.getAuditReports();
+        },
+        auditReport: async (_, { filter }, { dataSources }) => {
+            const queryParams = Object.keys(filter);
+            if (queryParams.length > 1) {
+                throw "Choose one parameter only"
+            }
+            const paramName = queryParams[0];
+            const paramValue = filter[queryParams[0]];
+            return await dataSources.db.getAuditReport(paramName, paramValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
             return await dataSources.db.getBudgetStatementFTEs();
@@ -366,6 +406,14 @@ export const resolvers = {
 
     },
     BudgetStatement: {
+        auditReport: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getAuditReports();
+            const reports = result.filter(report => {
+                return report.budgetStatementId === id;
+            })
+            return reports;
+        },
         budgetStatementFTEs: async (parent, __, { dataSources }) => {
             const { id } = parent;
             const result = await dataSources.db.getBudgetStatementFTEs();
@@ -448,7 +496,7 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
-                        console.log(`adding ${input.length} line items to CU ${user.cuId}`, )
+                        console.log(`adding ${input.length} line items to CU ${user.cuId}`,)
                         const result = await dataSources.db.addBatchtLineItems(input)
                         return result;
                     } else {
