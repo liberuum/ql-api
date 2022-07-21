@@ -9,6 +9,7 @@ dotenv.config()
 import schema from './schema/schema.js';
 import EcosystemDatabase from './datasource/index.js';
 import { Authorization } from './schema/auth/authorization.js';
+import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
 const { types } = pkg
 types.setTypeParser(1082, val => val);
@@ -36,7 +37,7 @@ async function startApolloServer() {
     const httpServer = http.createServer(app);
     const server = new ApolloServer({
         schema,
-        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer }), responseCachePlugin.default() ],
         context: ({ req }) => {
             try {
                 const user = req.auth || null;

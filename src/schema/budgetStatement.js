@@ -442,11 +442,8 @@ export const resolvers = {
     BudgetStatementWallet: {
         budgetStatementLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementLineItems();
-            const lineItems = result.filter(lineItem => {
-                return lineItem.budgetStatementWalletId === id
-            })
-            return lineItems;
+            const result = await dataSources.db.getLineItemsByWalletId(id);
+            return result;
         },
         budgetStatementPayment: async (parent, __, { dataSources }) => {
             const { id } = parent;

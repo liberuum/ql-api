@@ -15,6 +15,7 @@
     "@graphql-tools/schema": "^8.3.3",
     "apollo-server-core": "^3.6.3",
     "apollo-server-express": "^3.6.3",
+    "apollo-server-plugin-response-cache": "^3.7.0",
     "bcrypt": "^5.0.1",
     "datasource-sql": "^1.6.0",
     "dotenv": "^16.0.0",
