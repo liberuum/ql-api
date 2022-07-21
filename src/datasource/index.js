@@ -175,11 +175,11 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     getLineItemsByWalletId(walletId) {
-        return this.knex('BudgetStatementLineItem').where(`budgetStatementWalletId`, walletId)
+        return this.knex('BudgetStatementLineItem').where(`budgetStatementWalletId`, walletId).orderBy('month', 'desc')
     }
 
     getBudgetStatementLineItem(paramName, paramValue) {
-        return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue)
+        return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
     }
 
     getBudgetStatementPayments() {
