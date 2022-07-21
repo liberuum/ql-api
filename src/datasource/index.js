@@ -153,6 +153,10 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
 
+    getLineItemsByWalletId(walletId) {
+        return this.knex('BudgetStatementLineItem').where(`budgetStatementWalletId`, walletId)
+    }
+
     getBudgetStatementLineItem(paramName, paramValue) {
         return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue)
     }
@@ -512,13 +516,13 @@ class EcosystemDatabase extends SQLDataSource {
 
     async createUser(cuId, userName, password) {
         const user = await this.knex('User').insert({ userName, password }).returning("*");
-        const userRole = await this.knex('UserRole').insert({userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId}).returning('*');
+        const userRole = await this.knex('UserRole').insert({ userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId }).returning('*');
         return {
             id: user[0].id,
             cuId: userRole[0].resourceId,
             userName: user[0].userName
         }
-        
+
     }
 
     // ------------------- Updating data --------------------------------

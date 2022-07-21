@@ -393,11 +393,8 @@ export const resolvers = {
     BudgetStatementWallet: {
         budgetStatementLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementLineItems();
-            const lineItems = result.filter(lineItem => {
-                return lineItem.budgetStatementWalletId === id
-            })
-            return lineItems;
+            const result = await dataSources.db.getLineItemsByWalletId(id);
+            return result;
         },
         budgetStatementPayment: async (parent, __, { dataSources }) => {
             const { id } = parent;
@@ -447,7 +444,7 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
-                        console.log(`adding ${input.length} line items to CU ${user.cuId}`, )
+                        console.log(`adding ${input.length} line items to CU ${user.cuId}`,)
                         const result = await dataSources.db.addBatchtLineItems(input)
                         return result;
                     } else {
