@@ -513,24 +513,32 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Contributor').where('id', id)
     }
 
-    getGithubOrgs() {
-        return this.knex
-            .select('*')
-            .from('GithubOrg')
-            .orderBy('id')
-            .cache(MINUTE)
+    getGithubOrgs(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('GithubOrg')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('GithubOrg').where('id', id)
+        }
     }
 
     getGithubOrg(paramName, paramValue) {
         return this.knex('GithubOrg').where(`${paramName}`, paramValue)
     }
 
-    getGithubRepos() {
-        return this.knex
-            .select('*')
-            .from('GithubRepo')
-            .orderBy('id')
-            .cache(MINUTE)
+    getGithubRepos(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('GithubRepo')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('GithubRepo').where('id', id)
+        }
     }
 
     getGithubRepo(paramName, paramValue) {
