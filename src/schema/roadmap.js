@@ -358,93 +358,63 @@ export const resolvers = {
     Roadmap: {
         roadmapStakeholder: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapStakeholders()
-            const roadmapStakeholders = result.filter(roadmapStakeholder => {
-                return roadmapStakeholder.roadmapId === id
-            })
-            return roadmapStakeholders
+            const result = await dataSources.db.getRoadmapStakeholders(id)
+            return result
         },
         roadmapOutput: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapOutputs()
-            const roadmapOutputs = result.filter(roadmapOutput => {
-                return roadmapOutput.roadmapId === id
-            })
-            return roadmapOutputs
+            const result = await dataSources.db.getRoadmapOutputs(id)
+            return result
         },
         milestone: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMilestones();
-            const milestones = result.filter(milestone => {
-                return milestone.roadmapId === id;
-            })
-            return milestones;
+            const result = await dataSources.db.getMilestones(id);
+            return result;
         }
     },
     RoadmapStakeholder: {
         stakeholderRole: async (parent, __, { dataSources }) => {
             const { stakeholderRoleId } = parent;
-            const result = await dataSources.db.getStakeholderRoles();
-            const stakeholderRoles = result.filter(stakeholderRole => {
-                return stakeholderRole.id === stakeholderRoleId
-            })
-            return stakeholderRoles
+            const result = await dataSources.db.getStakeholderRoles(stakeholderRoleId);
+            return result
         },
         stakeholder: async (parent, __, { dataSources }) => {
             const { stakeholderId } = parent;
-            const result = await dataSources.db.getStakeholders();
-            const stakeholders = result.filter(stakeholder => {
-                return stakeholder.id === stakeholderId;
-            })
-            return stakeholders;
+            const result = await dataSources.db.getStakeholders(stakeholderId);
+            return result;
         }
     },
     Stakeholder: {
         roadmapStakeholder: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapStakeholders()
-            const roadmapStakeholders = result.filter(roadmapStakeholder => {
-                return roadmapStakeholder.stakeholderId === id;
-            });
-            return roadmapStakeholders
+            const result = await dataSources.db.getRoadmapStakeholdersByStakeholderId(id)
+            return result
         }
     },
     RoadmapOutput: {
         output: async (parent, __, { dataSources }) => {
             const { outputId } = parent;
-            const result = await dataSources.db.getOutputs();
-            const outputs = result.filter(output => {
-                return output.id === outputId
-            })
-            return outputs;
+            const result = await dataSources.db.getOutputs(outputId);
+            return result;
         },
         outputType: async (parent, __, { dataSources }) => {
             const { outputTypeId } = parent;
-            const result = await dataSources.db.getOutputTypes();
-            const outputTypes = result.filter(outputType => {
-                return outputType.id === outputTypeId
-            })
-            return outputTypes;
+            const result = await dataSources.db.getOutputTypes(outputTypeId);
+            return result;
         }
     },
     Milestone: {
         task: async (parent, __, { dataSources }) => {
             const { taskId } = parent;
-            const result = await dataSources.db.getTasks()
-            const tasks = result.filter(task => {
-                return task.id === taskId;
-            })
-            return tasks;
+            const result = await dataSources.db.getTasks(taskId)
+            return result;
         }
     },
     Task: {
         review: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getReviews();
-            const reviews = result.filter(review => {
-                return review.taskId === id
-            })
-            return reviews
+            const result = await dataSources.db.getReviews(id);
+            return result
         }
     }
 }

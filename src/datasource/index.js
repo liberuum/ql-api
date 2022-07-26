@@ -431,84 +431,116 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Roadmap').where(`${paramName}`, paramValue)
     }
 
-    getRoadmapStakeholders() {
-        return this.knex
-            .select('*')
-            .from('RoadmapStakeholder')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmapStakeholders(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('RoadmapStakeholder')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('RoadmapStakeholder').where('roadmapId', roadmapId)
+        }
+    }
+
+    getRoadmapStakeholdersByStakeholderId(stakeholderId) {
+        return this.knex('RoadmapStakeholder').where('stakeholderId', stakeholderId)
     }
 
     getRoadmapStakeholder(paramName, paramValue) {
         return this.knex('RoadmapStakeholder').where(`${paramName}`, paramValue)
     }
 
-    getStakeholderRoles() {
-        return this.knex
-            .select('*')
-            .from('StakeholderRole')
-            .orderBy('id')
-            .cache(MINUTE)
+    getStakeholderRoles(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('StakeholderRole')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('StakeholderRole').where('id', id)
+        }
     }
 
     getStakeholderRole(paramName, paramValue) {
         return this.knex('StakeholderRole').where(`${paramName}`, paramValue)
     }
 
-    getStakeholders() {
-        return this.knex
-            .select('*')
-            .from('Stakeholder')
-            .orderBy('id')
-            .cache(MINUTE)
+    getStakeholders(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Stakeholder')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Stakeholder').where('id', id)
+        }
     }
 
     getStakeholder(paramName, paramValue) {
         return this.knex('Stakeholder').where(`${paramName}`, paramValue)
     }
 
-    getRoadmapOutputs() {
-        return this.knex
-            .select('*')
-            .from('RoadmapOutput')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmapOutputs(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('RoadmapOutput')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('RoadmapOutput').where('roadmapId', roadmapId)
+        }
     }
 
     getRoadmapOutput(paramName, paramValue) {
         return this.knex('RoadmapOutput').where(`${paramName}`, paramValue)
     }
 
-    getOutputs() {
-        return this.knex
-            .select('*')
-            .from('Output')
-            .orderBy('id')
-            .cache(MINUTE)
+    getOutputs(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Output')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Output').where('id', id)
+        }
     }
 
     getOutput(paramName, paramValue) {
         return this.knex('Output').where(`${paramName}`, paramValue)
     }
 
-    getOutputTypes() {
-        return this.knex
-            .select('*')
-            .from('OutputType')
-            .orderBy('id')
-            .cache(MINUTE)
+    getOutputTypes(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('OutputType')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('OutputType').where('id', id)
+        }
     }
 
     getOutputType(paramName, paramValue) {
         return this.knex('OutputType').where(`${paramName}`, paramValue)
     }
 
-    getMilestones() {
-        return this.knex
-            .select('*')
-            .from('Milestone')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMilestones(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Milestone')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Milestone').where('roadmapId', roadmapId)
+        }
     }
 
     getMilestone(paramName, paramValue) {
@@ -585,12 +617,16 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('MakerGithubEcosystem').where(`${paramName}`, paramValue)
     }
 
-    getTasks() {
-        return this.knex
-            .select('*')
-            .from('Task')
-            .orderBy('id')
-            .cache(MINUTE)
+    getTasks(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Task')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Task').where('id', id)
+        }
     }
 
     getTask(paramName, paramValue) {
@@ -609,12 +645,16 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('TaskOutput').where(`${paramName}`, paramValue)
     }
 
-    getReviews() {
-        return this.knex
-            .select('*')
-            .from('Review')
-            .orderBy('id')
-            .cache(MINUTE)
+    getReviews(taskId) {
+        if (taskId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Review')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Review').where('taskId', taskId)
+        }
     }
 
     getReview(paramName, paramValue) {
