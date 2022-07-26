@@ -74,12 +74,16 @@ class EcosystemDatabase extends SQLDataSource {
         // return this.knex('CoreUnit').insert({ code: code, name: name })
     }
 
-    getCuUpdates() {
-        return this.knex
-            .select('*')
-            .from('CuUpdate')
-            .orderBy('id')
-            .cache(MINUTE)
+    getCuUpdates(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuUpdate')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuUpdate').where('cuId', cuId)
+        }
     }
 
     getCuUpdate(paramName, paramValue) {
@@ -101,6 +105,11 @@ class EcosystemDatabase extends SQLDataSource {
                 .orderBy('month', 'desc')
         }
     }
+
+    getBudgetStatementByCuId(cuId) {
+        return this.knex('BudgetStatement').where('cuId', cuId)
+    }
+
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
         if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
@@ -232,12 +241,16 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementTransferRequest').where(`${paramName}`, paramValue)
     }
 
-    getMips() {
-        return this.knex
-            .select('*')
-            .from('CuMip')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMips(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuMip')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuMip').where('cuId', cuId)
+        }
     }
 
     getMip(paramName, paramValue) {
@@ -328,46 +341,62 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Mip41').where(`${paramName}`, paramValue)
     }
 
-    getSocialMediaChannels() {
-        return this.knex
-            .select('*')
-            .from('SocialMediaChannels')
-            .orderBy('id')
-            .cache(MINUTE)
+    getSocialMediaChannels(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('SocialMediaChannels')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('SocialMediaChannels').where('cuId', cuId)
+        }
     }
 
     getSocialMediaChannel(paramName, paramValue) {
         return this.knex('SocialMediaChannels').where(`${paramName}`, paramValue)
     }
 
-    getContributorCommitments() {
-        return this.knex
-            .select('*')
-            .from('ContributorCommitment')
-            .orderBy('id')
-            .cache(MINUTE)
+    getContributorCommitments(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('ContributorCommitment')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('ContributorCommitment').where('cuId', cuId)
+        }
     }
     getContributorCommitment(paramName, paramValue) {
         return this.knex('ContributorCommitment').where(`${paramName}`, paramValue)
     }
-    getCuGithubContributions() {
-        return this.knex
-            .select('*')
-            .from('CuGithubContribution')
-            .orderBy('id')
-            .cache(MINUTE)
+    getCuGithubContributions(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuGithubContribution')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuGithubContribution').where('cuId', cuId)
+        }
     }
 
     getCuGithubContribution(paramName, paramValue) {
         return this.knex('CuGithubContribution').where(`${paramName}`, paramValue)
     }
 
-    getRoadmaps() {
-        return this.knex
-            .select('*')
-            .from('Roadmap')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmaps(ownerCuId) {
+        if (ownerCuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Roadmap')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Roadmap').where('ownerCuId', ownerCuId)
+        }
     }
 
     getRoadmap(paramName, paramValue) {
