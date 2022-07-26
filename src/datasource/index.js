@@ -480,6 +480,10 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Contributor').where(`${paramName}`, paramValue)
     }
 
+    getContributorById(id) {
+        return this.knex('Contributor').where('id', id)
+    }
+
     getGithubOrgs() {
         return this.knex
             .select('*')
