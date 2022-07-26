@@ -313,75 +313,50 @@ export const resolvers = {
     CuMip: {
         mipReplaces: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMipReplaces();
-            const mipReplaces = result.filter(mip => {
-                return mip.newMip === id;
-            })
-            return mipReplaces;
+            const result = await dataSources.db.getMipReplaces(id);
+            return result;
         },
         mip39: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip39s();
-            const mips = result.filter(mip => {
-                return mip.mipId === id;
-            })
-            return mips;
+            const result = await dataSources.db.getMip39s(id);
+            return result;
         },
         mip40: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip40s();
-            const mips = result.filter(mip => {
-                return mip.cuMipId === id;
-            })
-            return mips;
+            const result = await dataSources.db.getMip40s(id);
+            return result;
         },
         mip41: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip41s();
-            const mips = result.filter(mip => {
-                return mip.cuMipId === id;
-            })
-            return mips;
+            const result = await dataSources.db.getMip41s(id);
+            return result;
 
         }
     },
     Mip40: {
         mip40BudgetPeriod: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip40BudgetPeriods();
-            const mip40BudgetPeriods = result.filter(budgetPeriod => {
-                return budgetPeriod.mip40Id === id;
-            })
-            return mip40BudgetPeriods;
+            const result = await dataSources.db.getMip40BudgetPeriods(id);
+            return result;
         },
         mip40Wallet: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip40Wallets();
-            const mip40Wallets = result.filter(mip40wallet => {
-                return mip40wallet.mip40Id === id;
-            })
-            return mip40Wallets;
+            const result = await dataSources.db.getMip40Wallets(id);
+            return result;
         }
     },
     Mip41: {
         contributor: async (parent, __, { dataSources }) => {
             const { contributorId } = parent;
-            const result = await dataSources.db.getContributors();
-            const contributor = result.filter(contributor => {
-                return contributor.id === contributorId
-            })
-            return contributor;
+            const result = await dataSources.db.getContributorById(contributorId);
+            return result;
         }
     },
     Mip40Wallet: {
         mip40BudgetLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMip40BudgetLineItems()
-            const lineItems = result.filter(lineItem => {
-                return lineItem.mip40WalletId === id;
-            })
-            return lineItems;
-
+            const result = await dataSources.db.getMip40BudgetLineItems(id)
+            return result;
         }
     }
 }
