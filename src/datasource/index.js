@@ -109,47 +109,63 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
 
-    getAuditReports() {
-        return this.knex
-            .select('*')
-            .from('AuditReport')
-            .orderBy('id')
-            .cache(MINUTE)
+    getAuditReports(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('AuditReport')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('AuditReport').where(`budgetStatementId`, budgetStatementId)
+        }
     }
 
     getAuditReport(paramName, paramValue) {
         return this.knex('AuditReport').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementFTEs() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementFtes')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementFTEs(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementFtes')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementFtes').where(`budgetStatementId`, budgetStatementId)
+        }
     }
 
     getBudgetStatementFTE(paramName, paramValue) {
         return this.knex('BudgetStatementFtes').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementMKRVests() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementMkrVest')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementMKRVests(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementMkrVest')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementMkrVest').where('budgetStatementId', budgetStatementId)
+        }
     }
 
     getBudgetStatementMKRVest(paramName, paramValue) {
         return this.knex('BudgetStatementMkrVest').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementWallets() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementWallet')
-            .orderBy('id')
+    getBudgetStatementWallets(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementWallet')
+                .orderBy('id')
+        } else {
+            return this.knex('BudgetStatementWallet').where('budgetStatementId', budgetStatementId)
+        }
     }
 
     getBudgetStatementWallet(paramName, paramValue) {
@@ -182,24 +198,34 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
     }
 
-    getBudgetStatementPayments() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementPayment')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementPayments(budgetStatementWalletId) {
+        if (budgetStatementWalletId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementPayment')
+                .orderBy('id')
+                .cache(MINUTE)
+
+        } else {
+            return this.knex('BudgetStatementPayment').where('budgetStatementWalletId', budgetStatementWalletId)
+        }
+
     }
 
     getBudgetStatementPayment(paramName, paramValue) {
         return this.knex('BudgetStatementPayment').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementTransferRequests() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementTransferRequest')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementTransferRequests(budgetStatementWalletId) {
+        if (budgetStatementWalletId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementTransferRequest')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementTransferRequest').where('budgetStatementWalletId', budgetStatementWalletId)
+        }
     }
 
     getBudgetStatementTransferRequest(paramName, paramValue) {
