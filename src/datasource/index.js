@@ -74,12 +74,16 @@ class EcosystemDatabase extends SQLDataSource {
         // return this.knex('CoreUnit').insert({ code: code, name: name })
     }
 
-    getCuUpdates() {
-        return this.knex
-            .select('*')
-            .from('CuUpdate')
-            .orderBy('id')
-            .cache(MINUTE)
+    getCuUpdates(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuUpdate')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuUpdate').where('cuId', cuId)
+        }
     }
 
     getCuUpdate(paramName, paramValue) {
@@ -101,6 +105,11 @@ class EcosystemDatabase extends SQLDataSource {
                 .orderBy('month', 'desc')
         }
     }
+
+    getBudgetStatementByCuId(cuId) {
+        return this.knex('BudgetStatement').where('cuId', cuId)
+    }
+
     getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue) {
         if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatement').where(`${paramName}`, paramValue);
@@ -109,47 +118,63 @@ class EcosystemDatabase extends SQLDataSource {
         }
     }
 
-    getAuditReports() {
-        return this.knex
-            .select('*')
-            .from('AuditReport')
-            .orderBy('id')
-            .cache(MINUTE)
+    getAuditReports(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('AuditReport')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('AuditReport').where(`budgetStatementId`, budgetStatementId)
+        }
     }
 
     getAuditReport(paramName, paramValue) {
         return this.knex('AuditReport').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementFTEs() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementFtes')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementFTEs(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementFtes')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementFtes').where(`budgetStatementId`, budgetStatementId)
+        }
     }
 
     getBudgetStatementFTE(paramName, paramValue) {
         return this.knex('BudgetStatementFtes').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementMKRVests() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementMkrVest')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementMKRVests(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementMkrVest')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementMkrVest').where('budgetStatementId', budgetStatementId)
+        }
     }
 
     getBudgetStatementMKRVest(paramName, paramValue) {
         return this.knex('BudgetStatementMkrVest').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementWallets() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementWallet')
-            .orderBy('id')
+    getBudgetStatementWallets(budgetStatementId) {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementWallet')
+                .orderBy('id')
+        } else {
+            return this.knex('BudgetStatementWallet').where('budgetStatementId', budgetStatementId)
+        }
     }
 
     getBudgetStatementWallet(paramName, paramValue) {
@@ -182,250 +207,340 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
     }
 
-    getBudgetStatementPayments() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementPayment')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementPayments(budgetStatementWalletId) {
+        if (budgetStatementWalletId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementPayment')
+                .orderBy('id')
+                .cache(MINUTE)
+
+        } else {
+            return this.knex('BudgetStatementPayment').where('budgetStatementWalletId', budgetStatementWalletId)
+        }
+
     }
 
     getBudgetStatementPayment(paramName, paramValue) {
         return this.knex('BudgetStatementPayment').where(`${paramName}`, paramValue)
     }
 
-    getBudgetStatementTransferRequests() {
-        return this.knex
-            .select('*')
-            .from('BudgetStatementTransferRequest')
-            .orderBy('id')
-            .cache(MINUTE)
+    getBudgetStatementTransferRequests(budgetStatementWalletId) {
+        if (budgetStatementWalletId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementTransferRequest')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('BudgetStatementTransferRequest').where('budgetStatementWalletId', budgetStatementWalletId)
+        }
     }
 
     getBudgetStatementTransferRequest(paramName, paramValue) {
         return this.knex('BudgetStatementTransferRequest').where(`${paramName}`, paramValue)
     }
 
-    getMips() {
-        return this.knex
-            .select('*')
-            .from('CuMip')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMips(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuMip')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuMip').where('cuId', cuId)
+        }
     }
 
     getMip(paramName, paramValue) {
         return this.knex('CuMip').where(`${paramName}`, paramValue)
     }
 
-    getMipReplaces() {
-        return this.knex
-            .select('*')
-            .from('MipReplaces')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMipReplaces(newMip) {
+        if (newMip === undefined) {
+            return this.knex
+                .select('*')
+                .from('MipReplaces')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('MipReplaces').where('newMip', newMip)
+        }
     }
 
     getMipReplace(paramName, paramValue) {
         return this.knex('MipReplaces').where(`${paramName}`, paramValue);
     }
 
-    getMip39s() {
-        return this.knex
-            .select('*')
-            .from('Mip39')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip39s(mipId) {
+        if (mipId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip39')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip39').where('mipId', mipId)
+        }
     }
 
     getMip39(paramName, paramValue) {
         return this.knex('Mip39').where(`${paramName}`, paramValue)
     }
 
-    getMip40s() {
-        return this.knex
-            .select('*')
-            .from('Mip40')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip40s(cuMipId) {
+        if (cuMipId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip40')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip40').where('cuMipId', cuMipId)
+        }
     }
 
     getMip40(paramName, paramValue) {
         return this.knex('Mip40').where(`${paramName}`, paramValue)
     }
 
-    getMip40BudgetPeriods() {
-        return this.knex
-            .select('*')
-            .from('Mip40BudgetPeriod')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip40BudgetPeriods(mip40Id) {
+        if (mip40Id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip40BudgetPeriod')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip40BudgetPeriod').where('mip40Id', mip40Id)
+        }
     }
 
     getMip40BudgetPeriod(paramName, paramValue) {
         return this.knex('Mip40BudgetPeriod').where(`${paramName}`, paramValue)
     }
 
-    getMip40Wallets() {
-        return this.knex
-            .select('*')
-            .from('Mip40Wallet')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip40Wallets(mip40Id) {
+        if (mip40Id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip40Wallet')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip40Wallet').where('mip40Id', mip40Id)
+        }
     }
 
     getMip40Wallet(paramName, paramValue) {
         return this.knex('Mip40Wallet').where(`${paramName}`, paramValue)
     }
 
-    getMip40BudgetLineItems() {
-        return this.knex
-            .select('*')
-            .from('Mip40BudgetLineItem')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip40BudgetLineItems(mip40WalletId) {
+        if (mip40WalletId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip40BudgetLineItem')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip40BudgetLineItem').where('mip40WalletId', mip40WalletId)
+        }
     }
 
     getMip40BudgetLineItem(paramName, paramValue) {
         return this.knex('Mip40BudgetLineItem').where(`${paramName}`, paramValue)
     }
 
-    getMip41s() {
-        return this.knex
-            .select('*')
-            .from('Mip41')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMip41s(cuMipId) {
+        if (cuMipId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Mip41')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Mip41').where('cuMipId', cuMipId)
+        }
     }
 
     getMip41(paramName, paramValue) {
         return this.knex('Mip41').where(`${paramName}`, paramValue)
     }
 
-    getSocialMediaChannels() {
-        return this.knex
-            .select('*')
-            .from('SocialMediaChannels')
-            .orderBy('id')
-            .cache(MINUTE)
+    getSocialMediaChannels(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('SocialMediaChannels')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('SocialMediaChannels').where('cuId', cuId)
+        }
     }
 
     getSocialMediaChannel(paramName, paramValue) {
         return this.knex('SocialMediaChannels').where(`${paramName}`, paramValue)
     }
 
-    getContributorCommitments() {
-        return this.knex
-            .select('*')
-            .from('ContributorCommitment')
-            .orderBy('id')
-            .cache(MINUTE)
+    getContributorCommitments(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('ContributorCommitment')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('ContributorCommitment').where('cuId', cuId)
+        }
     }
     getContributorCommitment(paramName, paramValue) {
         return this.knex('ContributorCommitment').where(`${paramName}`, paramValue)
     }
-    getCuGithubContributions() {
-        return this.knex
-            .select('*')
-            .from('CuGithubContribution')
-            .orderBy('id')
-            .cache(MINUTE)
+    getCuGithubContributions(cuId) {
+        if (cuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('CuGithubContribution')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('CuGithubContribution').where('cuId', cuId)
+        }
     }
 
     getCuGithubContribution(paramName, paramValue) {
         return this.knex('CuGithubContribution').where(`${paramName}`, paramValue)
     }
 
-    getRoadmaps() {
-        return this.knex
-            .select('*')
-            .from('Roadmap')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmaps(ownerCuId) {
+        if (ownerCuId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Roadmap')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Roadmap').where('ownerCuId', ownerCuId)
+        }
     }
 
     getRoadmap(paramName, paramValue) {
         return this.knex('Roadmap').where(`${paramName}`, paramValue)
     }
 
-    getRoadmapStakeholders() {
-        return this.knex
-            .select('*')
-            .from('RoadmapStakeholder')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmapStakeholders(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('RoadmapStakeholder')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('RoadmapStakeholder').where('roadmapId', roadmapId)
+        }
+    }
+
+    getRoadmapStakeholdersByStakeholderId(stakeholderId) {
+        return this.knex('RoadmapStakeholder').where('stakeholderId', stakeholderId)
     }
 
     getRoadmapStakeholder(paramName, paramValue) {
         return this.knex('RoadmapStakeholder').where(`${paramName}`, paramValue)
     }
 
-    getStakeholderRoles() {
-        return this.knex
-            .select('*')
-            .from('StakeholderRole')
-            .orderBy('id')
-            .cache(MINUTE)
+    getStakeholderRoles(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('StakeholderRole')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('StakeholderRole').where('id', id)
+        }
     }
 
     getStakeholderRole(paramName, paramValue) {
         return this.knex('StakeholderRole').where(`${paramName}`, paramValue)
     }
 
-    getStakeholders() {
-        return this.knex
-            .select('*')
-            .from('Stakeholder')
-            .orderBy('id')
-            .cache(MINUTE)
+    getStakeholders(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Stakeholder')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Stakeholder').where('id', id)
+        }
     }
 
     getStakeholder(paramName, paramValue) {
         return this.knex('Stakeholder').where(`${paramName}`, paramValue)
     }
 
-    getRoadmapOutputs() {
-        return this.knex
-            .select('*')
-            .from('RoadmapOutput')
-            .orderBy('id')
-            .cache(MINUTE)
+    getRoadmapOutputs(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('RoadmapOutput')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('RoadmapOutput').where('roadmapId', roadmapId)
+        }
     }
 
     getRoadmapOutput(paramName, paramValue) {
         return this.knex('RoadmapOutput').where(`${paramName}`, paramValue)
     }
 
-    getOutputs() {
-        return this.knex
-            .select('*')
-            .from('Output')
-            .orderBy('id')
-            .cache(MINUTE)
+    getOutputs(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Output')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Output').where('id', id)
+        }
     }
 
     getOutput(paramName, paramValue) {
         return this.knex('Output').where(`${paramName}`, paramValue)
     }
 
-    getOutputTypes() {
-        return this.knex
-            .select('*')
-            .from('OutputType')
-            .orderBy('id')
-            .cache(MINUTE)
+    getOutputTypes(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('OutputType')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('OutputType').where('id', id)
+        }
     }
 
     getOutputType(paramName, paramValue) {
         return this.knex('OutputType').where(`${paramName}`, paramValue)
     }
 
-    getMilestones() {
-        return this.knex
-            .select('*')
-            .from('Milestone')
-            .orderBy('id')
-            .cache(MINUTE)
+    getMilestones(roadmapId) {
+        if (roadmapId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Milestone')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Milestone').where('roadmapId', roadmapId)
+        }
     }
 
     getMilestone(paramName, paramValue) {
@@ -454,24 +569,36 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('Contributor').where(`${paramName}`, paramValue)
     }
 
-    getGithubOrgs() {
-        return this.knex
-            .select('*')
-            .from('GithubOrg')
-            .orderBy('id')
-            .cache(MINUTE)
+    getContributorById(id) {
+        return this.knex('Contributor').where('id', id)
+    }
+
+    getGithubOrgs(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('GithubOrg')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('GithubOrg').where('id', id)
+        }
     }
 
     getGithubOrg(paramName, paramValue) {
         return this.knex('GithubOrg').where(`${paramName}`, paramValue)
     }
 
-    getGithubRepos() {
-        return this.knex
-            .select('*')
-            .from('GithubRepo')
-            .orderBy('id')
-            .cache(MINUTE)
+    getGithubRepos(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('GithubRepo')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('GithubRepo').where('id', id)
+        }
     }
 
     getGithubRepo(paramName, paramValue) {
@@ -490,12 +617,16 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('MakerGithubEcosystem').where(`${paramName}`, paramValue)
     }
 
-    getTasks() {
-        return this.knex
-            .select('*')
-            .from('Task')
-            .orderBy('id')
-            .cache(MINUTE)
+    getTasks(id) {
+        if (id === undefined) {
+            return this.knex
+                .select('*')
+                .from('Task')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Task').where('id', id)
+        }
     }
 
     getTask(paramName, paramValue) {
@@ -514,12 +645,16 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('TaskOutput').where(`${paramName}`, paramValue)
     }
 
-    getReviews() {
-        return this.knex
-            .select('*')
-            .from('Review')
-            .orderBy('id')
-            .cache(MINUTE)
+    getReviews(taskId) {
+        if (taskId === undefined) {
+            return this.knex
+                .select('*')
+                .from('Review')
+                .orderBy('id')
+                .cache(MINUTE)
+        } else {
+            return this.knex('Review').where('taskId', taskId)
+        }
     }
 
     getReview(paramName, paramValue) {

@@ -139,59 +139,38 @@ export const resolvers = {
     CoreUnit: {
         budgetStatements: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatements();
-            const budgetStatements = result.filter(statement => {
-                return statement.cuId === id;
-            })
-            return budgetStatements;
+            const result = await dataSources.db.getBudgetStatementByCuId(id);
+            return result;
         },
         cuMip: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMips();
-            const cuMips = result.filter(cuMip => {
-                return cuMip.cuId === id;
-            })
-            return cuMips;
+            const result = await dataSources.db.getMips(id);
+            return result;
         },
         socialMediaChannels: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getSocialMediaChannels();
-            const socialMediaChannels = result.filter(coreUnit => {
-                return coreUnit.cuId === id;
-            })
-            return socialMediaChannels;
+            const result = await dataSources.db.getSocialMediaChannels(id);
+            return result;
         },
         contributorCommitment: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getContributorCommitments();
-            const contributorCommitments = result.filter(commitment => {
-                return commitment.cuId === id;
-            })
-            return contributorCommitments;
+            const result = await dataSources.db.getContributorCommitments(id);
+            return result;
         },
         cuGithubContribution: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getCuGithubContributions();
-            const githubContributions = result.filter(contribution => {
-                return contribution.cuId === id;
-            })
-            return githubContributions;
+            const result = await dataSources.db.getCuGithubContributions(id);
+            return result;
         },
         roadMap: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmaps();
-            const roadmaps = result.filter(roadmap => {
-                return roadmap.ownerCuId === id;
-            })
-            return roadmaps;
+            const result = await dataSources.db.getRoadmaps(id);
+            return result;
         },
         cuUpdates: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getCuUpdates();
-            const cuUpdates = result.filter(cuUpdate => {
-                return cuUpdate.cuId === id;
-            })
-            return cuUpdates;
+            const result = await dataSources.db.getCuUpdates(id);
+            return result;
         }
     }
 };

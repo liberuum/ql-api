@@ -408,35 +408,23 @@ export const resolvers = {
     BudgetStatement: {
         auditReport: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getAuditReports();
-            const reports = result.filter(report => {
-                return report.budgetStatementId === id;
-            })
-            return reports;
+            const result = await dataSources.db.getAuditReports(id);
+            return result;
         },
         budgetStatementFTEs: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementFTEs();
-            const ftes = result.filter(fte => {
-                return fte.budgetStatementId === id;
-            })
-            return ftes
+            const result = await dataSources.db.getBudgetStatementFTEs(id);
+            return result
         },
         budgetStatementMKRVest: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementMKRVests()
-            const vests = result.filter(vest => {
-                return vest.budgetStatementId === id;
-            })
-            return vests;
+            const result = await dataSources.db.getBudgetStatementMKRVests(id)
+            return result;
         },
         budgetStatementWallet: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementWallets();
-            const wallets = result.filter(wallet => {
-                return wallet.budgetStatementId === id
-            })
-            return wallets;
+            const result = await dataSources.db.getBudgetStatementWallets(id);
+            return result;
         }
     },
     BudgetStatementWallet: {
@@ -447,19 +435,13 @@ export const resolvers = {
         },
         budgetStatementPayment: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementPayments();
-            const payments = result.filter(payment => {
-                return payment.budgetStatementWalletId === id
-            })
-            return payments;
+            const result = await dataSources.db.getBudgetStatementPayments(id);
+            return result;
         },
         budgetStatementTransferRequest: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementTransferRequests();
-            const transferRequests = result.filter(requests => {
-                return requests.budgetStatementWalletId === id
-            })
-            return transferRequests;
+            const result = await dataSources.db.getBudgetStatementTransferRequests(id);
+            return result;
         }
     },
     Mutation: {
