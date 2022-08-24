@@ -1,6 +1,7 @@
 import { ApolloServer, AuthenticationError } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
+import compression from 'compression';
 import http from 'http';
 import dotenv from 'dotenv';
 import pkg from 'pg';
@@ -27,6 +28,8 @@ const options = {
 
 async function startApolloServer() {
     const app = express();
+    
+    app.use(compression())
     app.use(
         expressjwt({
             secret: process.env.SECRET,
