@@ -17,6 +17,7 @@
     "apollo-server-express": "^3.6.3",
     "apollo-server-plugin-response-cache": "^3.7.0",
     "bcrypt": "^5.0.1",
+    "compression": "^1.7.4",
     "datasource-sql": "^1.6.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
