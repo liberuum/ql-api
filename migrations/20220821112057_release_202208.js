@@ -7,7 +7,7 @@ export function up(knex) {
         console.log("Creating Core Unit table...");
         table.increments('id').primary();
         table.string('code', 255).notNullable();
-        //table.string('shortCode', 255).notNullable();
+        table.string('shortCode', 255).notNullable();
         table.string('name', 255).notNullable();
         table.string('image', 255).notNullable();
         table.enu('category', ['Technical','Operational','Business','RWAs','Growth','Finance','Legal']).notNullable();
