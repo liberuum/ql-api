@@ -11,6 +11,7 @@ export const typeDefs = gql`
         discord: String
         linkedIn: String
         website: String
+        github: String
     }
 
     type TwitterFollowers {
@@ -38,6 +39,7 @@ export const typeDefs = gql`
         discord: String
         linkedIn: String
         website: String
+        github: String
     }
 
     extend type Query {
