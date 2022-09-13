@@ -10,7 +10,7 @@ export function up(knex) {
         table.string('shortCode', 255).notNullable();
         table.string('name', 255).notNullable();
         table.string('image', 255).notNullable();
-        table.enu('category', ['Technical','Operational','Business','RWAs','Growth','Finance','Legal']).notNullable();
+        table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable(),
         table.string('sentenceDescription', 255);
         table.string('paragraphDescription', 255);
         table.string('paragraphImage', 255);
@@ -28,7 +28,7 @@ export function up(knex) {
         table.date('accepted', 255);
         table.date('rejected', 255);
         table.date('obsolete', 255);
-        table.enu('mipStatus', ['RFC','FormalSubmission','Accepted','Rejected','Obsolete','Withdrawn']).notNullable();
+        table.specificType('status', 'text').defaultTo(knex.raw('\'{RFC,FormalSubmission,Accepted,Rejected,Obsolete,Withdrawn}\'::text')).notNullable(),
         table.string('mipUrl', 255);
         table.string('forumUrl', 255);
     })
@@ -41,8 +41,8 @@ export function up(knex) {
         table.string('cuCode', 255).notNullable();
         table.date('month', 255).notNullable();
         table.string('comments', 255);
-        table.enu('budgetStatus', ['Draft', 'SubmittedToAuditor','AwaitingCorretions','Final']);
-        table.string('publicaitonUrl', 255);
+        table.specificType('budgetStatus', 'text').defaultTo(knex.raw('\'{Draft,SubmittedToAuditor,AwaitingCorrections,Final}\'::text')).notNullable(),
+        table.string('publicationUrl', 255);
         table.float('mkrProgramLength', 255);
     })
 
