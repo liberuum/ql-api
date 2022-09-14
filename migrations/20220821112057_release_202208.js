@@ -112,7 +112,7 @@ export function up(knex) {
 
 export function down(knex) {
     
-    console.log("Dropping tables CoreUnit, CuMip, BudgetStatement, SocialMediaChannels, Contributor, ContributorCommitment, Roadmap...");
+    console.log("Dropping tables CoreUnit, CuMip, BudgetStatement, SocialMediaChannels, Contributor, ContributorCommitment, Roadmap, CuUpdate...");
 
     return knex.schema
 
