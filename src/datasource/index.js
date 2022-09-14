@@ -665,6 +665,14 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('User').where('userName', userName)
     }
 
+    getBudgetToolVersions() {
+        return this.knex('BudgetToolVersion').orderBy('id', 'desc').cache(MINUTE);
+    }
+
+    getLatestBudgetToolVersion() {
+        return this.knex('BudgetToolVersion').orderBy('id', 'desc').limit(1);
+    }
+
     // ------------------- Adding data --------------------------------
 
     addBatchtLineItems(rows) {
