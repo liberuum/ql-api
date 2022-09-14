@@ -80,7 +80,7 @@ export function up(knex) {
         table.integer('contributorId').notNullable();
         table.foreign('contributorId').references('Contributor.id').onDelete('CASCADE')
         table.date('startDate', 255).notNullable();
-        table.enu('commitment', ['FullTime','PartTime','Variable','Inactive']).notNullable();
+        table.specificType('commitment', 'text').defaultTo(knex.raw('\'{FullTime,PartTime,Variable,Inactive}\'::text')).notNullable(),
         table.string('title', 255).notNullable();
     })
 
@@ -91,7 +91,7 @@ export function up(knex) {
         table.foreign('ownerCuId').references('CoreUnit.id').onDelete('CASCADE')
         table.varchar('roadmapCode', 255);
         table.varchar('roadmapName', 255).notNullable();
-        table.enu('roadmapStatus', ['ToDo','InProgress','Done']).notNullable();
+        table.specificType('roadmapStatus', 'text').defaultTo(knex.raw('\'{ToDo,InProgress,Done}\'::text')).notNullable(),
         table.varchar('roadmapSummary', 255);
         table.boolean('strategicInitiative');
         table.string('comments', 255);
