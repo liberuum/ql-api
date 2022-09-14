@@ -47,6 +47,10 @@ import {
     typeDefs as ViewData,
     resolvers as ViewDataResolvers
 } from './viewData.js';
+import {
+    typeDefs as BudgetToolVersion,
+    resolvers as BudgetToolVersionResolvers
+} from './budgetToolVersion.js'
 
 const Query = gql`
     type Query
@@ -71,7 +75,8 @@ const schema = makeExecutableSchema({
         Roadmap,
         Utils,
         Users,
-        ViewData
+        ViewData,
+        BudgetToolVersion
     ],
     resolvers: _.merge(
         scalarResolvers,
@@ -85,7 +90,8 @@ const schema = makeExecutableSchema({
         RoadmapResolvers,
         UtilsResolvers,
         UsersResolvers,
-        ViewDataResolvers
+        ViewDataResolvers,
+        BudgetToolVersionResolvers
     )
 })
 
