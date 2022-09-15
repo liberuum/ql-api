@@ -1,3 +1,4 @@
+//Creation of the BudgetStatement subtables
 
  export function up(knex) {
     return knex.schema
@@ -30,7 +31,7 @@
         table.varchar('name', 255).notNullable();
         table.varchar('address', 255).notNullable();
         table.float('currentBalance', 255);
-        table.varchar('topupTransfer', 255);
+        table.float('topupTransfer', 255);
         table.varchar('comments', 255);
        })
 

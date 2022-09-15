@@ -61,7 +61,7 @@ await knex('BudgetStatement').insert([
   {
     cuId: 1,
     cuCode: 'EXA',
-    month: '01-07-2022',
+    month: '03-01-2022',
     comments: 'This is the first budget statement for the Example Core Unit',  
     budgetStatus: 'Draft',
     publicationUrl: 'https://mips.makerdao.com/mips/details/MIP39c2SP1',
@@ -70,7 +70,7 @@ await knex('BudgetStatement').insert([
 {
   cuId: 2,
   cuCode: 'WAR',
-  month: '01-07-2022',
+  month: '08-01-2022',
   comments: 'This is the first budget statement for the Example Core Unit',  
   budgetStatus: 'SubmittedToAuditor',
   publicationUrl: 'https://mips.makerdao.com/mips/details/MIP39c2SP1',
