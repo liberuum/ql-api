@@ -1,3 +1,4 @@
+//Up migration creates CuMip and subtables
 
 export function up(knex) {
     return knex.schema
@@ -27,7 +28,7 @@ export function up(knex) {
         table.increments('id').primary();
         table.integer('cuMipId').notNullable();
         table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
-        table.integer('mip40Spn').notNullable();
+        table.varchar('mip40Spn').notNullable();
         table.boolean('mkrOnly', 255).notNullable();  
         table.float('mkrProgramLength').notNullable();     
     })
@@ -50,8 +51,8 @@ export function up(knex) {
         table.varchar('address', 255).notNullable();
         table.varchar('name', 255).notNullable();  
         table.integer('signersTotal').notNullable();  
-        table.integer('signerRequired').notNullable();  
-        table.float('clawbackLimit').notNullable();     
+        table.integer('signersRequired').notNullable();  
+        table.float('clawbackLimit');     
     })
 
     .createTable('Mip40BudgetLineItem', function (table) {
