@@ -41,4 +41,22 @@
     {mip40Id: 2, address: '0x4862733B5FdDFd35f35ea8CCf08F5045e57388B3', name: 'The War Chest', signersTotal: 3, signersRequired: 2}
   ]);
 
+  await knex('Mip40BudgetLineItem').insert([
+    {mip40Id: 1, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '100000', headcountExpense: true},
+    {mip40Id: 1, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '10000', headcountExpense: false},
+    {mip40Id: 1, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '2500', headcountExpense: true},
+    {mip40Id: 1, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '3100', headcountExpense: false},
+    {mip40Id: 1, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '2000', headcountExpense: false},
+    {mip40Id: 2, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '110000', headcountExpense: true},
+    {mip40Id: 2, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '30000', headcountExpense: false},
+    {mip40Id: 2, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '100', headcountExpense: true},
+    {mip40Id: 2, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '5000', headcountExpense: false},
+    {mip40Id: 2, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '21000', headcountExpense: false},
+  ]);
+
+  await knex('Mip41').insert([
+    {cuMipId: 1, contributorId: 1},
+    {cuMipId: 1, contributorId: 2},
+  ]);
+
 };
