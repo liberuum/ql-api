@@ -56,7 +56,7 @@ export function up(knex) {
        .createTable('Task', function (table) {
         console.log("Creating Task table...");
         table.increments('id').primary();
-        table.integer('parentId').notNullable();
+        table.integer('parentId');
         table.foreign('parentId').references('Task.id').onDelete('CASCADE');
         table.varchar('taskName', 255).notNullable(); 
         table.specificType('taskStatus', 'text').defaultTo(knex.raw('\'{Backlog,ToDo,InProgress,Done,WontDo,Blocked}\'::text')).notNullable();
