@@ -18,9 +18,9 @@ export function up(knex) {
         table.integer('cuMipId').notNullable();
         table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
         table.integer('mip39Spn').notNullable();
-        table.string('cuName', 255).notNullable();  
-        table.string('sentenceSummary', 255).notNullable();     
-        table.string('paragraphSummary', 255).notNullable();     
+        table.string('cuName').notNullable();  
+        table.string('sentenceSummary').notNullable();     
+        table.string('paragraphSummary').notNullable();     
     })
 
     .createTable('Mip40', function (table) {
@@ -29,7 +29,7 @@ export function up(knex) {
         table.integer('cuMipId').notNullable();
         table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
         table.varchar('mip40Spn').notNullable();
-        table.boolean('mkrOnly', 255).notNullable();  
+        table.boolean('mkrOnly').notNullable();  
         table.float('mkrProgramLength').notNullable();     
     })
 
@@ -48,8 +48,8 @@ export function up(knex) {
         table.increments('id').primary();
         table.integer('mip40Id').notNullable();
         table.foreign('mip40Id').references('Mip40.id').onDelete('CASCADE');
-        table.varchar('address', 255).notNullable();
-        table.varchar('name', 255).notNullable();  
+        table.varchar('address').notNullable();
+        table.varchar('name').notNullable();  
         table.integer('signersTotal').notNullable();  
         table.integer('signersRequired').notNullable();  
         table.float('clawbackLimit');     
@@ -58,12 +58,12 @@ export function up(knex) {
     .createTable('Mip40BudgetLineItem', function (table) {
         console.log("Creating Mip40BudgetLineItem table...");
         table.increments('id').primary();
-        table.integer('mip40Id').notNullable();
-        table.foreign('mip40Id').references('Mip40Wallet.id').onDelete('CASCADE');
-        table.integer('position', 255);
-        table.varchar('group', 255);  
-        table.varchar('budgetCategory', 255).notNullable();   
-        table.specificType('canonicalBudgetCategory', 'text').defaultTo(knex.raw('\'{CompensationAndBenefits,Bonus,TravelAndEntertainment,TrainingExpense,AdminExpense,CommunityDevelopmentExpense,FreightAndDuties,GasExpense,GovernancePrograms,HardwareExpense,MarketingExpense,ProfessionalServices,SoftwareDevelopmentExpense,SoftwareExpense,Supplies,ContingencyBuffer}\'::text')).notNullable(),
+        table.integer('mip40WalletId').notNullable();
+        table.foreign('mip40WalletId').references('Mip40Wallet.id').onDelete('CASCADE');
+        table.integer('position');
+        table.varchar('group');  
+        table.varchar('budgetCategory').notNullable();   
+        table.specificType('canonicalBudgetCategory', 'text').defaultTo(knex.raw('\'{CompensationAndBenefits,Bonus,TravelAndEntertainment,TrainingExpense,AdminExpense,CommunityDevelopmentExpense,FreightAndDuties,GasExpense,GovernancePrograms,HardwareExpense,MarketingExpense,ProfessionalServices,SoftwareDevelopmentExpense,SoftwareExpense,Supplies,ContingencyBuffer}\'::text')),
         table.float('budgetCap').notNullable();  
         table.boolean('headcountExpense').notNullable()   
     })

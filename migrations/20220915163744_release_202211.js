@@ -7,16 +7,16 @@ export function up(knex) {
         console.log("Creating Stakeholder table...");
         table.increments('id').primary();
         table.varchar('name').notNullable();
-        table.integer('stakeholderContributorId').notNullable();
+        table.integer('stakeholderContributorId');
         table.foreign('stakeholderContributorId').references('Contributor.id').onDelete('CASCADE');
-        table.integer('stakeholderCuId').notNullable();
+        table.integer('stakeholderCuId');
         table.foreign('stakeholderCuId').references('CoreUnit.id').onDelete('CASCADE');
        })
 
        .createTable('StakeholderRole', function (table) {
         console.log("Creating StakeholderRole table...");
         table.increments('id').primary();
-        table.varchar('stakeholderRoleName', 255).notNullable();
+        table.varchar('stakeholderRoleName').notNullable();
        })
 
        .createTable('RoadmapStakeholder', function (table) {
@@ -33,15 +33,15 @@ export function up(knex) {
        .createTable('Output', function (table) {
         console.log("Creating Output table...");
         table.increments('id').primary();
-        table.varchar('name', 255).notNullable();
-        table.varchar('outputUrl', 255).notNullable();
+        table.varchar('name').notNullable();
+        table.varchar('outputUrl').notNullable();
         table.date('outputDate').notNullable();
        })
 
        .createTable('OutputType', function (table) {
         console.log("Creating OutputType table...");
         table.increments('id').primary();
-        table.varchar('outputType', 255).notNullable(); 
+        table.varchar('outputType').notNullable(); 
        })
 
        .createTable('RoadmapOutput', function (table) {
@@ -58,7 +58,7 @@ export function up(knex) {
         table.increments('id').primary();
         table.integer('parentId');
         table.foreign('parentId').references('Task.id').onDelete('CASCADE');
-        table.varchar('taskName', 255).notNullable(); 
+        table.varchar('taskName').notNullable(); 
         table.specificType('taskStatus', 'text').defaultTo(knex.raw('\'{Backlog,ToDo,InProgress,Done,WontDo,Blocked}\'::text')).notNullable();
         table.integer('ownerStakeholderId');
         table.foreign('ownerStakeholderId').references('Stakeholder.id').onDelete('CASCADE');
@@ -67,7 +67,7 @@ export function up(knex) {
         table.date('target');
         table.float('completedPercentage');
         table.specificType('confidenceLevel', 'text').defaultTo(knex.raw('\'{High,Medium,Low}\'::text')).notNullable();
-        table.varchar('comments', 255);
+        table.varchar('comments');
        })
 
        .createTable('Review', function (table) {
@@ -77,7 +77,7 @@ export function up(knex) {
         table.foreign('taskId').references('Task.id').onDelete('CASCADE');
         table.date('reviewDate').notNullable();
         table.specificType('reviewOutcome', 'text').defaultTo(knex.raw('\'{Red,Yellow,Green}\'::text')).notNullable();
-        table.varchar('comments', 255);
+        table.varchar('comments');
        })
 
        .createTable('Milestone', function (table) {
