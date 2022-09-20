@@ -4,12 +4,18 @@
  */
  export async function seed(knex) {
   // Deletes ALL existing entries
+  await knex('AuditReport').del()
   await knex('BudgetStatementTransferRequest').del()
   await knex('BudgetStatementPayment').del()
   await knex('BudgetStatementLineItem').del()
   await knex('BudgetStatementWallet').del()
   await knex('BudgetStatementMkrVest').del()
   await knex('BudgetStatementFtes').del()
+
+  await knex('AuditReport').insert([
+    {budgetStatementId: 1, AuditStatus: 'Approved', timestamp: '2022-01-01 19:10:25-07'},
+    {budgetStatementId: 2, AuditStatus: 'NeedActionsBeforeApproval', timestamp: '2022-09-19 16:40:25-07'}
+  ]);
 
   await knex('BudgetStatementFtes').insert([
     {id: 1, budgetStatementId: 1, month: '03-01-2022', ftes: 12},

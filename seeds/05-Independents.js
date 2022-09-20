@@ -4,17 +4,30 @@
  */
  export async function seed(knex) {
   // Deletes ALL existing entries
+  await knex('UserRole').del()
+  await knex('User').del()
   await knex('ViewDataCache').del()
   await knex('BudgetToolVersion').del()
 
-  await knex('ViewDataCache').insert([
-    {name: 'Colonel Sanders', stakeholderContributorId: 1, stakeholderCuId: 2},
-    {name: 'Example', stakeholderContributorId: 2, stakeholderCuId: 1}
+  /*await knex('ViewDataCache').insert([
+    {lastUpdate:'2022-06-22 19:10:25-07', value: {"employees":[
+      {"firstName":"John", "lastName":"Doe"},
+      {"firstName":"Anna", "lastName":"Smith"},
+      {"firstName":"Peter", "lastName":"Jones"}
+    ]}}
+  ]);
+  */
+
+  await knex('User').insert([
+    {username: 'user1', password: 'password123'}
+  ]);
+
+  await knex('UserRole').insert([
+    {roleId: 1, userId: 1, resource: 'CoreUnit', resourceId: 1}
   ]);
 
   await knex('BudgetToolVersion').insert([
-    {stakeholderRoleName: 'Captain of the Ship'},
-    {stakeholderRoleName: 'Facilitator'}
+    {version: '1.0.1', link:'https://github.com/pcatana/budget-tool/releases/tag/v1.1.0'}
   ]);
 
 };

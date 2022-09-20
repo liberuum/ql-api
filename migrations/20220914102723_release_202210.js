@@ -3,6 +3,15 @@
  export function up(knex) {
     return knex.schema
 
+    .createTable('AuditReport', function (table) {
+        console.log("Creating AuditReport table...");
+        table.increments('id').primary();
+        table.integer('budgetStatementId').notNullable();
+        table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
+        table.specificType('AuditStatus', 'text').defaultTo(knex.raw('\'{Approved,ApprovedWithComments,NeedAcionsBeforeApproval,Escalated}\'::text')).notNullable(),
+        table.timestamp('timestamp').notNullable();
+       })
+
     .createTable('BudgetStatementFtes', function (table) {
         console.log("Creating BudgetStatementFtes table...");
         table.increments('id').primary();
@@ -91,4 +100,5 @@ export function down(knex) {
     .dropTable("BudgetStatementWallet")
     .dropTable("BudgetStatementMkrVest")
     .dropTable("BudgetStatementFtes") 
+    .dropTable("AuditReport")
 };

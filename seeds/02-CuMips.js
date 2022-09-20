@@ -42,16 +42,16 @@
   ]);
 
   await knex('Mip40BudgetLineItem').insert([
-    {mip40Id: 1, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '100000', headcountExpense: true},
-    {mip40Id: 1, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '10000', headcountExpense: false},
-    {mip40Id: 1, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '2500', headcountExpense: true},
-    {mip40Id: 1, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '3100', headcountExpense: false},
-    {mip40Id: 1, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '2000', headcountExpense: false},
-    {mip40Id: 2, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '110000', headcountExpense: true},
-    {mip40Id: 2, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '30000', headcountExpense: false},
-    {mip40Id: 2, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '100', headcountExpense: true},
-    {mip40Id: 2, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '5000', headcountExpense: false},
-    {mip40Id: 2, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '21000', headcountExpense: false},
+    {mip40WalletId: 1, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '100000', headcountExpense: true},
+    {mip40WalletId: 1, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '10000', headcountExpense: false},
+    {mip40WalletId: 1, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '2500', headcountExpense: true},
+    {mip40WalletId: 1, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '3100', headcountExpense: false},
+    {mip40WalletId: 1, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '2000', headcountExpense: false},
+    {mip40WalletId: 2, budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', budgetCap: '110000', headcountExpense: true},
+    {mip40WalletId: 2, budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', budgetCap: '30000', headcountExpense: false},
+    {mip40WalletId: 2, budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', budgetCap: '100', headcountExpense: true},
+    {mip40WalletId: 2, budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', budgetCap: '5000', headcountExpense: false},
+    {mip40WalletId: 2, budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', budgetCap: '21000', headcountExpense: false},
   ]);
 
   await knex('Mip41').insert([
