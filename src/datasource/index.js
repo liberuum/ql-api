@@ -203,8 +203,12 @@ class EcosystemDatabase extends SQLDataSource {
         return this.knex('BudgetStatementLineItem').where(`budgetStatementWalletId`, walletId).orderBy('month', 'desc')
     }
 
-    getBudgetStatementLineItem(paramName, paramValue) {
-        return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
+    getBudgetStatementLineItem(paramName, paramValue, secondParamName, secondParamValue) {
+        if(secondParamName === undefined && secondParamValue === undefined) {
+            return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
+        } else {
+            return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
+        }
     }
 
     getBudgetStatementPayments(budgetStatementWalletId) {
