@@ -59,8 +59,8 @@ export function down(knex) {
     return knex.schema
 
     .dropTable("RolePermission") 
-    .dropTable("Role") 
     .dropTable("UserRole") 
+    .dropTable("Role") 
     .dropTable("User") 
     .dropTable("BudgetToolVersion") 
     .dropTable("ViewDataCache")

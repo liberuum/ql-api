@@ -4,7 +4,9 @@
  */
  export async function seed(knex) {
   // Deletes ALL existing entries
+  await knex('RolePermission').del()
   await knex('UserRole').del()
+  await knex('Role').del()
   await knex('User').del()
   await knex('ViewDataCache').del()
   await knex('BudgetToolVersion').del()
@@ -22,8 +24,17 @@
     {username: 'user1', password: 'password123'}
   ]);
 
+  await knex('Role').insert([
+    {roleName: 'CoreUnit'},
+    {roleName: 'SuperUser'}
+  ]);
+
+  await knex('RolePermission').insert([
+    {roleId: 1, permission: 'Create', resourceId: '1'}
+  ]);
+
   await knex('UserRole').insert([
-    {roleId: 1, userId: 1, resource: 'CoreUnit', resourceId: 1}
+    {roleId: 1, userId: 1, resource: 'CoreUnit', resource: 'System', resourceId: 1}
   ]);
 
   await knex('BudgetToolVersion').insert([
