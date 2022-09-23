@@ -204,7 +204,7 @@ class EcosystemDatabase extends SQLDataSource {
     }
 
     getBudgetStatementLineItem(paramName, paramValue, secondParamName, secondParamValue) {
-        if(secondParamName === undefined && secondParamValue === undefined) {
+        if (secondParamName === undefined && secondParamValue === undefined) {
             return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).orderBy('month', 'desc')
         } else {
             return this.knex('BudgetStatementLineItem').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
@@ -709,6 +709,12 @@ class EcosystemDatabase extends SQLDataSource {
 
     changeUserPassword(userName, password) {
         return this.knex('User').where('userName', userName).update('password', password).returning('*')
+    }
+
+    async updateLineItem(lineItem) {
+        const id = lineItem.id;
+        delete lineItem.id;
+        return this.knex('BudgetStatementLineItem').where('id', id).update(lineItem).returning('*');
     }
 
     async batchUpdateLineItems(lineItems) {
