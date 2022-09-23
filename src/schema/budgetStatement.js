@@ -250,7 +250,41 @@ export const typeDefs = gql`
         budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
         budgetLineItemsBatchAdd(input: [LineItemsBatchAddInput]): [BudgetStatementLineItem]
         budgetLineItemsBatchDelete(input: [LineItemsBatchDeleteInput]): [BudgetStatementLineItem]
+        budgetLineItemUpdate(input: LineItemUpdateInput): [BudgetStatementLineItem]
+        budgetLineItemsBatchUpdate(input: [LineItemsBatchUpdateInput]): [BudgetStatementLineItem]
         budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
+    }
+
+    input LineItemsBatchUpdateInput {
+        id: ID
+        budgetStatementWalletId: ID
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
+        headcountExpense: Boolean
+        budgetCap: Float
+        payment: Float
+    }
+
+    input LineItemUpdateInput {
+        id: ID
+        budgetStatementWalletId: ID
+        month: String
+        position: Int
+        group: String
+        budgetCategory: String
+        forecast: Float
+        actual: Float
+        comments: String
+        canonicalBudgetCategory: CanonicalBudgetCategory
+        headcountExpense: Boolean
+        budgetCap: Float
+        payment: Float
     }
 
     input LineItemsBatchAddInput {
@@ -479,6 +513,43 @@ export const resolvers = {
                     if (allowed[0].count > 0) {
                         console.log(`adding ${input.length} line items to CU ${user.cuId}`,)
                         const result = await dataSources.db.addBatchtLineItems(input)
+                        return result;
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetLineItems')
+            }
+        },
+        budgetLineItemUpdate: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetLineItem")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`updating line item ${input.id} to CU ${user.cuId}`,)
+                        console.log('updating lineItem input', input);
+                        const result = await dataSources.db.updateLineItem(input)
+                        return result;
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetLineItems')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetLineItems')
+            }
+        },
+        budgetLineItemsBatchUpdate: async (_, { input }, { user, auth, dataSources }) => { // this one
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetLineItem")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`updating line items ${input.length} to CU ${user.cuId}`,)
+                        const result = await dataSources.db.batchUpdateLineItems(input)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetLineItems')
