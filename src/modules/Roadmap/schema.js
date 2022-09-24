@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-core";
 
-export const typeDefs = gql`
+export const typeDefs = [gql`
 
     "Core Unit or Cross Core Unit Intitiatives"
     type Roadmap {
@@ -228,7 +228,7 @@ export const typeDefs = gql`
         roadmapOutput(filter: RoadmapOutputFilter): [RoadmapOutput]
     }
 
-`;
+`];
 
 export const resolvers = {
     Query: {

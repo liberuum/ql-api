@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 dotenv.config()
 
-export const typeDefs = gql`
+export const typeDefs = [gql`
 
     type User {
         id: ID
@@ -43,7 +43,7 @@ export const typeDefs = gql`
         userLogin(input: AuthInput!): UserPayload!
         userChangePassword(input: UpdatePassword!): User!
     }
-`;
+`];
 
 export const resolvers = {
     Query: {

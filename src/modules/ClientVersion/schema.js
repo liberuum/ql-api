@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server-core';
 
-export const typeDefs = gql`
+export const typeDefs = [gql`
 
     type BudgetToolVersion {
         id: ID!
@@ -13,7 +13,7 @@ export const typeDefs = gql`
         latestBudgetToolVersion: [BudgetToolVersion]
     }
 
-`
+`]
 
 export const resolvers = {
     Query: {

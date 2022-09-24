@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-core";
 
-export const typeDefs = gql`
+export const typeDefs = [gql`
 
     type CuMip {
         id: ID!
@@ -207,7 +207,7 @@ export const typeDefs = gql`
         mip41s: [Mip41],
         mip41(filter: Mip41Filter): [Mip41]
     }
-`;
+`];
 
 export const resolvers = {
     Query: {
