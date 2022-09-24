@@ -24,6 +24,8 @@ export const typeDefs = [gql`
         milestone: [Milestone]
     }
 
+
+
     enum RoadmapStatus {
         Todo
         InProgress
@@ -205,7 +207,7 @@ export const typeDefs = [gql`
         reviewOutcome: ReviewOutcome
     }
 
-    type Query {
+    extend type Query {
         roadmaps: [Roadmap]
         roadmap(filter: RoadmapFilter): [Roadmap]
         roadmapStakeholders: [RoadmapStakeholder]
@@ -228,6 +230,10 @@ export const typeDefs = [gql`
         roadmapOutput(filter: RoadmapOutputFilter): [RoadmapOutput]
     }
 
+    extend type CoreUnit {
+        "Access details on the roadmap (work performed and planned) of a Core Unit"
+        roadMap: [Roadmap]
+    }
 `];
 
 export const resolvers = {
@@ -416,5 +422,12 @@ export const resolvers = {
             const result = await dataSources.db.getReviews(id);
             return result
         }
+    },
+    CoreUnit: {
+        roadMap: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getRoadmaps(id);
+            return result;
+        },
     }
 }
