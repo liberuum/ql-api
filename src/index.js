@@ -7,20 +7,27 @@ import dotenv from 'dotenv';
 import pkg from 'pg';
 import { expressjwt } from "express-jwt";
 dotenv.config()
-import schema from './modules/schema.js';
-import EcosystemDatabase from './datasource/index.js';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import linkApiModules from './modules/factory.js';
+import EcosystemDatabase from './modules/EcosystemDatabase.js';
 import { Authorization } from './modules/Auth/authorization.js';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
 const { types } = pkg
 types.setTypeParser(1082, val => val);
+
 const knexConfig = {
     client: 'pg',
     connection: process.env.PG_CONNECTION_STRING,
 };
 
-
 const db = new EcosystemDatabase(knexConfig);
+const apiModules = await linkApiModules(db);
+
+const schema = makeExecutableSchema({ 
+    typeDefs: apiModules.typeDefs,
+    resolvers: apiModules.resolvers 
+});
 
 const options = {
     port: process.env.PORT || 4000
@@ -45,7 +52,7 @@ async function startApolloServer() {
             try {
                 const user = req.auth || null;
                 if (user) {
-                    const auth = new Authorization(db, user.id)
+                    const auth = new Authorization(apiModules.datasource, user.id)
                     return { user, auth }
                 } else {
                     return null;
@@ -55,7 +62,7 @@ async function startApolloServer() {
             }
 
         },
-        dataSources: () => ({ db })
+        dataSources: () => ({ db: apiModules.datasource })
     });
 
     await server.start();
