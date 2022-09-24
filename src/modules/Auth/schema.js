@@ -56,11 +56,11 @@ export const resolvers = {
     Mutation: {
         userLogin: async (_, { input }, { dataSources }) => {
             try {
-                const [user] = await dataSources.db.getUser(input.userName)
+                const [user] = await dataSources.db.Auth.getUser(input.userName)
                 if (user != undefined) {
                     const match = await bcrypt.compare(input.password, user.password);
                     if (match === true) {
-                        const resources = await dataSources.db.getResourceId(user.id);
+                        const resources = await dataSources.db.Auth.getResourceId(user.id);
                         const [resource] = resources.filter(rs => rs !== null)
                         const resourceId = resource.resourceId
                         const token = jwt.sign(
@@ -94,7 +94,7 @@ export const resolvers = {
                     const allowed = await auth.canManage('System', user.id)
                     if (allowed[0].count > 0) {
                         const hash = await bcrypt.hash(input.password, 10);
-                        const result = await dataSources.db.createUser(input.cuId, input.userName, hash)
+                        const result = await dataSources.db.Auth.createUser(input.cuId, input.userName, hash)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized')
@@ -107,11 +107,11 @@ export const resolvers = {
         userChangePassword: async (_, { input }, { user, dataSources }) => {
             try {
                 if (user) {
-                    const [userObj] = await dataSources.db.getUser(input.userName)
+                    const [userObj] = await dataSources.db.Auth.getUser(input.userName)
                     const match = await bcrypt.compare(input.password, userObj.password);
                     if (match) {
                         const hash = await bcrypt.hash(input.newPassword, 10);
-                        const result = await dataSources.db.changeUserPassword(input.userName, hash);
+                        const result = await dataSources.db.Auth.changeUserPassword(input.userName, hash);
                         console.log('result', result)
                         return result[0];
                     } else {

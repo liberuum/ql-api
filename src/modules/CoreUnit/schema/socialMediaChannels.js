@@ -52,7 +52,7 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         socialMediaChannels: async (_, __, { dataSources }) => {
-            return await dataSources.db.getSocialMediaChannels()
+            return await dataSources.db.CoreUnit.getSocialMediaChannels()
         },
         socialMediaChannel: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -61,7 +61,7 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getSocialMediaChannel(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getSocialMediaChannel(paramName, paramValue)
         }
     }
 }

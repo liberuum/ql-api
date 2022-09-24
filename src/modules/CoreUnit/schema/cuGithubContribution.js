@@ -85,7 +85,7 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         cuGithubContributions: async (_, __, { dataSources }) => {
-            return await dataSources.db.getCuGithubContributions()
+            return await dataSources.db.CoreUnit.getCuGithubContributions()
         },
         cuGithubContribution: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -94,10 +94,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getCuGithubContribution(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getCuGithubContribution(paramName, paramValue)
         },
         githubOrgs: async (_, __, { dataSources }) => {
-            return dataSources.db.getGithubOrgs()
+            return dataSources.db.CoreUnit.getGithubOrgs()
         },
         githubOrg: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -106,10 +106,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getGithubOrg(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getGithubOrg(paramName, paramValue)
         },
         githubRepos: async (_, __, { dataSources }) => {
-            return await dataSources.db.getGithubRepos()
+            return await dataSources.db.CoreUnit.getGithubRepos()
         },
         githubRepo: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -118,10 +118,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getGithubRepo(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getGithubRepo(paramName, paramValue)
         },
         makerGithubEcosystemAll: async (_, __, { dataSources }) => {
-            return await dataSources.db.getMakerGithubEcosystemAll()
+            return await dataSources.db.CoreUnit.getMakerGithubEcosystemAll()
         },
         makerGithubEcosystem: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -130,18 +130,18 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getMakerGithubEcosystem(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getMakerGithubEcosystem(paramName, paramValue)
         }
     },
     CuGithubContribution: {
         githubOrg: async (parent, __, { dataSources }) => {
             const { orgId } = parent;
-            const result = await dataSources.db.getGithubOrgs(orgId);
+            const result = await dataSources.db.CoreUnit.getGithubOrgs(orgId);
             return result
         },
         githubRepo: async (parent, __, { dataSources }) => {
             const { repoId } = parent;
-            const result = await dataSources.db.getGithubRepos(repoId);
+            const result = await dataSources.db.CoreUnit.getGithubRepos(repoId);
             return result;
         }
     }

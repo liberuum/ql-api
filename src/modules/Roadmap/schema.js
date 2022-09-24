@@ -239,7 +239,7 @@ export const typeDefs = [gql`
 export const resolvers = {
     Query: {
         roadmaps: async (_, __, { dataSources }) => {
-            return await dataSources.db.getRoadmaps()
+            return await dataSources.db.Roadmap.getRoadmaps()
         },
         roadmap: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -248,10 +248,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getRoadmap(paramName, paramValue);
+            return await dataSources.db.Roadmap.getRoadmap(paramName, paramValue);
         },
         roadmapStakeholders: async (_, __, { dataSources }) => {
-            return await dataSources.db.getRoadmapStakeholders()
+            return await dataSources.db.Roadmap.getRoadmapStakeholders()
         },
         roadmapStakeholder: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -260,10 +260,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getRoadmapStakeholder(paramName, paramValue);
+            return await dataSources.db.Roadmap.getRoadmapStakeholder(paramName, paramValue);
         },
         stakeholders: async (_, __, { dataSources }) => {
-            return await dataSources.db.getStakeholders()
+            return await dataSources.db.Roadmap.getStakeholders()
         },
         stakeholder: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -272,10 +272,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getStakeholder(paramName, paramValue);
+            return await dataSources.db.Roadmap.getStakeholder(paramName, paramValue);
         },
         stakeholderRoles: async (_, __, { dataSources }) => {
-            return dataSources.db.getStakeholderRoles()
+            return dataSources.db.Roadmap.getStakeholderRoles()
         },
         stakeholderRole: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -284,10 +284,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getStakeholderRole(paramName, paramValue);
+            return await dataSources.db.Roadmap.getStakeholderRole(paramName, paramValue);
         },
         roadmapOutputs: async (_, __, { dataSources }) => {
-            return await dataSources.db.getRoadmapOutputs();
+            return await dataSources.db.Roadmap.getRoadmapOutputs();
         },
         roadmapOutput: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -296,10 +296,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getRoadmapOutput(paramName, paramValue);
+            return await dataSources.db.Roadmap.getRoadmapOutput(paramName, paramValue);
         },
         outputs: async (_, __, { dataSources }) => {
-            return await dataSources.db.getOutputs()
+            return await dataSources.db.Roadmap.getOutputs()
         },
         output: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -308,10 +308,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getOutput(paramName, paramValue);
+            return await dataSources.db.Roadmap.getOutput(paramName, paramValue);
         },
         outputTypes: async (_, __, { dataSources }) => {
-            return await dataSources.db.getOutputTypes();
+            return await dataSources.db.Roadmap.getOutputTypes();
         },
         outputType: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -320,10 +320,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getOutputType(paramName, paramValue);
+            return await dataSources.db.Roadmap.getOutputType(paramName, paramValue);
         },
         milestones: async (_, __, { dataSources }) => {
-            return dataSources.db.getMilestones()
+            return dataSources.db.Roadmap.getMilestones()
         },
         milestone: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -332,10 +332,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getMilestone(paramName, paramValue);
+            return await dataSources.db.Roadmap.getMilestone(paramName, paramValue);
         },
         tasks: async (_, __, { dataSources }) => {
-            return await dataSources.db.getTasks();
+            return await dataSources.db.Roadmap.getTasks();
         },
         task: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -344,10 +344,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getTask(paramName, paramValue);
+            return await dataSources.db.Roadmap.getTask(paramName, paramValue);
         },
         reviews: async (_, __, { dataSources }) => {
-            return dataSources.db.getReviews()
+            return dataSources.db.Roadmap.getReviews()
         },
         review: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -356,7 +356,7 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getReview(paramName, paramValue);
+            return await dataSources.db.Roadmap.getReview(paramName, paramValue);
         }
 
 
@@ -364,69 +364,69 @@ export const resolvers = {
     Roadmap: {
         roadmapStakeholder: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapStakeholders(id)
+            const result = await dataSources.db.Roadmap.getRoadmapStakeholders(id)
             return result
         },
         roadmapOutput: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapOutputs(id)
+            const result = await dataSources.db.Roadmap.getRoadmapOutputs(id)
             return result
         },
         milestone: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getMilestones(id);
+            const result = await dataSources.db.Roadmap.getMilestones(id);
             return result;
         }
     },
     RoadmapStakeholder: {
         stakeholderRole: async (parent, __, { dataSources }) => {
             const { stakeholderRoleId } = parent;
-            const result = await dataSources.db.getStakeholderRoles(stakeholderRoleId);
+            const result = await dataSources.db.Roadmap.getStakeholderRoles(stakeholderRoleId);
             return result
         },
         stakeholder: async (parent, __, { dataSources }) => {
             const { stakeholderId } = parent;
-            const result = await dataSources.db.getStakeholders(stakeholderId);
+            const result = await dataSources.db.Roadmap.getStakeholders(stakeholderId);
             return result;
         }
     },
     Stakeholder: {
         roadmapStakeholder: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmapStakeholdersByStakeholderId(id)
+            const result = await dataSources.db.Roadmap.getRoadmapStakeholdersByStakeholderId(id)
             return result
         }
     },
     RoadmapOutput: {
         output: async (parent, __, { dataSources }) => {
             const { outputId } = parent;
-            const result = await dataSources.db.getOutputs(outputId);
+            const result = await dataSources.db.Roadmap.getOutputs(outputId);
             return result;
         },
         outputType: async (parent, __, { dataSources }) => {
             const { outputTypeId } = parent;
-            const result = await dataSources.db.getOutputTypes(outputTypeId);
+            const result = await dataSources.db.Roadmap.getOutputTypes(outputTypeId);
             return result;
         }
     },
     Milestone: {
         task: async (parent, __, { dataSources }) => {
             const { taskId } = parent;
-            const result = await dataSources.db.getTasks(taskId)
+            const result = await dataSources.db.Roadmap.getTasks(taskId)
             return result;
         }
     },
     Task: {
         review: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getReviews(id);
+            const result = await dataSources.db.Roadmap.getReviews(id);
             return result
         }
     },
     CoreUnit: {
         roadMap: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getRoadmaps(id);
+            const result = await dataSources.db.Roadmap.getRoadmaps(id);
             return result;
         },
     }

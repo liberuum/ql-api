@@ -86,7 +86,7 @@ export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
         coreUnits: async (_, filter, { dataSources }) => {
-            const result = await dataSources.db.getCoreUnits(filter.limit, filter.offset)
+            const result = await dataSources.db.CoreUnit.getCoreUnits(filter.limit, filter.offset)
             const parsedResult = result.map(cu => {
                 if (cu.category !== null) {
                     const cleanCategory = cu.category.slice(1, cu.category.length - 1)
@@ -105,7 +105,7 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            const result = await dataSources.db.getCoreUnit(paramName, paramValue)
+            const result = await dataSources.db.CoreUnit.getCoreUnit(paramName, paramValue)
             const parsedResult = result.map(cu => {
                 if (cu.category !== null) {
                     const cleanCategory = cu.category.slice(1, cu.category.length - 1)
@@ -118,7 +118,7 @@ export const resolvers = {
             return parsedResult;
         },
         cuUpdates: async (_, __, { dataSources }) => {
-            return await dataSources.db.getCuUpdates();
+            return await dataSources.db.CoreUnit.getCuUpdates();
         },
         cuUpdate: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -127,28 +127,28 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getCuUpdate(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getCuUpdate(paramName, paramValue)
         }
     },
     CoreUnit: {
         socialMediaChannels: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getSocialMediaChannels(id);
+            const result = await dataSources.db.CoreUnit.getSocialMediaChannels(id);
             return result;
         },
         contributorCommitment: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getContributorCommitments(id);
+            const result = await dataSources.db.CoreUnit.getContributorCommitments(id);
             return result;
         },
         cuGithubContribution: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getCuGithubContributions(id);
+            const result = await dataSources.db.CoreUnit.getCuGithubContributions(id);
             return result;
         },
         cuUpdates: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getCuUpdates(id);
+            const result = await dataSources.db.CoreUnit.getCuUpdates(id);
             return result;
         }
     }
