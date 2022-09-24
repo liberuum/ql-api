@@ -246,6 +246,11 @@ export const typeDefs = [gql`
         budgetStatementTransferRequest(filter: BudgetStatementTransferRequestFilter): [BudgetStatementTransferRequest]
     }
 
+    extend type CoreUnit {
+        "Access details on the budget statements of a Core Unit"
+        budgetStatements: [BudgetStatement]
+    }
+
     type Mutation {
         budgetStatementsBatchAdd(input: [BudgetStatementBatchAddInput]): [BudgetStatement]
         budgetLineItemsBatchAdd(input: [LineItemsBatchAddInput]): [BudgetStatementLineItem]
@@ -440,6 +445,13 @@ export const resolvers = {
             return await dataSources.db.getBudgetStatementTransferRequest(paramName, paramValue)
         }
 
+    },
+    CoreUnit: {
+        budgetStatements: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getBudgetStatementByCuId(id);
+            return result;
+        },
     },
     BudgetStatement: {
         auditReport: async (parent, __, { dataSources }) => {

@@ -207,6 +207,11 @@ export const typeDefs = [gql`
         mip41s: [Mip41],
         mip41(filter: Mip41Filter): [Mip41]
     }
+
+    extend type CoreUnit {
+        "Access details on MIPs 39/40/41 of a Core Unit"
+        cuMip: [CuMip]
+    }
 `];
 
 export const resolvers = {
@@ -309,6 +314,13 @@ export const resolvers = {
             return await dataSources.db.getMip41(paramName, paramValue)
         }
 
+    },
+    CoreUnit: {
+        cuMip: async (parent, __, { dataSources }) => {
+            const { id } = parent;
+            const result = await dataSources.db.getMips(id);
+            return result;
+        },
     },
     CuMip: {
         mipReplaces: async (parent, __, { dataSources }) => {
