@@ -7,9 +7,9 @@ import dotenv from 'dotenv';
 import pkg from 'pg';
 import { expressjwt } from "express-jwt";
 dotenv.config()
-import schema from './schema/schema.js';
+import schema from './modules/schema.js';
 import EcosystemDatabase from './datasource/index.js';
-import { Authorization } from './schema/auth/authorization.js';
+import { Authorization } from './modules/Auth/authorization.js';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
 
 const { types } = pkg

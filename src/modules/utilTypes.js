@@ -1,15 +1,13 @@
 import { gql } from "apollo-server-core";
 
 export const typeDefs = gql`
-
+    type Query {
+        currentTime: String!
+    }
+    
     type Error {
         message: String!
     }
-
-    extend type Query {
-        currentTime: String!
-    }
-
 `
 
 export const resolvers = {

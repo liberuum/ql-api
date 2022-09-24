@@ -1,6 +1,6 @@
 import { gql, AuthenticationError } from 'apollo-server-core';
 
-export const typeDefs = gql`
+export const typeDefs = [gql`
 
     type BudgetStatement {
         "Auto generated id field"
@@ -334,7 +334,7 @@ export const typeDefs = gql`
         comments: String
     }
 
-`;
+`];
 
 export const resolvers = {
     Query: {
