@@ -18,10 +18,10 @@ export const typeDefs = [gql`
 export const resolvers = {
     Query: {
         budgetToolVersions: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetToolVersions()
+            return await dataSources.db.ClientVersion.getBudgetToolVersions()
         },
         latestBudgetToolVersion: async (_, __, {dataSources}) => {
-            return await dataSources.db.getLatestBudgetToolVersion()
+            return await dataSources.db.ClientVersion.getLatestBudgetToolVersion()
         }
     }
 }

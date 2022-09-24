@@ -345,7 +345,7 @@ export const resolvers = {
     Query: {
         // coreUnits: (parent, args, context, info) => {}
         budgetStatements: async (_, filter, { dataSources }) => {
-            return await dataSources.db.getBudgetStatements(filter.limit, filter.offset)
+            return await dataSources.db.BudgetStatement.getBudgetStatements(filter.limit, filter.offset)
         },
         budgetStatement: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -356,10 +356,10 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             const secondParamName = queryParams[1];
             const secondParamValue = filter[queryParams[1]];
-            return await dataSources.db.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatement(paramName, paramValue, secondParamName, secondParamValue)
         },
         auditReports: async (_, __, { dataSources }) => {
-            return await dataSources.db.getAuditReports();
+            return await dataSources.db.BudgetStatement.getAuditReports();
         },
         auditReport: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -368,10 +368,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getAuditReport(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getAuditReport(paramName, paramValue)
         },
         budgetStatementFTEs: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementFTEs();
+            return await dataSources.db.BudgetStatement.getBudgetStatementFTEs();
         },
         budgetStatementFTE: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -380,10 +380,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatementFTE(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementFTE(paramName, paramValue)
         },
         budgetStatementMKRVests: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementMKRVests();
+            return await dataSources.db.BudgetStatement.getBudgetStatementMKRVests();
         },
         budgetStatementMKRVest: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -392,10 +392,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatementMKRVest(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementMKRVest(paramName, paramValue)
         },
         budgetStatementWallets: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementWallets();
+            return await dataSources.db.BudgetStatement.getBudgetStatementWallets();
         },
         budgetStatementWallet: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -404,10 +404,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatementWallet(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementWallet(paramName, paramValue)
         },
         budgetStatementLineItems: async (_, filter, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementLineItems(filter.limit, filter.offset);
+            return await dataSources.db.BudgetStatement.getBudgetStatementLineItems(filter.limit, filter.offset);
         },
         budgetStatementLineItem: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -418,10 +418,10 @@ export const resolvers = {
             const paramValue = filter[queryParams[0]];
             const secondParamName = queryParams[1];
             const secondParamValue = filter[queryParams[1]];
-            return await dataSources.db.getBudgetStatementLineItem(paramName, paramValue, secondParamName, secondParamValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementLineItem(paramName, paramValue, secondParamName, secondParamValue)
         },
         budgetStatementPayments: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementPayments();
+            return await dataSources.db.BudgetStatement.getBudgetStatementPayments();
         },
         budgetStatementPayment: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -430,10 +430,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatementPayment(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementPayment(paramName, paramValue)
         },
         budgetStatementTransferRequests: async (_, __, { dataSources }) => {
-            return await dataSources.db.getBudgetStatementTransferRequests()
+            return await dataSources.db.BudgetStatement.getBudgetStatementTransferRequests()
         },
         budgetStatementTransferRequest: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -442,53 +442,53 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getBudgetStatementTransferRequest(paramName, paramValue)
+            return await dataSources.db.BudgetStatement.getBudgetStatementTransferRequest(paramName, paramValue)
         }
 
     },
     CoreUnit: {
         budgetStatements: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementByCuId(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementByCuId(id);
             return result;
         },
     },
     BudgetStatement: {
         auditReport: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getAuditReports(id);
+            const result = await dataSources.db.BudgetStatement.getAuditReports(id);
             return result;
         },
         budgetStatementFTEs: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementFTEs(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementFTEs(id);
             return result
         },
         budgetStatementMKRVest: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementMKRVests(id)
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementMKRVests(id)
             return result;
         },
         budgetStatementWallet: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementWallets(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementWallets(id);
             return result;
         }
     },
     BudgetStatementWallet: {
         budgetStatementLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getLineItemsByWalletId(id);
+            const result = await dataSources.db.BudgetStatement.getLineItemsByWalletId(id);
             return result;
         },
         budgetStatementPayment: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementPayments(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementPayments(id);
             return result;
         },
         budgetStatementTransferRequest: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.getBudgetStatementTransferRequests(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementTransferRequests(id);
             return result;
         }
     },
@@ -504,7 +504,7 @@ export const resolvers = {
                             throw new Error('"No input data')
                         }
                         console.log(`adding ${input.length} budgetStatements to CU ${user.cuId}`)
-                        const result = await dataSources.db.addBatchBudgetStatements(input);
+                        const result = await dataSources.db.BudgetStatement.addBatchBudgetStatements(input);
                         return result
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetStatements')
@@ -524,7 +524,7 @@ export const resolvers = {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
                         console.log(`adding ${input.length} line items to CU ${user.cuId}`,)
-                        const result = await dataSources.db.addBatchtLineItems(input)
+                        const result = await dataSources.db.BudgetStatement.addBatchtLineItems(input)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetLineItems')
@@ -543,7 +543,7 @@ export const resolvers = {
                     if (allowed[0].count > 0) {
                         console.log(`updating line item ${input.id} to CU ${user.cuId}`,)
                         console.log('updating lineItem input', input);
-                        const result = await dataSources.db.updateLineItem(input)
+                        const result = await dataSources.db.BudgetStatement.updateLineItem(input)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetLineItems')
@@ -561,7 +561,7 @@ export const resolvers = {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
                         console.log(`updating line items ${input.length} to CU ${user.cuId}`,)
-                        const result = await dataSources.db.batchUpdateLineItems(input)
+                        const result = await dataSources.db.BudgetStatement.batchUpdateLineItems(input)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetLineItems')
@@ -579,7 +579,7 @@ export const resolvers = {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
                         console.log(`deleting ${input.length} line items from CU ${user.cuId}`);
-                        return await dataSources.db.batchDeleteLineItems(input)
+                        return await dataSources.db.BudgetStatement.batchDeleteLineItems(input)
                     } else {
                         throw new AuthenticationError('You are not authorized to delete budgetLineItems')
                     }
@@ -597,7 +597,7 @@ export const resolvers = {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
                         console.log(`Adding ${input.length} wallets to CU ${user.cuId}`)
-                        return await dataSources.db.addBudgetStatementWallets(input);
+                        return await dataSources.db.BudgetStatement.addBudgetStatementWallets(input);
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
                     }

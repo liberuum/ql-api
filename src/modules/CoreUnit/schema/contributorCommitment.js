@@ -63,7 +63,7 @@ export const typeDefs = gql`
 export const resolvers = {
     Query: {
         contributorCommitments: async (_, __, { dataSources }) => {
-            return await dataSources.db.getContributorCommitments();
+            return await dataSources.db.CoreUnit.getContributorCommitments();
         },
         contributorCommitment: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -72,10 +72,10 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getContributorCommitment(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getContributorCommitment(paramName, paramValue)
         },
         contributors: async (_, filter, { dataSources }) => {
-            return await dataSources.db.getContributors(filter.limit, filter.offset)
+            return await dataSources.db.CoreUnit.getContributors(filter.limit, filter.offset)
         },
         contributor: async (_, { filter }, { dataSources }) => {
             const queryParams = Object.keys(filter);
@@ -84,13 +84,13 @@ export const resolvers = {
             }
             const paramName = queryParams[0];
             const paramValue = filter[queryParams[0]];
-            return await dataSources.db.getContributor(paramName, paramValue)
+            return await dataSources.db.CoreUnit.getContributor(paramName, paramValue)
         }
     },
     ContributorCommitment: {
         contributor: async (parent, __, { dataSources }) => {
             const { contributorId } = parent;
-            const result = await dataSources.db.getContributorById(contributorId);
+            const result = await dataSources.db.CoreUnit.getContributorById(contributorId);
             return result;
         }
     }

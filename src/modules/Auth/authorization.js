@@ -29,11 +29,11 @@ export class Authorization {
     // Todo
     // canCreate()
     async canUpdate(resourceType, resourceId) {
-        return await this.db.canUpdate(this.userId, resourceType, resourceId)
+        return await this.db.Auth.canUpdate(this.userId, resourceType, resourceId)
     }
     // canDelete()
     async canManage(resourceType) {
-        return await this.db.canManage(this.userId, resourceType)
+        return await this.db.Auth.canManage(this.userId, resourceType)
     }
 
     async can(permission, resourceType, resourceId = null) {
