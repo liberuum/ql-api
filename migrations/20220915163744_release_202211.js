@@ -59,14 +59,14 @@ export function up(knex) {
         table.integer('parentId');
         table.foreign('parentId').references('Task.id').onDelete('CASCADE');
         table.varchar('taskName').notNullable(); 
-        table.specificType('taskStatus', 'text').defaultTo(knex.raw('\'{Backlog,ToDo,InProgress,Done,WontDo,Blocked}\'::text')).notNullable();
+        table.enu('taskStatus', ['Backlog','ToDo','InProgress','Done','WontDo','Blocked'], {useNative: true, enumName: 'TaskStatus'}).notNullable();
         table.integer('ownerStakeholderId');
         table.foreign('ownerStakeholderId').references('Stakeholder.id').onDelete('CASCADE');
         table.date('startDate');
         table.integer('position').notNullable();
         table.date('target');
         table.float('completedPercentage');
-        table.specificType('confidenceLevel', 'text').defaultTo(knex.raw('\'{High,Medium,Low}\'::text')).notNullable();
+        table.enu('confidenceLevel', ['High','Medium','Low'], {useNative: true, enumName: 'ConfidenceLevel'}).notNullable();
         table.varchar('comments');
        })
 
@@ -76,7 +76,7 @@ export function up(knex) {
         table.integer('taskId').notNullable();
         table.foreign('taskId').references('Task.id').onDelete('CASCADE');
         table.date('reviewDate').notNullable();
-        table.specificType('reviewOutcome', 'text').defaultTo(knex.raw('\'{Red,Yellow,Green}\'::text')).notNullable();
+        table.enu('reviewOutcome', ['Red','Yellow','Green'], {useNative: true, enumName: 'ReviewOutcome'}).notNullable();
         table.varchar('comments');
        })
 
@@ -107,5 +107,8 @@ export function down(knex) {
     .dropTable("RoadmapStakeholder")
     .dropTable("StakeholderRole")
     .dropTable("Stakeholder")
+    .raw('DROP TYPE "TaskStatus"')
+    .raw('DROP TYPE "ConfidenceLevel"')
+    .raw('DROP TYPE "ReviewOutcome"')
 
 };

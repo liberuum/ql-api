@@ -37,7 +37,7 @@ export function up(knex) {
         table.foreign('roleId').references('Role.id').onDelete('CASCADE')
         table.integer('userId').notNullable();
         table.foreign('userId').references('User.id').onDelete('CASCADE')
-        table.specificType('resource', 'text').defaultTo(knex.raw('\'{System,CoreUnit}\'::text')).notNullable();
+        table.enu('resource', ['System','CoreUnit'], {useNative: true, enumName: 'Resource'}).notNullable();
         table.integer('resourceId').notNullable();
        })
 
@@ -46,7 +46,7 @@ export function up(knex) {
         table.increments('id').primary();
         table.integer('roleId').notNullable();
         table.foreign('roleId').references('Role.id').onDelete('CASCADE')
-        table.specificType('permission', 'text').defaultTo(knex.raw('\'{Create,Update,Delete,Audit,Manage}\'::text')).notNullable();
+        table.enu('permission', ['Create','Update','Delete','Audit','Manage'], {useNative: true, enumName: 'Permission'}).notNullable();
         table.integer('resourceId').notNullable();
        })
 
@@ -64,5 +64,7 @@ export function down(knex) {
     .dropTable("User") 
     .dropTable("BudgetToolVersion") 
     .dropTable("ViewDataCache")
-
+    .raw('DROP TYPE "Resource"')
+    .raw('DROP TYPE "Permission"')
+    
 };

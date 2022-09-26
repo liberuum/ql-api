@@ -8,7 +8,7 @@
         table.increments('id').primary();
         table.integer('budgetStatementId').notNullable();
         table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
-        table.specificType('AuditStatus', 'text').defaultTo(knex.raw('\'{Approved,ApprovedWithComments,NeedAcionsBeforeApproval,Escalated}\'::text')).notNullable(),
+        table.enu('auditStatus', ['Approved','ApprovedWithComments','NeedAcionsBeforeApproval','Escalated'], {useNative: true, enumName: 'AuditStatus'}).notNullable();
         table.timestamp('timestamp').notNullable();
        })
 
@@ -85,6 +85,21 @@
         table.varchar('comments');
        })
 
+       .createTable('CanonicalBudgetCategory', function (table) {
+        console.log("Creating CanonicalBudgetCategory table...");
+        table.increments('id').primary();
+        table.varchar('category').notNullable();
+       })
+
+       .createTable('BudgetStatementLineItem_CanonicalBudgetCategory', function (table) {
+        console.log("Creating BudgetStatementLineItem_CanonicalBudgetCategory table...");
+        table.increments('id').primary();
+        table.integer('budgetStatementLineItemId').notNullable();
+        table.foreign('budgetStatementLineItemId').references('BudgetStatementLineItem.id').onDelete('CASCADE');
+        table.integer('canonicalBudgetCategoryId');
+        table.foreign('canonicalBudgetCategoryId').references('CanonicalBudgetCategory.id').onDelete('CASCADE');
+       })
+
 
 };
 
@@ -94,6 +109,8 @@ export function down(knex) {
 
     return knex.schema
 
+    .dropTable("BudgetStatementLineItem_CanonicalBudgetCategory")
+    .dropTable("CanonicalBudgetCategory")
     .dropTable("BudgetStatementTransferRequest")
     .dropTable("BudgetStatementPayment")
     .dropTable("BudgetStatementLineItem")
@@ -101,4 +118,6 @@ export function down(knex) {
     .dropTable("BudgetStatementMkrVest")
     .dropTable("BudgetStatementFtes") 
     .dropTable("AuditReport")
+    .raw('DROP TYPE "AuditStatus"')
+
 };

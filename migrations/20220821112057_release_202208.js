@@ -10,7 +10,7 @@ export function up(knex) {
         table.string('shortCode').notNullable();
         table.string('name').notNullable();
         table.string('image').notNullable();
-        table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable(),
+        table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable();
         table.string('sentenceDescription');
         table.string('paragraphDescription');
         table.string('paragraphImage');
@@ -28,7 +28,7 @@ export function up(knex) {
         table.date('accepted');
         table.date('rejected');
         table.date('obsolete');
-        table.specificType('status', 'text').defaultTo(knex.raw('\'{RFC,FormalSubmission,Accepted,Rejected,Obsolete,Withdrawn}\'::text')).notNullable(),
+        table.enu('status', ['RFC','FormalSubmission','Accepted','Rejected','Obsolete','Withdrawn'], {useNative: true, enumName: 'MipStatus'}).notNullable();
         table.string('mipUrl');
         table.string('forumUrl');
     })
@@ -41,7 +41,7 @@ export function up(knex) {
         table.string('cuCode').notNullable();
         table.date('month').notNullable();
         table.string('comments');
-        table.specificType('budgetStatus', 'text').defaultTo(knex.raw('\'{Draft,SubmittedToAuditor,AwaitingCorrections,Final}\'::text')).notNullable(),
+        table.enu('budgetStatus', ['Draft','SubmittedToAuditor','AwaitingCorrections','Final'], {useNative: true, enumName: 'BudgetStatus'}).notNullable();
         table.string('publicationUrl');
         table.float('mkrProgramLength');
     })
@@ -80,7 +80,7 @@ export function up(knex) {
         table.integer('contributorId').notNullable();
         table.foreign('contributorId').references('Contributor.id').onDelete('CASCADE')
         table.date('startDate').notNullable();
-        table.specificType('commitment', 'text').defaultTo(knex.raw('\'{FullTime,PartTime,Variable,Inactive}\'::text')).notNullable(),
+        table.enu('commitment', ['FullTime','PartTime','Variable','Inactive'], {useNative: true, enumName: 'Commitment'}).notNullable();
         table.string('title').notNullable();
     })
 
@@ -91,7 +91,7 @@ export function up(knex) {
         table.foreign('ownerCuId').references('CoreUnit.id').onDelete('CASCADE')
         table.varchar('roadmapCode');
         table.varchar('roadmapName').notNullable();
-        table.specificType('roadmapStatus', 'text').defaultTo(knex.raw('\'{ToDo,InProgress,Done}\'::text')).notNullable(),
+        table.enu('roadmapStatus', ['ToDo','InProgress','Done'], {useNative: true, enumName: 'RoadmapStatus'}).notNullable();
         table.varchar('roadmapSummary');
         table.boolean('strategicInitiative');
         table.string('comments');
@@ -124,5 +124,9 @@ export function down(knex) {
     .dropTable("BudgetStatement")
     .dropTable("CuMip")
     .dropTable("CoreUnit")
+    .raw('DROP TYPE "BudgetStatus"')
+    .raw('DROP TYPE "Commitment"')
+    .raw('DROP TYPE "MipStatus"')
+    .raw('DROP TYPE "RoadmapStatus"')
       
 }
