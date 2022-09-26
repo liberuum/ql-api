@@ -1,54 +1,58 @@
 import _ from 'lodash'
-import moduleSettings from './default.config.js';
+import { typeDefs as scalarTypeDefs, resolvers as scalarResolvers } from 'graphql-scalars';
+import { typeDefs as baseTypes, resolvers as baseTypeResolvers } from './base.schema.js';
+import defaultSettings from './default.config.js';
 
-// Import scalar type definitions and resolvers
-import {
-    typeDefs as scalarTypeDefs,
-    resolvers as scalarResolvers
-} from 'graphql-scalars';
+// Load the GraphQL schema (type definitions + resolvers) and database object of each module
+export default async function linkApiModules(datasource, settings=defaultSettings) {
+    const schema = await linkSchemas(settings);
 
-// Import Query and Error base type definitions and resolvers
-import {
-    typeDefs as BaseTypes,
-    resolvers as BaseTypeResolvers
-} from './base.schema.js';
+    return { 
+        typeDefs: schema.typeDefs,
+        resolvers: schema.resolvers,
+        datasource: await linkDataModules(datasource, settings)
+    };
+}
 
-// 
-async function linkApiModules(datasource) {
-
-    // Import the API module types and resolvers that are enabled in the settings
-    const enabledModules = Object.keys(moduleSettings).filter(m => moduleSettings[m].enabled);
+// Load the GraphQL schema (type definitions + resolvers) of each module
+export async function linkSchemas(settings=defaultSettings) {
+    const enabledModules = Object.keys(settings).filter(m => settings[m].enabled);
     const moduleTypeDefs = [], moduleResolvers = {};
 
-    for (const moduleName of sortDependencyTree(enabledModules, moduleSettings)) {
-        // Import the type definitions and resolvers of the module
-        console.log(`Importing API module '${moduleName}'...`)
+    for (const moduleName of enabledModules) {
+        console.log(`Importing GraphQL schema for API module '${moduleName}'...`)
         const schemaJs = await import(`./${moduleName}/schema.js`);
         moduleTypeDefs.push(...schemaJs.typeDefs);
         _.merge(moduleResolvers, schemaJs.resolvers);
-
-        // Import the API module's datasource
-        const moduleDataSource = await import(`./${moduleName}/db.js`);
-        const dependencies = moduleSettings[moduleName].require || [];
-
-        datasource.extend(moduleName, moduleDataSource.default, dependencies);
     }
 
-    // Compile final type definitions list
     const typeDefs = [
         ...scalarTypeDefs,
-        BaseTypes,
+        baseTypes,
         ...moduleTypeDefs,
     ];
 
-    // Compile final resolvers object
     const resolvers = _.merge(
         scalarResolvers,
-        BaseTypeResolvers,
+        baseTypeResolvers,
         moduleResolvers,
     );
 
-    return { typeDefs, resolvers, datasource };
+    return { typeDefs, resolvers }; 
+}
+
+// Load the database object of each module
+export async function linkDataModules(datasource, settings=defaultSettings) {
+    const enabledModules = Object.keys(settings).filter(m => settings[m].enabled);
+    
+    for (const moduleName of sortDependencyTree(enabledModules, settings)) {
+        const moduleDataSource = await import(`./${moduleName}/db.js`);
+        const dependencies = settings[moduleName].require || [];
+
+        datasource.loadModule(moduleName, moduleDataSource.default, dependencies);
+    }
+
+    return datasource;
 }
 
 // Sort the list of modules so we're guaranteed to load all dependencies before we're loading the dependent module.
@@ -96,6 +100,3 @@ function sortDependencyTree(modules, settings) {
 
     return result;
 }
-
-//
-export default linkApiModules;
