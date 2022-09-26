@@ -1,13 +1,13 @@
 import { SQLDataSource } from "datasource-sql";
 
-class EcosystemDatabase extends SQLDataSource {
+export default class EcosystemDatabase extends SQLDataSource {
 
-    // Extend the database object with a new API module
-    extend(moduleName, apiModule, dependencies) {
+    // Load the database object of an API module
+    loadModule(moduleName, apiModule, dependencies) {
 
         if (typeof apiModule === 'function') {
             // New form where knex is injected into the apiModule factory function, together with the dependencies.
-            console.log(`> Loading '${moduleName}' db module with dependencies [` + dependencies.join(', ') + ']');
+            console.log(`Loading database object for API module '${moduleName}' with dependencies [` + dependencies.join(', ') + ']');
 
             // Compile an object containing all the dependencies.
             const collectedDependencies = dependencies.reduce((result, d) => {
@@ -24,11 +24,9 @@ class EcosystemDatabase extends SQLDataSource {
 
         } else {
             // Legacy form where knex is available to the apiModule object through this.knex
-            console.log(`> Setting '${moduleName}' db module (legacy format)`);
+            console.log(`Setting '${moduleName}' db module (legacy format)`);
             Object.setPrototypeOf(apiModule, this);
             this[moduleName] = apiModule;
         }
     }
 }
-
-export default EcosystemDatabase;
