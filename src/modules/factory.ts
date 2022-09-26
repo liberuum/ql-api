@@ -2,9 +2,11 @@ import _ from 'lodash'
 import { typeDefs as scalarTypeDefs, resolvers as scalarResolvers } from 'graphql-scalars';
 import { typeDefs as baseTypes, resolvers as baseTypeResolvers } from './base.schema.js';
 import defaultSettings from './default.config.js';
+import { ModulesConfig } from './ModulesConfig';
+import EcosystemDatabase from './EcosystemDatabase.js';
 
 // Load the GraphQL schema (type definitions + resolvers) and database object of each module
-export default async function linkApiModules(datasource, settings=defaultSettings) {
+export default async function linkApiModules(datasource:EcosystemDatabase, settings:ModulesConfig = defaultSettings) {
     const schema = await linkSchemas(settings);
 
     return { 
@@ -15,9 +17,9 @@ export default async function linkApiModules(datasource, settings=defaultSetting
 }
 
 // Load the GraphQL schema (type definitions + resolvers) of each module
-export async function linkSchemas(settings=defaultSettings) {
+export async function linkSchemas(settings:ModulesConfig = defaultSettings) {
     const enabledModules = Object.keys(settings).filter(m => settings[m].enabled);
-    const moduleTypeDefs = [], moduleResolvers = {};
+    const moduleTypeDefs:any[] = [], moduleResolvers = {};
 
     for (const moduleName of enabledModules) {
         console.log(`Importing GraphQL schema for API module '${moduleName}'...`)
@@ -42,7 +44,7 @@ export async function linkSchemas(settings=defaultSettings) {
 }
 
 // Load the database object of each module
-export async function linkDataModules(datasource, settings=defaultSettings) {
+export async function linkDataModules(datasource:EcosystemDatabase, settings:ModulesConfig = defaultSettings) {
     const enabledModules = Object.keys(settings).filter(m => settings[m].enabled);
     
     for (const moduleName of sortDependencyTree(enabledModules, settings)) {
@@ -56,27 +58,35 @@ export async function linkDataModules(datasource, settings=defaultSettings) {
 }
 
 // Sort the list of modules so we're guaranteed to load all dependencies before we're loading the dependent module.
-function sortDependencyTree(modules, settings) {
+function sortDependencyTree(modules:string[], settings:ModulesConfig) {
 
     // Modules will be added to result in the order they get resolved.
-    const result = [];
+    const result:string[] = [];
 
     // Build an index that keeps track of whether the module has been resolved, and its depenedencies.
-    const index = modules.reduce((index, module) => {
-        // Normalized array of dependencies.
-        const deps = settings[module].require || [];
-        
-        if (deps.length < 1) {
-            // If the module has no dependencies, resolve it right away.
-            result.push(module);
-            index[module] = {resolved: true, deps};
-        } else {
-            // If the modules has at least one dependency, we'll resolve it later.
-            index[module] = {resolved: false, deps};
-        }
+    const index = modules.reduce(
+        (index, module) => {
+            // Normalized array of dependencies.
+            const deps = settings[module].require || [];
+            
+            if (deps.length < 1) {
+                // If the module has no dependencies, resolve it right away.
+                result.push(module);
+                index[module] = {resolved: true, deps};
+            } else {
+                // If the modules has at least one dependency, we'll resolve it later.
+                index[module] = {resolved: false, deps};
+            }
 
-        return index;
-    }, {});
+            return index;
+        }, 
+        {} as {
+            [key:string]: {
+                resolved: boolean,
+                deps: string[]
+            }
+        }
+    );
 
     // Keep going until all modules have been resolved
     while (result.length < modules.length) {
