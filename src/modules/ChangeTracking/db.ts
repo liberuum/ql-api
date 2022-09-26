@@ -17,7 +17,7 @@ export interface ChangeTrackingEvent {
     description: string;
 }
 
-class ChangeTrackingModel {
+export class ChangeTrackingModel {
     knex: Knex;
     coreUnitModel: object;
 
