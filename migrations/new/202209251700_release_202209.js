@@ -3,7 +3,7 @@ export function up(knex) {
     return knex.schema
         // The ChangeTrackingEvents table keeps track of all the changes that have happened in the system (in the form of an activity feed) 
         .createTable('ChangeTrackingEvents', function (table) {
-            console.log("Creating ChangeTracking_Events table...");
+            console.log("Creating ChangeTrackingEvents table...");
             
             // Primary Key ID
             table.increments('id').primary();
@@ -37,7 +37,7 @@ export function up(knex) {
             table.integer('coreunit_id').notNullable();
             table.foreign('coreunit_id').references('CoreUnit.id').onDelete('CASCADE');
         });
-}
+};
 
 //Down migration deletes Core Unit and all root table
 export function down(knex) {
@@ -45,4 +45,4 @@ export function down(knex) {
     return knex.schema
         .dropTable("ChangeTrackingEvents_CoreUnits")
         .dropTable("ChangeTrackingEvents");
-}
+};
