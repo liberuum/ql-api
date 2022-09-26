@@ -13,8 +13,8 @@
   await knex('BudgetStatementFtes').del()
 
   await knex('AuditReport').insert([
-    {budgetStatementId: 1, auditStatus: 'Approved', timestamp: '2022-01-01 19:10:25-07'},
-    {budgetStatementId: 2, auditStatus: 'NeedActionsBeforeApproval', timestamp: '2022-09-19 16:40:25-07'}
+    {budgetStatementId: 1, auditStatus: 'Approved', timestamp: '2022-01-01 19:10:25-07', reportUrl: 'www.github.com/auditReport2'},
+    {budgetStatementId: 2, auditStatus: 'NeedActionsBeforeApproval', timestamp: '2022-09-19 16:40:25-07', reportUrl: 'www.github.com/auditReport3'}
   ]);
 
   await knex('BudgetStatementFtes').insert([
