@@ -4,26 +4,14 @@ import express from 'express';
 import compression from 'compression';
 import http from 'http';
 import dotenv from 'dotenv';
-import pkg from 'pg';
 import { expressjwt } from "express-jwt";
 dotenv.config()
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import linkApiModules from './modules/factory.js';
-import EcosystemDatabase from './modules/EcosystemDatabase.js';
 import { Authorization } from './modules/Auth/authorization.js';
 import responseCachePlugin from 'apollo-server-plugin-response-cache';
+import initApi from './initApi.js';
 
-const { types } = pkg
-types.setTypeParser(1082, val => val);
-
-const knexConfig = {
-    client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
-};
-
-const db = new EcosystemDatabase(knexConfig);
-const apiModules = await linkApiModules(db);
-
+const apiModules = await initApi();
 const schema = makeExecutableSchema({ 
     typeDefs: apiModules.typeDefs,
     resolvers: apiModules.resolvers 
