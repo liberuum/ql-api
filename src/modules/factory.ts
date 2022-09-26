@@ -4,9 +4,16 @@ import { typeDefs as baseTypes, resolvers as baseTypeResolvers } from './base.sc
 import defaultSettings from './default.config.js';
 import { ModulesConfig } from './ModulesConfig';
 import EcosystemDatabase from './EcosystemDatabase.js';
+import { DocumentNode } from 'graphql';
+
+export interface ApiModules {
+    typeDefs: DocumentNode[];
+    resolvers: {[key:string]: any};
+    datasource: EcosystemDatabase;
+}
 
 // Load the GraphQL schema (type definitions + resolvers) and database object of each module
-export default async function linkApiModules(datasource:EcosystemDatabase, settings:ModulesConfig = defaultSettings) {
+export default async function linkApiModules(datasource:EcosystemDatabase, settings:ModulesConfig = defaultSettings): Promise<ApiModules> {
     const schema = await linkSchemas(settings);
 
     return { 
@@ -40,7 +47,7 @@ export async function linkSchemas(settings:ModulesConfig = defaultSettings) {
         moduleResolvers,
     );
 
-    return { typeDefs, resolvers }; 
+    return { typeDefs, resolvers };
 }
 
 // Load the database object of each module
