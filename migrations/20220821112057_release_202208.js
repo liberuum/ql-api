@@ -43,7 +43,7 @@ export function up(knex) {
         table.string('comments');
         table.enu('budgetStatus', ['Draft','SubmittedToAuditor','AwaitingCorrections','Final'], {useNative: true, enumName: 'BudgetStatus'}).notNullable();
         table.string('publicationUrl');
-        table.float('mkrProgramLength');
+        table.decimal('mkrProgramLength', 4, 2);
     })
 
     .createTable('SocialMediaChannels', function (table) {

@@ -18,7 +18,7 @@
         table.integer('budgetStatementId').notNullable();
         table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
         table.date('month').notNullable();
-        table.float('ftes').notNullable();
+        table.decimal('ftes', 4, 2).notNullable();
        })
 
        .createTable('BudgetStatementMkrVest', function (table) {
@@ -27,8 +27,8 @@
         table.integer('budgetStatementId').notNullable();
         table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
         table.date('vestingDate').notNullable();
-        table.float('mkrAmount');
-        table.float('mkrAmountOld');
+        table.decimal('mkrAmount', 10, 2);
+        table.decimal('mkrAmountOld', 10, 2);
         table.varchar('comments');
        })
 
@@ -39,8 +39,8 @@
         table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
         table.varchar('name').notNullable();
         table.varchar('address').notNullable();
-        table.float('currentBalance');
-        table.float('topupTransfer');
+        table.decimal('currentBalance', 14, 2);
+        table.decimal('topupTransfer', 14, 2);
         table.varchar('comments');
        })
 
@@ -54,12 +54,12 @@
         table.varchar('group');
         table.varchar('budgetCategory').notNullable();
         table.specificType('canonicalBudgetCategory', 'text').defaultTo(knex.raw('\'{CompensationAndBenefits,Bonus,TravelAndEntertainment,TrainingExpense,AdminExpense,CommunityDevelopmentExpense,FreightAndDuties,GasExpense,GovernancePrograms,HardwareExpense,MarketingExpense,ProfessionalServices,SoftwareDevelopmentExpense,SoftwareExpense,Supplies,ContingencyBuffer}\'::text')),
-        table.float('forecast');
-        table.float('actual');
-        table.float('payment');
-        table.float('budgetCap');
-        table.boolean('headcountExpense').notNullable();
-        table.varchar('comments');
+        table.decimal('forecast', 14, 2);
+        table.decimal('actual', 14, 2);
+        table.decimal('payment', 14, 2);
+        table.decimal('budgetCap', 14, 2);
+        table.boolean('headcountExpense', 14, 2).notNullable();
+        table.varchar('comments', 14, 2);
        })
 
        .createTable('BudgetStatementPayment', function (table) {
@@ -81,7 +81,7 @@
         table.foreign('budgetStatementWalletId').references('BudgetStatementWallet.id').onDelete('CASCADE');
         table.integer('budgetStatementPaymentId');
         table.foreign('budgetStatementPaymentId').references('BudgetStatementLineItem.id').onDelete('CASCADE');
-        table.float('requestAmount').notNullable();
+        table.decimal('requestAmount', 14, 2).notNullable();
         table.varchar('comments');
        })
 

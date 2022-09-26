@@ -30,7 +30,7 @@ export function up(knex) {
         table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
         table.varchar('mip40Spn').notNullable();
         table.boolean('mkrOnly').notNullable();  
-        table.float('mkrProgramLength').notNullable();     
+        table.decimal('mkrProgramLength', 4, 2).notNullable();     
     })
 
     .createTable('Mip40BudgetPeriod', function (table) {
@@ -40,7 +40,7 @@ export function up(knex) {
         table.foreign('mip40Id').references('Mip40.id').onDelete('CASCADE');
         table.date('budgetPeriodStart').notNullable()
         table.date('budgetPeriodEnd').notNullable()
-        table.float('ftes').notNullable();     
+        table.decimal('ftes', 4, 2).notNullable();     
     })
 
     .createTable('Mip40Wallet', function (table) {
@@ -52,7 +52,7 @@ export function up(knex) {
         table.varchar('name').notNullable();  
         table.integer('signersTotal').notNullable();  
         table.integer('signersRequired').notNullable();  
-        table.float('clawbackLimit');     
+        table.decimal('clawbackLimit', 14, 2);     
     })
 
     .createTable('Mip40BudgetLineItem', function (table) {
@@ -64,7 +64,7 @@ export function up(knex) {
         table.varchar('group');  
         table.varchar('budgetCategory').notNullable();   
         table.specificType('canonicalBudgetCategory', 'text').defaultTo(knex.raw('\'{CompensationAndBenefits,Bonus,TravelAndEntertainment,TrainingExpense,AdminExpense,CommunityDevelopmentExpense,FreightAndDuties,GasExpense,GovernancePrograms,HardwareExpense,MarketingExpense,ProfessionalServices,SoftwareDevelopmentExpense,SoftwareExpense,Supplies,ContingencyBuffer}\'::text')),
-        table.float('budgetCap').notNullable();  
+        table.decimal('budgetCap', 14, 2).notNullable();  
         table.boolean('headcountExpense').notNullable()   
     })
 
