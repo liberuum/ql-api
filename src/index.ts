@@ -65,7 +65,7 @@ async function startApolloServer(app: express.Express, apiModules:ApiModules, op
 
     await server.start();
     server.applyMiddleware({ app });
-    await new Promise(resolve => httpServer.listen(options, resolve));
+    await new Promise<void>(resolve => httpServer.listen(options, resolve));
     console.log(`Server ready at http://localhost:${options.port}${server.graphqlPath}`)
 };
 
