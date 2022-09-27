@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./build/index.js",
-    "build": "tsc -p ./config/tsconfig.json",
+    "build": "tsc -p ./config/tsconfig.json && npm run migrate:latest",
     "dev": "tsc-watch -p ./config/tsconfig.json --onSuccess 'node ./build/index.js'",
     "migrate:latest": "knex --migrations-directory=./migrations/new --migrations-table-name=knex_migrations_new migrate:latest",
     "migrate:up": "knex --migrations-directory=./migrations/new --migrations-table-name=knex_migrations_new migrate:up",
