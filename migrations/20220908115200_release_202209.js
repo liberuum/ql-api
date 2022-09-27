@@ -19,8 +19,8 @@ export function up(knex) {
             table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
             table.integer('mip39Spn').notNullable();
             table.string('cuName').notNullable();
-            table.string('sentenceSummary').notNullable();
-            table.string('paragraphSummary').notNullable();
+            table.text('sentenceSummary').notNullable();
+            table.text('paragraphSummary').notNullable();
         })
 
         .createTable('Mip40', function (table) {
@@ -28,7 +28,7 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('cuMipId').notNullable();
             table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
-            table.varchar('mip40Spn').notNullable();
+            table.string('mip40Spn').notNullable();
             table.boolean('mkrOnly').notNullable();
             table.decimal('mkrProgramLength', 4, 2).notNullable();
         })
@@ -48,8 +48,8 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('mip40Id').notNullable();
             table.foreign('mip40Id').references('Mip40.id').onDelete('CASCADE');
-            table.varchar('address').notNullable();
-            table.varchar('name').notNullable();
+            table.string('address').notNullable();
+            table.string('name').notNullable();
             table.integer('signersTotal').notNullable();
             table.integer('signersRequired').notNullable();
             table.decimal('clawbackLimit', 14, 2);
@@ -58,7 +58,7 @@ export function up(knex) {
         .createTable('CanonicalBudgetCategory', function (table) {
             console.log("Creating BudgetStatementLineItem table...");
             table.increments('id').primary();
-            table.varchar('category').notNullable();
+            table.string('category').notNullable();
         })
 
         .createTable('Mip40BudgetLineItem', function (table) {
@@ -67,8 +67,8 @@ export function up(knex) {
             table.integer('mip40WalletId').notNullable();
             table.foreign('mip40WalletId').references('Mip40Wallet.id').onDelete('CASCADE');
             table.integer('position');
-            table.varchar('group');
-            table.varchar('budgetCategory').notNullable();
+            table.string('group');
+            table.string('budgetCategory').notNullable();
             table.boolean('headcountExpense').notNullable()
         })
 

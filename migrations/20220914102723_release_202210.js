@@ -8,11 +8,11 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('budgetStatementId').notNullable();
             table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
+            table.string('reportUrl').notNullable();
             table.enu('auditStatus', ['Approved', 'ApprovedWithComments', 'NeedActionsBeforeApproval', 'Escalated'], {
                 useNative: true,
                 enumName: 'AuditStatus'
             }).notNullable();
-            table.varchar('reportUrl').notNullable();
             table.timestamp('timestamp').notNullable();
         })
 
@@ -33,7 +33,7 @@ export function up(knex) {
             table.date('vestingDate').notNullable();
             table.decimal('mkrAmount', 10, 2);
             table.decimal('mkrAmountOld', 10, 2);
-            table.varchar('comments');
+            table.text('comments');
         })
 
         .createTable('BudgetStatementWallet', function (table) {
@@ -41,11 +41,11 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('budgetStatementId').notNullable();
             table.foreign('budgetStatementId').references('BudgetStatement.id').onDelete('CASCADE');
-            table.varchar('name').notNullable();
-            table.varchar('address').notNullable();
+            table.string('name').notNullable();
+            table.string('address').notNullable();
             table.decimal('currentBalance', 14, 2);
             table.decimal('topupTransfer', 14, 2);
-            table.varchar('comments');
+            table.text('comments');
         })
 
         .createTable('BudgetStatementLineItem', function (table) {
@@ -55,14 +55,14 @@ export function up(knex) {
             table.foreign('budgetStatementWalletId').references('BudgetStatementWallet.id').onDelete('CASCADE');
             table.date('month').notNullable();
             table.integer('position');
-            table.varchar('group');
-            table.varchar('budgetCategory').notNullable();
+            table.string('group');
+            table.string('budgetCategory').notNullable();
             table.decimal('forecast', 14, 2);
             table.decimal('actual', 14, 2);
-            table.decimal('payment', 14, 2);
-            table.decimal('budgetCap', 14, 2);
+            table.text('comments');
             table.boolean('headcountExpense', 14, 2).notNullable();
-            table.varchar('comments', 14, 2);
+            table.decimal('budgetCap', 14, 2);
+            table.decimal('payment', 14, 2);
         })
 
         .createTable('BudgetStatementLineItem_CanonicalBudgetCategory', function (table) {
@@ -80,10 +80,10 @@ export function up(knex) {
             table.integer('budgetStatementWalletId').notNullable();
             table.foreign('budgetStatementWalletId').references('BudgetStatementWallet.id').onDelete('CASCADE');
             table.date('transactionDate').notNullable();
-            table.varchar('transactionId').notNullable();
+            table.string('transactionId').notNullable();
             table.integer('budgetStatementLineItemId');
             table.foreign('budgetStatementLineItemId').references('BudgetStatementLineItem.id').onDelete('CASCADE');
-            table.varchar('comments');
+            table.text('comments');
         })
 
         .createTable('BudgetStatementTransferRequest', function (table) {
@@ -94,7 +94,7 @@ export function up(knex) {
             table.integer('budgetStatementPaymentId');
             table.foreign('budgetStatementPaymentId').references('BudgetStatementLineItem.id').onDelete('CASCADE');
             table.decimal('requestAmount', 14, 2).notNullable();
-            table.varchar('comments');
+            table.text('comments');
         })
 
 };

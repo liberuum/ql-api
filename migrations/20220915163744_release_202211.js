@@ -33,15 +33,15 @@ export function up(knex) {
         .createTable('Output', function (table) {
             console.log("Creating Output table...");
             table.increments('id').primary();
-            table.varchar('name').notNullable();
-            table.varchar('outputUrl').notNullable();
+            table.string('name').notNullable();
+            table.string('outputUrl').notNullable();
             table.date('outputDate').notNullable();
         })
 
         .createTable('OutputType', function (table) {
             console.log("Creating OutputType table...");
             table.increments('id').primary();
-            table.varchar('outputType').notNullable();
+            table.string('outputType').notNullable();
         })
 
         .createTable('RoadmapOutput', function (table) {
@@ -58,7 +58,7 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('parentId');
             table.foreign('parentId').references('Task.id').onDelete('CASCADE');
-            table.varchar('taskName').notNullable();
+            table.string('taskName').notNullable();
             table.enu('taskStatus', ['ToDo', 'InProgress', 'Done', 'WontDo', 'Blocked', 'Backlog'], {
                 useNative: true,
                 enumName: 'TaskStatus'

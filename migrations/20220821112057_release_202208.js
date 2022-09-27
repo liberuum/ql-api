@@ -11,8 +11,8 @@ export function up(knex) {
             table.string('name').notNullable();
             table.string('image').notNullable();
             table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable();
-            table.string('sentenceDescription');
-            table.string('paragraphDescription');
+            table.text('sentenceDescription');
+            table.text('paragraphDescription');
             table.string('paragraphImage');
         })
 
@@ -40,15 +40,15 @@ export function up(knex) {
             console.log("Creating BudgetStatement table...");
             table.increments('id').primary();
             table.integer('cuId').notNullable();
-            table.foreign('cuId').references('CoreUnit.id').onDelete('CASCADE')
-            table.string('cuCode').notNullable();
+            table.foreign('cuId').references('CoreUnit.id').onDelete('CASCADE');
             table.date('month').notNullable();
-            table.string('comments');
+            table.text('comments');
+            table.string('publicationUrl');
+            table.string('cuCode').notNullable();
             table.enu('budgetStatus', ['Draft', 'SubmittedToAuditor', 'AwaitingCorrections', 'Final'], {
                 useNative: true,
                 enumName: 'BudgetStatus'
             }).notNullable();
-            table.string('publicationUrl');
             table.decimal('mkrProgramLength', 4, 2);
         })
 
@@ -98,13 +98,13 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('ownerCuId');
             table.foreign('ownerCuId').references('CoreUnit.id').onDelete('CASCADE')
-            table.varchar('roadmapCode');
-            table.varchar('roadmapName').notNullable();
+            table.string('roadmapCode');
+            table.string('roadmapName').notNullable();
             table.enu('roadmapStatus', ['ToDo', 'InProgress', 'Done'], {
                 useNative: true,
                 enumName: 'RoadmapStatus'
             }).notNullable();
-            table.varchar('roadmapSummary');
+            table.text('roadmapSummary');
             table.boolean('strategicInitiative');
             table.string('comments');
         })
@@ -114,9 +114,9 @@ export function up(knex) {
             table.increments('id').primary();
             table.integer('cuId').notNullable();
             table.foreign('cuId').references('CoreUnit.id').onDelete('CASCADE')
-            table.varchar('updateTitle').notNullable();
+            table.string('updateTitle').notNullable();
             table.date('updateDate').notNullable();
-            table.varchar('updateUrl').notNullable();
+            table.string('updateUrl').notNullable();
         })
 }
 

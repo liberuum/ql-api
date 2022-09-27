@@ -5,7 +5,7 @@ export function up(knex) {
 
         .createTable('ViewDataCache', function (table) {
             console.log("Creating ViewDataCache table...");
-            table.varchar('key').primary().notNullable();
+            table.string('key').primary().notNullable();
             table.timestamp('lastUpdate').notNullable();
             table.json('value');
         })
@@ -13,21 +13,21 @@ export function up(knex) {
         .createTable('BudgetToolVersion', function (table) {
             console.log("Creating BudgetToolVersion table...");
             table.increments('id').primary();
-            table.varchar('version').notNullable();
-            table.varchar('link').notNullable();
+            table.string('version').notNullable();
+            table.string('link').notNullable();
         })
 
         .createTable('User', function (table) {
             console.log("Creating User table...");
             table.increments('id').primary();
-            table.varchar('username').notNullable();
-            table.varchar('password').notNullable();
+            table.string('username').notNullable();
+            table.string('password').notNullable();
         })
 
         .createTable('Role', function (table) {
             console.log("Creating Role table...");
             table.increments('id').primary();
-            table.varchar('roleName').notNullable();
+            table.string('roleName').notNullable();
         })
 
         .createTable('UserRole', function (table) {
@@ -39,7 +39,7 @@ export function up(knex) {
             table.foreign('userId').references('User.id').onDelete('CASCADE')
             table.enu('resource', ['System', 'CoreUnit'], {
                 useNative: true,
-                enumName: 'Resource'
+                enumName: 'ResourceType'
             }).notNullable();
             table.integer('resourceId').notNullable();
         })
@@ -70,7 +70,7 @@ export function down(knex) {
         .dropTable("User")
         .dropTable("BudgetToolVersion")
         .dropTable("ViewDataCache")
-        .raw('DROP TYPE "Resource"')
+        .raw('DROP TYPE "ResourceType"')
         .raw('DROP TYPE "Permission"')
 
 };
