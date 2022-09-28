@@ -80,7 +80,7 @@ export function up(knex) {
             table.integer('budgetStatementWalletId').notNullable();
             table.foreign('budgetStatementWalletId').references('BudgetStatementWallet.id').onDelete('CASCADE');
             table.date('transactionDate').notNullable();
-            table.string('transactionId').notNullable();
+            table.string('transactionId');
             table.integer('budgetStatementLineItemId');
             table.foreign('budgetStatementLineItemId').references('BudgetStatementLineItem.id').onDelete('CASCADE');
             table.text('comments');

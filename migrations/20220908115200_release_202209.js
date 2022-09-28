@@ -29,7 +29,7 @@ export function up(knex) {
             table.integer('cuMipId').notNullable();
             table.foreign('cuMipId').references('CuMip.id').onDelete('CASCADE');
             table.string('mip40Spn').notNullable();
-            table.boolean('mkrOnly').notNullable();
+            table.boolean('mkrOnly');
             table.decimal('mkrProgramLength', 4, 2).notNullable();
         })
 
@@ -72,6 +72,15 @@ export function up(knex) {
             table.boolean('headcountExpense').notNullable()
         })
 
+        .createTable('Mip40BudgetLineItem_CanonicalBudgetCategory', function (table) {
+            console.log('Creating Mip40BudgetLineItem_CanonicalBudgetCategory table...');
+            table.increments('id').primary();
+            table.integer('mip40BudgetLineItemId').notNullable();
+            table.foreign('mip40BudgetLineItemId').references('Mip40BudgetLineItem.Id').onDelete('CASCADE');  
+            table.integer('canonicalBudgetCategory').notNullable();
+            table.foreign('canonicalBudgetCategory').references('canonicalBudgetCategory.Id').onDelete('CASCADE');  
+        })
+
         .createTable('Mip41', function (table) {
             console.log("Creating Mip41 table...");
             table.increments('id').primary();
@@ -91,6 +100,7 @@ export function down(knex) {
     return knex.schema
 
         .dropTable("Mip41")
+        .dropTable("Mip40BudgetLineItem_CanonicalBudgetCategory")
         .dropTable("CanonicalBudgetCategory")
         .dropTable("Mip40BudgetLineItem")
         .dropTable("Mip40Wallet")

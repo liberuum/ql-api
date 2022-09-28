@@ -9,7 +9,7 @@ export function up(knex) {
             table.string('code').notNullable();
             table.string('shortCode').notNullable();
             table.string('name').notNullable();
-            table.string('image').notNullable();
+            table.string('image');
             table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable();
             table.text('sentenceDescription');
             table.text('paragraphDescription');
@@ -28,7 +28,7 @@ export function up(knex) {
             table.date('accepted');
             table.date('rejected');
             table.date('obsolete');
-            table.enu('status', ['RFC', 'Formal Submission', 'Accepted', 'Rejected', 'Obsolete', 'Withdrawn'], {
+            table.enu('mipStatus', ['RFC', 'Formal Submission', 'Accepted', 'Rejected', 'Obsolete', 'Withdrawn'], {
                 useNative: true,
                 enumName: 'MipStatus'
             }).notNullable();
@@ -48,7 +48,7 @@ export function up(knex) {
             table.enu('budgetStatus', ['Draft', 'SubmittedToAuditor', 'AwaitingCorrections', 'Final'], {
                 useNative: true,
                 enumName: 'BudgetStatus'
-            }).notNullable();
+            });
             table.decimal('mkrProgramLength', 4, 2);
         })
 
