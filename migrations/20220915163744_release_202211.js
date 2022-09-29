@@ -35,7 +35,7 @@ export function up(knex) {
             table.increments('id').primary();
             table.string('name').notNullable();
             table.string('outputUrl').notNullable();
-            table.date('outputDate').notNullable();
+            table.date('outputDate');
         })
 
         .createTable('OutputType', function (table) {
@@ -73,7 +73,7 @@ export function up(knex) {
                 useNative: true,
                 enumName: 'ConfidenceLevel'
             }).notNullable();
-            table.varchar('comments');
+            table.text('comments');
         })
 
         .createTable('Review', function (table) {
@@ -86,7 +86,7 @@ export function up(knex) {
                 useNative: true,
                 enumName: 'ReviewOutcome'
             }).notNullable();
-            table.varchar('comments');
+            table.text('comments');
         })
 
         .createTable('Milestone', function (table) {

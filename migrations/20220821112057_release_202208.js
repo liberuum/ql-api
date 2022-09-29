@@ -106,7 +106,7 @@ export function up(knex) {
             }).notNullable();
             table.text('roadmapSummary');
             table.boolean('strategicInitiative');
-            table.string('comments');
+            table.text('comments');
         })
 
         .createTable('CuUpdate', function (table) {

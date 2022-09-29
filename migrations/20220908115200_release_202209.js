@@ -69,16 +69,17 @@ export function up(knex) {
             table.integer('position');
             table.string('group');
             table.string('budgetCategory').notNullable();
-            table.boolean('headcountExpense').notNullable()
+            table.decimal('budgetCap', 14, 2).notNullable();
+            table.boolean('headcountExpense').notNullable();
         })
 
         .createTable('Mip40BudgetLineItem_CanonicalBudgetCategory', function (table) {
             console.log('Creating Mip40BudgetLineItem_CanonicalBudgetCategory table...');
             table.increments('id').primary();
             table.integer('mip40BudgetLineItemId').notNullable();
-            table.foreign('mip40BudgetLineItemId').references('Mip40BudgetLineItem.Id').onDelete('CASCADE');  
-            table.integer('canonicalBudgetCategory').notNullable();
-            table.foreign('canonicalBudgetCategory').references('canonicalBudgetCategory.Id').onDelete('CASCADE');  
+            table.foreign('mip40BudgetLineItemId').references('Mip40BudgetLineItem.id').onDelete('CASCADE');  
+            table.integer('canonicalBudgetCategoryId').notNullable();
+            table.foreign('canonicalBudgetCategoryId').references('CanonicalBudgetCategory.id').onDelete('CASCADE');  
         })
 
         .createTable('Mip41', function (table) {
@@ -101,8 +102,8 @@ export function down(knex) {
 
         .dropTable("Mip41")
         .dropTable("Mip40BudgetLineItem_CanonicalBudgetCategory")
-        .dropTable("CanonicalBudgetCategory")
         .dropTable("Mip40BudgetLineItem")
+        .dropTable("CanonicalBudgetCategory")
         .dropTable("Mip40Wallet")
         .dropTable("Mip40BudgetPeriod")
         .dropTable("Mip40")
