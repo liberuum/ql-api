@@ -541,6 +541,16 @@ export const resolvers = {
                 } else {
                     const allowed = await auth.canUpdate('CoreUnit', user.cuId)
                     if (allowed[0].count > 0) {
+                        //Tacking Change
+                        const [CU] = await dataSources.db.CoreUnit.getCoreUnit('id', user.cuId);
+                        // console.log(CU)
+                        const [wallet] = await dataSources.db.BudgetStatement.getBudgetStatementWallet('id', input.budgetStatementWalletId)
+                        // console.log(wallet);
+                        const [bStatement] = await dataSources.db.BudgetStatement.getBudgetStatement('id', wallet.budgetStatementId)
+                        // console.log(bStatement);
+                        console.log(dataSources.db.ChangeTracking);
+                        // await dataSources.db.ChangeTrackingModel.coreUnitBudgetStatementUpdated(CU.id, CU.code, CU.shortCode, wallet.budgetStatementId, bStatement.month)
+                        //Updating lineItems
                         console.log(`updating line item ${input.id} to CU ${user.cuId}`,)
                         console.log('updating lineItem input', input);
                         const result = await dataSources.db.BudgetStatement.updateLineItem(input)
