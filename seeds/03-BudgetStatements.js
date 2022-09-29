@@ -33,17 +33,61 @@
   ]);
 
   await knex('BudgetStatementLineItem').insert([
-    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', actual: 90000, forecast: 95000, budgetCap: 100000, payment: 90000, headcountExpense: true},
-    {budgetStatementWalletId: 1, month: '03-01-2022',budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', actual: 8000, forecast: 9000, budgetCap: 10000, payment: 9000, headcountExpense: false},
-    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', actual: 2000, forecast: 2000, budgetCap: 2500, payment: 1800, headcountExpense: true},
-    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', actual: 3000, forecast: 3000, budgetCap: 3100, payment: 3000, headcountExpense: false},
-    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', actual: 2100, forecast: 2000, budgetCap: 2000, payment: 2100, headcountExpense: false},
-    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Salaries and Wages', canonicalBudgetCategory: 'CompensationAndBenefits', actual: 110000, forecast: 110000, budgetCap: 110000, payment: 110000, headcountExpense: true},
-    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Admin Expenses', canonicalBudgetCategory: 'AdminExpense', actual: 90000, forecast: 95000, budgetCap: 30000, payment: 90000, headcountExpense: false},
-    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Flights and Taxis', canonicalBudgetCategory: 'TravelAndEntertainment', actual: 50, forecast: 50, budgetCap: 100, payment: 50, headcountExpense: true},
-    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Legal Costs', canonicalBudgetCategory: 'ProfessionalServices', actual: 4000, forecast: 4000, budgetCap: 5000, payment: 4000, headcountExpense: false},
-    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Software Subscriptions', canonicalBudgetCategory: 'SoftwareExpense', actual: 18000, forecast: 20000, budgetCap: 21000, payment: 18000, headcountExpense: false},
+    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Salaries and Wages', actual: 90000, forecast: 95000, budgetCap: 100000, payment: 90000, headcountExpense: true},
+    {budgetStatementWalletId: 1, month: '03-01-2022',budgetCategory: 'Admin Expenses', actual: 8000, forecast: 9000, budgetCap: 10000, payment: 9000, headcountExpense: false},
+    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Flights and Taxis', actual: 2000, forecast: 2000, budgetCap: 2500, payment: 1800, headcountExpense: true},
+    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Legal Costs', actual: 3000, forecast: 3000, budgetCap: 3100, payment: 3000, headcountExpense: false},
+    {budgetStatementWalletId: 1, month: '03-01-2022', budgetCategory: 'Software Subscriptions', actual: 2100, forecast: 2000, budgetCap: 2000, payment: 2100, headcountExpense: false},
+    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Salaries and Wages', actual: 110000, forecast: 110000, budgetCap: 110000, payment: 110000, headcountExpense: true},
+    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Admin Expenses',  actual: 90000, forecast: 95000, budgetCap: 30000, payment: 90000, headcountExpense: false},
+    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Flights and Taxis', actual: 50, forecast: 50, budgetCap: 100, payment: 50, headcountExpense: true},
+    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Legal Costs', actual: 4000, forecast: 4000, budgetCap: 5000, payment: 4000, headcountExpense: false},
+    {budgetStatementWalletId: 2, month: '08-01-2022', budgetCategory: 'Software Subscriptions', actual: 18000, forecast: 20000, budgetCap: 21000, payment: 18000, headcountExpense: false},
   ]);
+
+  await knex('BudgetStatementLineItem_CanonicalBudgetCategory').insert([{
+    budgetStatementLineItemId: 1,
+    canonicalBudgetCategoryId: 2
+  },
+  {
+    budgetStatementLineItemId: 2,
+    canonicalBudgetCategoryId: 5
+  },
+  {
+    budgetStatementLineItemId: 3,
+    canonicalBudgetCategoryId: 3
+  },
+  {
+    budgetStatementLineItemId: 4,
+    canonicalBudgetCategoryId: 10
+  },
+  {
+    budgetStatementLineItemId: 5,
+    canonicalBudgetCategoryId: 12
+  },
+  {
+    budgetStatementLineItemId: 6,
+    canonicalBudgetCategoryId: 1
+  },
+  {
+    budgetStatementLineItemId: 7,
+    canonicalBudgetCategoryId: 4
+  },
+  {
+    budgetStatementLineItemId: 8,
+    canonicalBudgetCategoryId: 3
+  },
+  {
+    budgetStatementLineItemId: 9,
+    canonicalBudgetCategoryId: 10
+  },
+  {
+    budgetStatementLineItemId: 10,
+    canonicalBudgetCategoryId: 12
+  },
+
+
+])
 
   await knex('BudgetStatementPayment').insert([
     {budgetStatementWalletId: 1, transactionDate: 'SEP-15-2022', transactionId: '0xec9db5bfbcd30ad2e3070b626ed4f78abce88687c5d1eb23464242be5edcb537'},

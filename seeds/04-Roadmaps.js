@@ -15,8 +15,8 @@
   await knex('Milestone').del()
 
   await knex('Stakeholder').insert([
-    {name: 'Colonel Sanders', stakeholderContributorId: 1, stakeholderCuId: 2},
-    {name: 'Example', stakeholderContributorId: 2, stakeholderCuId: 1}
+    {name: 'Colonel Sanders', stakeholderContributorId: 1, stakeholderCuId: 1},
+    {name: 'Example', stakeholderContributorId: 2, stakeholderCuId: 0}
   ]);
 
   await knex('StakeholderRole').insert([

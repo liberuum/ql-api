@@ -15,6 +15,7 @@ export async function seed(knex) {
 
   await knex('CoreUnit').insert([
     {
+      id: 0,
       code: 'EXA-001',
       shortCode: 'EXA',
       name: 'Example',
@@ -38,20 +39,20 @@ export async function seed(knex) {
 
   await knex('CuMip').insert([
     {
-      cuId: 1,
+      cuId: 0,
       mipCode: 'MIP39c2SP1',
       mipTitle: 'Adding RWF Core Unit',
       rfc: '08-07-2022',
-      status: 'RFC',
+      mipStatus: 'RFC',
       mipUrl: 'https://mips.makerdao.com/mips/details/MIP39c2SP1',
       forumUrl: 'https://forum.makerdao.com/t/mip39c2-sp1-adding-core-unit-real-world-finance/6224'
   },
   {
-    cuId: 2,
+    cuId: 1,
     mipCode: 'MIP39c2SP1',
     mipTitle: 'Adding War Core Unit',
     rfc: '08-07-2022',
-    status: 'RFC',
+    mipStatus: 'RFC',
     mipUrl: 'https://mips.makerdao.com/mips/details/MIP39c2SP1',
     forumUrl: 'https://forum.makerdao.com/t/mip39c2-sp1-adding-core-unit-real-world-finance/6224'
 }
@@ -59,7 +60,7 @@ export async function seed(knex) {
 
 await knex('BudgetStatement').insert([
   {
-    cuId: 1,
+    cuId: 0,
     cuCode: 'EXA',
     month: '03-01-2022',
     comments: 'This is the first budget statement for the Example Core Unit',  
@@ -68,7 +69,7 @@ await knex('BudgetStatement').insert([
     mkrProgramLength: 2
   },
 {
-  cuId: 2,
+  cuId: 1,
   cuCode: 'WAR',
   month: '08-01-2022',
   comments: 'This is the first budget statement for the Example Core Unit',  
@@ -80,7 +81,7 @@ await knex('BudgetStatement').insert([
 
 await knex('SocialMediaChannels').insert([
   {
-    cuId: 1,
+    cuId: 0,
     forumTag: 'EXA-001',
     twitter: '',
     youtube: '',  
@@ -90,7 +91,7 @@ await knex('SocialMediaChannels').insert([
     github: 'https://github.com/EXA'
 },
 {
-  cuId: 2,
+  cuId: 1,
   forumTag: 'WAR-001',
   twitter: '@WARroom',
   youtube: 'https://youtube.com/TheWarrooms',  
@@ -124,14 +125,14 @@ await knex('Contributor').insert([
 
 await knex('ContributorCommitment').insert([
   {
-    cuId: 1,
+    cuId: 0,
     contributorId: 1,
     startDate: '01-01-2022',
     commitment: 'FullTime',  
     title: 'Leader of the Examples',
 },
 {
-  cuId: 2,
+  cuId: 1,
   contributorId: 2,
   startDate: '10-01-2022',
   commitment: 'PartTime',  
@@ -141,7 +142,7 @@ await knex('ContributorCommitment').insert([
 
 await knex('Roadmap').insert([
   {
-    ownerCuId: 1,
+    ownerCuId: 0,
     roadmapCode: 'EXA-22-Q1-O1',
     roadmapName: 'First objective of 2022 for Example CU',
     roadmapStatus: 'ToDo',  
@@ -150,7 +151,7 @@ await knex('Roadmap').insert([
     comments: ''
 },
 {
-    ownerCuId: 2,
+    ownerCuId: 1,
     roadmapCode: 'WAR-22-Q3-O1',
     roadmapName: 'Takeover the periphery',
     roadmapStatus: 'InProgress',  
@@ -168,7 +169,7 @@ await knex('CuUpdate').insert([
     updateUrl: 'https://forum.makerdao.com/t/monthly-core-unit-updates-july-2022/16954',  
 },
 {
-  cuId: 2,
+  cuId: 1,
   updateTitle: 'Roadmap update for 2022 - WAR-001',
   updateDate: '01-12-2022',
   updateUrl: 'https://forum.makerdao.com/t/monthly-core-unit-updates-july-2022/16954',  
