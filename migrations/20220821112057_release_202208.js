@@ -10,7 +10,6 @@ export function up(knex) {
             table.string('shortCode').notNullable();
             table.string('name').notNullable();
             table.string('image');
-            table.specificType('category', 'text[]').defaultTo(knex.raw('\'{Technical,Operational,Business,RWAs,Growth,Finance,Legal}\'::text[]')).notNullable();
             table.text('sentenceDescription');
             table.text('paragraphDescription');
             table.string('paragraphImage');
