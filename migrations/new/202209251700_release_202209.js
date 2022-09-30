@@ -29,7 +29,7 @@ export function up(knex) {
             // Primary Key ID
             table.increments('id').primary();
 
-            // Foreign Key referencing CoreUnit.id
+            // Foreign Key referencing ChangeTrackingEvents.id
             table.integer('event_id').notNullable();
             table.foreign('event_id').references('ChangeTrackingEvents.id').onDelete('CASCADE');
 
