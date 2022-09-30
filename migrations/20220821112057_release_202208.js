@@ -118,6 +118,22 @@ export function up(knex) {
             table.date('updateDate').notNullable();
             table.string('updateUrl').notNullable();
         })
+
+        .createTable('CuCategory', function (table) {
+            console.log("Creating cuCategory table...");
+            table.increments('id').primary();
+            table.string('category').notNullable();
+        })
+
+        .createTable('CoreUnit_CuCategory', function (table) {
+            console.log("Creating CoreUnit_CoreUnitCategory table...");
+            table.increments('id').primary();
+            table.integer('cuId').notNullable();
+            table.foreign('cuId').references('CoreUnit.id').onDelete('CASCADE');
+            table.integer('cuCategoryId').notNullable();
+            table.foreign('cuCategoryId').references('CuCategory.id').onDelete('CASCADE');
+        })
+
 }
 
 //Down migration deletes Core Unit and all root tables
@@ -128,6 +144,8 @@ export function down(knex) {
 
     return knex.schema
 
+        .dropTable("CoreUnit_CuCategory")
+        .dropTable("CuCategory")
         .dropTable("CuUpdate")
         .dropTable("Roadmap")
         .dropTable("ContributorCommitment")
