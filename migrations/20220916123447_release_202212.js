@@ -10,13 +10,6 @@ export function up(knex) {
         table.json('value');
        })
 
-       .createTable('BudgetToolVersion', function (table) {
-        console.log("Creating BudgetToolVersion table...");
-        table.increments('id').primary();
-        table.varchar('version').notNullable();
-        table.varchar('link').notNullable();
-       })
-
        .createTable('User', function (table) {
         console.log("Creating User table...");
         table.increments('id').primary();
@@ -62,7 +55,6 @@ export function down(knex) {
     .dropTable("UserRole") 
     .dropTable("Role") 
     .dropTable("User") 
-    .dropTable("BudgetToolVersion") 
     .dropTable("ViewDataCache")
 
 };
