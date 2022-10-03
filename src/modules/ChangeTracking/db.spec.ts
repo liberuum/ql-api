@@ -18,7 +18,7 @@ const cu = {
 
 it('returns a change tracking event as last activity of a core unit', async () => {
     const model = await getChangeTrackingModel();
-    const entry = await model.getCoreUnitLastActivity(cu.id, cu.code, cu.shortCode);
+    const entry = await model.getCoreUnitLastActivity(cu.id);
 
     expect(entry?.event).toEqual('CU_BUDGET_STATEMENT_CREATE');
     expect(entry?.params).toEqual({
@@ -34,7 +34,7 @@ it('returns a change tracking event as last activity of a core unit', async () =
 
 it('returns a string ID for Core Unit-related events', async () => {
     const model = await getChangeTrackingModel();
-    const entry = await model.getCoreUnitLastActivity(cu.id, cu.code, cu.shortCode);
+    const entry = await model.getCoreUnitLastActivity(cu.id);
 
     expect(entry?.event).toEqual('CU_BUDGET_STATEMENT_CREATE');
     expect(typeof (entry?.params as any).coreUnit.id).toBe('string');

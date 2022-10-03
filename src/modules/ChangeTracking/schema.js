@@ -3,7 +3,7 @@ import { gql } from "apollo-server-core";
 export const typeDefs = [gql`
     type ChangeTrackingEvent {
         id: ID!
-        datetime: String!,
+        created_at: DateTime!,
         event: String!,
         params: JSON!,
         description: String!
@@ -27,10 +27,10 @@ export const resolvers = {
     },
     CoreUnit: {
         lastActivity: async (parent, _, { dataSources }) => {
-            return dataSources.db.ChangeTracking.getCoreUnitLastActivity(parent.id, parent.code, parent.shortCode);
+            return dataSources.db.ChangeTracking.getCoreUnitLastActivity(parent.id);
         },
         activityFeed: async (parent, _, { dataSources }) => {
-            return dataSources.db.ChangeTracking.getCoreUnitActivityFeed(parent.id, parent.code, parent.shortCode);
+            return dataSources.db.ChangeTracking.getCoreUnitActivityFeed(parent.id);
         },
     },
 };

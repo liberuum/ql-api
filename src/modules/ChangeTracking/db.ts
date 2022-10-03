@@ -1,17 +1,8 @@
 import { Knex } from "knex";
 
-let fakeId = 1;
-const eventMock = (cuId: string, cuCode: string, cuShortCode: string): ChangeTrackingEvent => ({
-    id: '' + fakeId++,
-    datetime: '2022-09-25T17:55:00',
-    event: 'CU_BUDGET_STATEMENT_CREATE',
-    params: { coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId: 123, month: '2022-09' },
-    description: `Core Unit ${cuShortCode} submitted a new budget statement for 2022-09`
-});
-
 export interface ChangeTrackingEvent {
     id: string;
-    datetime: string;
+    created_at: string;
     event: string;
     params: object;
     description: string;
@@ -27,45 +18,54 @@ export class ChangeTrackingModel {
     }
 
     async getActivityFeed(): Promise<ChangeTrackingEvent[]> {
-        return [
-            eventMock('5', "GOV-001", "GOV"),
-            eventMock('9', "CES-001", "CES"),
-            eventMock('5', "GOV-001", "GOV"),
-        ];
+        return await this.knex.select('*')
+            .from('ChangeTrackingEvents')
+            .orderBy('id', 'desc');
     }
 
-    async getCoreUnitActivityFeed(cuId: string, cuCode: string, cuShortCode: string): Promise<ChangeTrackingEvent[]> {
-        return [
-            eventMock(cuId, cuCode, cuShortCode),
-            eventMock(cuId, cuCode, cuShortCode),
-            eventMock(cuId, cuCode, cuShortCode),
-        ];
+    async getCoreUnitActivityFeed(cuId: string): Promise<ChangeTrackingEvent[]> {
+        return await this.knex('ChangeTrackingEvents_CoreUnits')
+            .where('coreunit_id', cuId)
+            .orderBy('event_id', 'desc')
+            .join('ChangeTrackingEvents', 'ChangeTrackingEvents_CoreUnits.event_id', '=', 'ChangeTrackingEvents.id');
     }
 
-    async getCoreUnitLastActivity(cuId: string, cuCode: string, cuShortCode: string): Promise<ChangeTrackingEvent | null> {
-        return eventMock(cuId, cuCode, cuShortCode);
+    async getCoreUnitLastActivity(cuId: string): Promise<ChangeTrackingEvent | null> {
+        /*
+        ToDo
+        Improve query to return latest row with knex
+        */
+        const result = await this.knex('ChangeTrackingEvents_CoreUnits')
+            .where('coreunit_id', cuId)
+            .orderBy('event_id', 'desc')
+            .join('ChangeTrackingEvents', 'ChangeTrackingEvents_CoreUnits.event_id', '=', 'ChangeTrackingEvents.id');
+        return result[0]
     }
 
     async coreUnitBudgetStatementCreated(cuId: string, cuCode: string, cuShortCode: string, budgetStatementId: string, month: string) {
+        const monthDate = new Date(month);
         const event = {
-            dateTime: new Date().toISOString(),
+            created_at: new Date().toISOString(),
             event: 'CU_BUDGET_STATEMENT_CREATED',
-            params: { coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month },
-            description: `Core Unit ${cuShortCode} has published a new expense report for ${month}`
+            params: JSON.stringify({ coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month }),
+            description: `Core Unit ${cuShortCode} has published a new expense report for ${monthDate.toLocaleString('default', { month: 'long' })} ${monthDate.getFullYear()}`
         }
 
-        console.log(event);
+        const result = await this.knex('ChangeTrackingEvents').insert({ created_at: event.created_at, event: event.event, params: event.params, description: event.description }).returning('*')
+        await this.knex('ChangeTrackingEvents_CoreUnits').insert({ event_id: result[0].id, coreunit_id: cuId })
     }
 
     async coreUnitBudgetStatementUpdated(cuId: string, cuCode: string, cuShortCode: string, budgetStatementId: string, month: string) {
+        const monthDate = new Date(month);
         const event = {
-            dateTime: new Date().toISOString(),
+            created_at: new Date().toISOString(),
             event: 'CU_BUDGET_STATEMENT_UPDATED',
-            params: { coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month },
-            description: `Core Unit ${cuShortCode} has published a new expense report for ${month}`
+            params: JSON.stringify({ coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month: monthDate.toISOString().slice(0, 7) }),
+            description: `Core Unit ${cuShortCode} has updated their expense report for ${monthDate.toLocaleString('default', { month: 'long' })} ${monthDate.getFullYear()}`
         }
 
-        console.log(event);
+        const result = await this.knex('ChangeTrackingEvents').insert({ created_at: event.created_at, event: event.event, params: event.params, description: event.description }).returning('*')
+        await this.knex('ChangeTrackingEvents_CoreUnits').insert({ event_id: result[0].id, coreunit_id: cuId })
     }
 }
 
