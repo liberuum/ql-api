@@ -1,4 +1,4 @@
-//Up migration creates 
+//Up migration creates ChangeTrackingEvents and ChangeTrackingEvents_CoreUnits entries
 export async function up(knex) {
     const data = await knex.select('id', 'cuId', 'month', 'cuCode')
         .from('BudgetStatement')
@@ -40,13 +40,29 @@ export async function up(knex) {
             }).into('ChangeTrackingEvents')
         }
     }
-};
 
-//Down migration deletes all change tracking events
+    //Create entries for the ChangeTrackingEvents_CoreUnits table
+
+    const dataChangeTrackingEvents = await knex.select('id','params')
+        .from('ChangeTrackingEvents')
+
+    console.log('Creating ' + dataChangeTrackingEvents.length + ' ChangeTrackingEvents_CoreUnits for existing budget statements...')
+
+    for (let j = 0; j < dataChangeTrackingEvents.length; j++) {
+        var coreUnitId = dataChangeTrackingEvents[j].params.coreUnit.id
+        
+            await knex.insert({
+                event_id: dataChangeTrackingEvents[j].id,
+                coreunit_id: coreUnitId
+            }).into('ChangeTrackingEvents_CoreUnits')
+        }
+    };
+
+//Down migration deletes all ChangeTrackingEvents and ChangeTrackingEvents_CoreUnits
 export function down(knex) {
 
     console.log('Deleting all change tracking events for existing budget statements...')
 
-    return knex('ChangeTrackingEvents').del()
+    return knex('ChangeTrackingEvents', 'ChangeTrackingEvents_CoreUnits').del()
 
 };
