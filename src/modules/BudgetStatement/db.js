@@ -174,6 +174,10 @@ export default {
         return this.knex.batchInsert('BudgetStatementWallet', rows, chunkSize).returning('*');
     },
 
+    addBudgetStatementFTE(input) {
+        return this.knex('BudgetStatementFtes').insert({budgetStatementId: input.budgetStatementId, month: input.month, ftes: input.ftes})
+    },
+
 
     // ------------------- Updating data --------------------------------
 
@@ -181,6 +185,12 @@ export default {
         const id = lineItem.id;
         delete lineItem.id;
         return this.knex('BudgetStatementLineItem').where('id', id).update(lineItem).returning('*');
+    },
+
+    async updateBudgetStatementFTE(input) {
+        const id = input.id;
+        delete input.id;
+        return this.knex('BudgetStatementFtes').where('id', id).update(input).returning('*')
     },
 
     async batchUpdateLineItems(lineItems) {

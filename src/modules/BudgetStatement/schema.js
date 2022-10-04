@@ -258,6 +258,21 @@ export const typeDefs = [gql`
         budgetLineItemUpdate(input: LineItemUpdateInput): [BudgetStatementLineItem]
         budgetLineItemsBatchUpdate(input: [LineItemsBatchUpdateInput]): [BudgetStatementLineItem]
         budgetStatementWalletBatchAdd(input: [BudgetStatementWalletBatchAddInput]): [BudgetStatementWallet]
+        budgetStatementFTEAdd(input: BudgetStatementFTEInput): [BudgetStatementFTEs]
+        budgetStatementFTEUpdate(input: BudgetStatementFTEUpdateInput): [BudgetStatementFTEs]
+    }
+
+    input BudgetStatementFTEInput {
+        budgetStatementId: ID!
+        month: String!
+        ftes: Float!
+    }
+
+    input BudgetStatementFTEUpdateInput {
+        id: ID!
+        budgetStatementId: ID!
+        month: String!
+        ftes: Float!
     }
 
     input LineItemsBatchUpdateInput {
@@ -504,7 +519,7 @@ export const resolvers = {
                             throw new Error('"No input data')
                         }
                         console.log(`adding ${input.length} budgetStatements to CU ${user.cuId}`)
-                        const result = await dataSources.db.BudgetStatement.addBatchBudgetStatements(input);               
+                        const result = await dataSources.db.BudgetStatement.addBatchBudgetStatements(input);
                         return result
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetStatements')
@@ -616,6 +631,40 @@ export const resolvers = {
                     if (allowed[0].count > 0) {
                         console.log(`Adding ${input.length} wallets to CU ${user.cuId}`)
                         return await dataSources.db.BudgetStatement.addBudgetStatementWallets(input);
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatementWallets')
+            }
+        },
+        budgetStatementFTEAdd: async (_, { input }, { user, auth, dataSources }) => {
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`Adding ${input.ftes} ftes to CU ${user.cuId}`)
+                        return await dataSources.db.BudgetStatement.addBudgetStatementFTE(input);
+                    } else {
+                        throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatementWallets')
+            }
+        },
+        budgetStatementFTEUpdate: async (_, { input }, { user, auth, dataSources }) => {
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
+                } else {
+                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        console.log(`Updating ${input.ftes} ftes to CU ${user.cuId}`)
+                        return await dataSources.db.BudgetStatement.updateBudgetStatementFTE(input);
                     } else {
                         throw new AuthenticationError('You are not authorized to update budgetStatementWallets')
                     }
