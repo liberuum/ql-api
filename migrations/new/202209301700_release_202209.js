@@ -31,6 +31,7 @@ export async function up(knex) {
         const utcMonth = new Date(data[i].month);
         utcMonth.setUTCDate(utcMonth.getUTCDate() + 1);
         utcMonth.setUTCHours(12);
+        utcMonth.setUTCDate(1);
         
         // The change tracking event is assumed to happen 1 month later.
         const createdDate = new Date(utcMonth);
