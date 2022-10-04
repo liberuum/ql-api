@@ -31,14 +31,12 @@ export class ChangeTrackingModel {
     }
 
     async getCoreUnitLastActivity(cuId: string): Promise<ChangeTrackingEvent | null> {
-        /*
-        ToDo
-        Improve query to return latest row with knex
-        */
         const result = await this.knex('ChangeTrackingEvents_CoreUnits')
             .where('coreunit_id', cuId)
-            .orderBy('event_id', 'desc')
-            .join('ChangeTrackingEvents', 'ChangeTrackingEvents_CoreUnits.event_id', '=', 'ChangeTrackingEvents.id');
+            .orderBy('created_at', 'desc')
+            .join('ChangeTrackingEvents', 'ChangeTrackingEvents_CoreUnits.event_id', '=', 'ChangeTrackingEvents.id')
+            .limit(1);
+
         return result[0]
     }
 
