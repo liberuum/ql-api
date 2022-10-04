@@ -1,7 +1,14 @@
 //Up migration creates ChangeTrackingEvents and ChangeTrackingEvents_CoreUnits entries
 export async function up(knex) {
-    const data = await knex.select('id', 'cuId', 'month', 'cuCode')
+    const data = await knex
+        .select('id', 'cuId', 'month', 'cuCode')
         .from('BudgetStatement')
+        .whereExists(
+            knex.select('*')
+              .from('BudgetStatementWallet as b2')
+              .whereRaw('"b2"."budgetStatementId" = "BudgetStatement"."id" AND EXISTS (SELECT * FROM "BudgetStatementLineItem" AS "b3" WHERE "b3"."budgetStatementWalletId" = "b2"."id")')
+        )
+        .orderBy('id'); 
 
     const months = [
         'January',
