@@ -18,14 +18,33 @@ export async function up(knex) {
         'December'
     ]
 
-    var today = new Date()
+    let today = new Date();
+    let eventsAdded = 0;
 
-    console.log('Creating ' + data.length + ' change tracking events for existing budget statements...')
+    console.log('Processing ' + data.length + ' budget statements to create change tracking events...');
 
     for (let i = 0; i < data.length; i++) {
-        if (data[i].month < today) {
-            await knex.insert({
-                created_at: data[i].month,
+        
+        // Instead of the 1st day of the month, the BudgetStatement month sometimes has the previous 
+        // month due to timezone differences, e.g. 2021-11-30T23:00:00.000Z for December. Add 1 day 
+        // and reset UTC hour to 12 as a band aid to correct for this.
+        const utcMonth = new Date(data[i].month);
+        utcMonth.setUTCDate(utcMonth.getUTCDate() + 1);
+        utcMonth.setUTCHours(12);
+        
+        // The change tracking event is assumed to happen 1 month later.
+        const createdDate = new Date(utcMonth);
+        createdDate.setMonth(createdDate.getMonth() + 1);
+
+        // Only create ChangeTrackingEvents that are supposed to have happened in the past.
+        if (createdDate < today) {
+            const description = 'The ' + data[i].cuCode.slice(0, -4) + ' Core Unit submitted a new budget statement for ' + months[utcMonth.getMonth()] + ' ' + utcMonth.getFullYear();
+
+            console.log("  ADDING", data[i].id, ":", data[i].month, ">> M:", utcMonth, ">> C:", createdDate);
+            console.log("  > " + description);
+
+            const newRecord = {
+                created_at: createdDate,
                 event: 'CU_BUDGET_STATEMENT_CREATE',
                 params: {
                     coreUnit: {
@@ -34,17 +53,25 @@ export async function up(knex) {
                         shortCode: data[i].cuCode.slice(0, -4)
                     },
                     budgetStatementId: data[i].id,
-                    month: data[i].month.toISOString().slice(0, 7)
+                    month: utcMonth.toISOString().slice(0, 7)
                 },
-                description: 'Core Unit ' + data[i].cuCode + ' submitted a new budget statement for ' + months[data[i].month.getMonth()] + ' ' + data[i].month.getFullYear()
-            }).into('ChangeTrackingEvents')
+                description: description
+            };
+
+            await knex.insert(newRecord).into('ChangeTrackingEvents');
+            eventsAdded++;
+
+        } else {
+            console.log("SKIPPING", data[i].id, ":", data[i].month, " >> ", utcMonth, " >> ", createdDate);
         }
     }
 
-    //Create entries for the ChangeTrackingEvents_CoreUnits table
+    console.log("Added", eventsAdded, "change tracking events.");
 
-    const dataChangeTrackingEvents = await knex.select('id','params')
-        .from('ChangeTrackingEvents')
+    //Create entries for the ChangeTrackingEvents_CoreUnits table
+    const dataChangeTrackingEvents = await knex
+        .select('id','params')
+        .from('ChangeTrackingEvents');
 
     console.log('Creating ' + dataChangeTrackingEvents.length + ' ChangeTrackingEvents_CoreUnits for existing budget statements...')
 
