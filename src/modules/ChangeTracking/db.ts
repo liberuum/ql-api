@@ -17,6 +17,15 @@ export class ChangeTrackingModel {
         this.coreUnitModel = coreUnitModel;
     }
 
+    private toMonthName(monthNumber: number) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+      
+        return date.toLocaleString('en-US', {
+          month: 'long',
+        });
+      }
+
     async getActivityFeed(): Promise<ChangeTrackingEvent[]> {
         return await this.knex.select('*')
             .from('ChangeTrackingEvents')
@@ -45,8 +54,8 @@ export class ChangeTrackingModel {
         const event = {
             created_at: new Date().toISOString(),
             event: 'CU_BUDGET_STATEMENT_CREATED',
-            params: JSON.stringify({ coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month }),
-            description: `Core Unit ${cuShortCode} has published a new expense report for ${monthDate.toLocaleString('default', { month: 'long' })} ${monthDate.getFullYear()}`
+            params: JSON.stringify({ coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month: monthDate.toISOString().slice(0, 7) }),
+            description: `Core Unit ${cuShortCode} has published a new expense report for ${this.toMonthName(Number(monthDate.toISOString().slice(5, 7)))} ${monthDate.getFullYear()}`
         }
 
         const result = await this.knex('ChangeTrackingEvents').insert({ created_at: event.created_at, event: event.event, params: event.params, description: event.description }).returning('*')
@@ -59,7 +68,7 @@ export class ChangeTrackingModel {
             created_at: new Date().toISOString(),
             event: 'CU_BUDGET_STATEMENT_UPDATED',
             params: JSON.stringify({ coreUnit: { id: cuId, code: cuCode, shortCode: cuShortCode }, budgetStatementId, month: monthDate.toISOString().slice(0, 7) }),
-            description: `Core Unit ${cuShortCode} has updated their expense report for ${monthDate.toLocaleString('default', { month: 'long' })} ${monthDate.getFullYear()}`
+            description: `Core Unit ${cuShortCode} has updated their expense report for ${this.toMonthName(Number(monthDate.toISOString().slice(5, 7)))} ${monthDate.getFullYear()}`
         }
 
         const result = await this.knex('ChangeTrackingEvents').insert({ created_at: event.created_at, event: event.event, params: event.params, description: event.description }).returning('*')
