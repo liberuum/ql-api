@@ -9,8 +9,6 @@ export const typeDefs = [gql`
         cuId: ID!
         "Month of corresponding budget statement"
         month: String!
-        "Optional comments field"
-        comments: String
         "Status of the budgest statement (Draft/Final)"
         budgetStatus: BudgetStatus
         "Link to the complete publication of the budget statement"
@@ -148,7 +146,6 @@ export const typeDefs = [gql`
         cuId: ID
         cuCode: String
         month: String
-        comments: String
         budgetStatus: BudgetStatus
         publicationUrl: String
     }
@@ -157,7 +154,6 @@ export const typeDefs = [gql`
         id: ID
         cuId: ID
         month: String
-        comments: String
         budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
@@ -339,7 +335,6 @@ export const typeDefs = [gql`
     input BudgetStatementBatchAddInput {
         cuId: ID
         month: String
-        comments: String
         budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
