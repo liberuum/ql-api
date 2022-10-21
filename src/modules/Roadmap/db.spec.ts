@@ -106,7 +106,6 @@ it('returns list of outputs with id or undefined param', async () => {
 it('returns output with outputDate filter', async () => {
     const model = await getRoadmapModel();
     const entry = await model.getOutput('outputDate', '2022-03-14');
-    console.log(entry)
     expect(entry.length).toBeGreaterThan(0)
 });
 
@@ -160,7 +159,7 @@ it('returns list of reviews with taskId or undefined params', async () => {
     expect(entry1.length).toBeGreaterThan(0);
 });
 
-it('returns a review by reviewOutcome gree', async () => {
+it('returns a review by reviewOutcome green', async () => {
     const model = await getRoadmapModel();
     const entry = await model.getReview('reviewOutcome', 'Green');
     expect(entry[0].reviewOutcome).toEqual("Green");
