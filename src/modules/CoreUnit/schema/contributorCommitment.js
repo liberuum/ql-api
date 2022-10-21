@@ -90,7 +90,7 @@ export const resolvers = {
     ContributorCommitment: {
         contributor: async (parent, __, { dataSources }) => {
             const { contributorId } = parent;
-            const result = await dataSources.db.CoreUnit.getContributorById(contributorId);
+            const result = await dataSources.db.CoreUnit.getContributor('id', contributorId);
             return result;
         }
     }
