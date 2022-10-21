@@ -4,7 +4,7 @@ export const typeDefs = gql`
 
     type SocialMediaChannels {
         id: ID!
-        cuCode: String
+        cuId: String
         forumTag: String
         twitter: String
         youtube: String
@@ -32,7 +32,7 @@ export const typeDefs = gql`
 
     input SocialMediaChannelsFilter {
         id: ID
-        cuCode: String
+        cuId: String
         forumTag: String
         twitter: String
         youtube: String
