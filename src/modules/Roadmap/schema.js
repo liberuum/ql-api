@@ -173,7 +173,7 @@ export const typeDefs = [gql`
     input OutputFilter {
         id: ID
         name: String
-        roadmapId: ID
+        outputDate: String
         outputUrl: String
     }
 
@@ -393,7 +393,7 @@ export const resolvers = {
     Stakeholder: {
         roadmapStakeholder: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.Roadmap.getRoadmapStakeholdersByStakeholderId(id)
+            const result = await dataSources.db.Roadmap.getRoadmapStakeholder('stakeholderId', id)
             return result
         }
     },
