@@ -146,6 +146,9 @@ export const typeDefs = [gql`
     input Mip40Filter {
         id: ID
         cuMipId: ID
+        mip40Spn: String
+        mkrOnly: Boolean
+        mkrProgramLength: Float
     }
 
     input Mip40BudgetPeriodFilter {
