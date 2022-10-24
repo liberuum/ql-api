@@ -459,7 +459,7 @@ export const resolvers = {
     CoreUnit: {
         budgetStatements: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.BudgetStatement.getBudgetStatementByCuId(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatement('cuId', id);
             return result;
         },
     },
