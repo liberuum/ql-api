@@ -354,13 +354,6 @@ export const resolvers = {
             return result;
         }
     },
-    Mip41: {
-        contributor: async (parent, __, { dataSources }) => {
-            const { contributorId } = parent;
-            const result = await dataSources.db.CoreUnit.getContributorById(contributorId);
-            return result;
-        }
-    },
     Mip40Wallet: {
         mip40BudgetLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
