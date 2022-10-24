@@ -1,6 +1,7 @@
 import { gql } from "apollo-server-core";
 
 export const typeDefs = [gql`
+    "Table tracking change events in the Database"
     type ChangeTrackingEvent {
         id: ID!
         created_at: DateTime!,
@@ -10,11 +11,14 @@ export const typeDefs = [gql`
     }
 
     extend type Query {
+        "Retreive ALL Change Tracking Events"
         activityFeed: [ChangeTrackingEvent]
     }
 
     extend type CoreUnit {
+        "Latest Change Tracking Event"
         lastActivity: ChangeTrackingEvent
+        "Full activity feed of Change Tracking Events"
         activityFeed: [ChangeTrackingEvent]
     }
 `];

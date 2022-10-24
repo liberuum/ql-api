@@ -2,6 +2,7 @@ import { gql } from "apollo-server-core";
 
 export const typeDefs = gql`
 
+    "Information on the length of time and level of commitment the contributor has to their current position"
     type ContributorCommitment {
         id: ID!
         cuId: ID!
@@ -13,6 +14,7 @@ export const typeDefs = gql`
         jobTitle: String
     }
 
+    "Level of commitment - Part-Time / Full-Time etc"
     enum Commitment {
         FullTime
         PartTime
@@ -20,6 +22,7 @@ export const typeDefs = gql`
         Inactive
     }
 
+    "Social media information for a specific contributor"
     type Contributor {
         id: ID!
         name: String!
@@ -41,7 +44,8 @@ export const typeDefs = gql`
         cuCode: String
         jobTitle: String
     }
-
+    
+    "Allows filtering of the contributor table"
     input ContributorFilter {
         id: ID
         name: String
