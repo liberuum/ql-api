@@ -107,12 +107,6 @@ export const typeDefs = [gql`
         id: ID!
         cuMipId: ID!
         contributorId: ID
-        facilitatorName: String
-        discordHandle: String
-        twitterHandle: String
-        forumHandle: String
-        githubAccount: String
-        contributor: [Contributor]
     }
 
     input MipReplaceFilter {
