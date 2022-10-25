@@ -9,7 +9,7 @@ export const typeDefs = [gql`
     type User {
         id: ID
         cuId: ID
-        userName: String
+        username: String
     }
 
     type UserPayload {
@@ -19,17 +19,17 @@ export const typeDefs = [gql`
 
     input UserInput {
         cuId: ID!
-        userName: String!
+        username: String!
         password: String!
     }
 
     input AuthInput {
-        userName: String!
+        username: String!
         password: String!
     }
 
     input UpdatePassword {
-        userName: String!
+        username: String!
         password: String!
         newPassword: String!
     }
@@ -56,7 +56,7 @@ export const resolvers = {
     Mutation: {
         userLogin: async (_, { input }, { dataSources }) => {
             try {
-                const [user] = await dataSources.db.Auth.getUser(input.userName)
+                const [user] = await dataSources.db.Auth.getUser(input.username)
                 if (user != undefined) {
                     const match = await bcrypt.compare(input.password, user.password);
                     if (match === true) {
@@ -64,7 +64,7 @@ export const resolvers = {
                         const [resource] = resources.filter(rs => rs !== null)
                         const resourceId = resource.resourceId
                         const token = jwt.sign(
-                            { id: user.id, cuId: resourceId, userName: user.userName },
+                            { id: user.id, cuId: resourceId, username: user.username },
                             process.env.SECRET,
                             { algorithm: "HS256", subject: `${user.id}`, expiresIn: "7d" }
                         );
@@ -72,7 +72,7 @@ export const resolvers = {
                             user: {
                                 id: user.id,
                                 cuId: resourceId,
-                                userName: user.userName
+                                username: user.username
                             },
                             authToken: token
                         }
@@ -94,7 +94,7 @@ export const resolvers = {
                     const allowed = await auth.canManage('System', user.id)
                     if (allowed[0].count > 0) {
                         const hash = await bcrypt.hash(input.password, 10);
-                        const result = await dataSources.db.Auth.createUser(input.cuId, input.userName, hash)
+                        const result = await dataSources.db.Auth.createUser(input.cuId, input.username, hash)
                         return result;
                     } else {
                         throw new AuthenticationError('You are not authorized')
@@ -107,11 +107,11 @@ export const resolvers = {
         userChangePassword: async (_, { input }, { user, dataSources }) => {
             try {
                 if (user) {
-                    const [userObj] = await dataSources.db.Auth.getUser(input.userName)
+                    const [userObj] = await dataSources.db.Auth.getUser(input.username)
                     const match = await bcrypt.compare(input.password, userObj.password);
                     if (match) {
                         const hash = await bcrypt.hash(input.newPassword, 10);
-                        const result = await dataSources.db.Auth.changeUserPassword(input.userName, hash);
+                        const result = await dataSources.db.Auth.changeUserPassword(input.username, hash);
                         console.log('result', result)
                         return result[0];
                     } else {
