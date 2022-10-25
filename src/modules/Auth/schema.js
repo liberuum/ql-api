@@ -93,9 +93,14 @@ export const resolvers = {
                 } else {
                     const allowed = await dataSources.db.Auth.canManage(user.id, 'System')
                     if (allowed[0].count > 0) {
-                        const hash = await bcrypt.hash(input.password, 10);
-                        const result = await dataSources.db.Auth.createUser(input.cuId, input.username, hash)
-                        return result;
+                        const [user] = await dataSources.db.Auth.getUser(input.username);
+                        if (user === undefined) {
+                            const hash = await bcrypt.hash(input.password, 10);
+                            const result = await dataSources.db.Auth.createUser(input.cuId, input.username, hash)
+                            return result;
+                        } else {
+                            throw new Error('username already taken, try a new one')
+                        }
                     } else {
                         throw new AuthenticationError('You are not authorized')
                     }
@@ -124,5 +129,5 @@ export const resolvers = {
             }
         }
     }
-    
+
 };
