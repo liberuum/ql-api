@@ -3,7 +3,7 @@ import { Knex } from "knex";
 export interface User {
     id: string
     cuId: string
-    userName: string
+    username: string
 }
 
 export interface count {

@@ -10,10 +10,10 @@ async function getAuthModel(): Promise<AuthModel> {
     return db.module<AuthModel>('Auth');
 };
 
-it('returns user with userName: exampleName', async () => {
+it('returns user with username: exampleName', async () => {
     const model = await getAuthModel();
     const entry = await model.getUser('exampleName');
-    expect(entry[0].userName).toEqual('exampleName')
+    expect(entry[0].username).toEqual('exampleName')
 });
 
 it('returns resourceId with userId 1', async () => {
