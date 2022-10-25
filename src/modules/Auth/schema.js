@@ -91,7 +91,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login!")
                 } else {
-                    const allowed = await auth.canManage(user.id, 'System')
+                    const allowed = await dataSources.db.Auth.canManage(user.id, 'System')
                     if (allowed[0].count > 0) {
                         const hash = await bcrypt.hash(input.password, 10);
                         const result = await dataSources.db.Auth.createUser(input.cuId, input.username, hash)
