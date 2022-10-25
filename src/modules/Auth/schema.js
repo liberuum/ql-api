@@ -91,7 +91,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login!")
                 } else {
-                    const allowed = await auth.canManage('System', user.id)
+                    const allowed = await auth.canManage(user.id, 'System')
                     if (allowed[0].count > 0) {
                         const hash = await bcrypt.hash(input.password, 10);
                         const result = await dataSources.db.Auth.createUser(input.cuId, input.username, hash)
@@ -112,7 +112,6 @@ export const resolvers = {
                     if (match) {
                         const hash = await bcrypt.hash(input.newPassword, 10);
                         const result = await dataSources.db.Auth.changeUserPassword(input.username, hash);
-                        console.log('result', result)
                         return result[0];
                     } else {
                         throw new Error('wrong password')

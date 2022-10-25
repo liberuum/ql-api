@@ -508,7 +508,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetStatements")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         if (input.length < 1) {
                             throw new Error('"No input data')
@@ -531,7 +531,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetLineItems")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         //Tacking Change
                         const [CU] = await dataSources.db.CoreUnit.getCoreUnit('id', user.cuId);
@@ -555,7 +555,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetLineItem")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         //Tacking Change
                         const [CU] = await dataSources.db.CoreUnit.getCoreUnit('id', user.cuId);
@@ -580,7 +580,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetLineItem")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         //Tacking Change
                         const [CU] = await dataSources.db.CoreUnit.getCoreUnit('id', user.cuId);
@@ -604,7 +604,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to delete budgetLineItems")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         console.log(`deleting ${input.length} line items from CU ${user.cuId}`);
                         return await dataSources.db.BudgetStatement.batchDeleteLineItems(input)
@@ -622,7 +622,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         console.log(`Adding ${input.length} wallets to CU ${user.cuId}`)
                         return await dataSources.db.BudgetStatement.addBudgetStatementWallets(input);
@@ -639,7 +639,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         console.log(`Adding ${input.ftes} ftes to CU ${user.cuId}`)
                         return await dataSources.db.BudgetStatement.addBudgetStatementFTE(input);
@@ -656,7 +656,7 @@ export const resolvers = {
                 if (!user && !auth) {
                     throw new AuthenticationError("Not authenticated, login to update budgetStatementWallets")
                 } else {
-                    const allowed = await auth.canUpdate('CoreUnit', user.cuId)
+                    const allowed = await auth.canUpdate(user.cuId, 'CoreUnit')
                     if (allowed[0].count > 0) {
                         console.log(`Updating ${input.ftes} ftes to CU ${user.cuId}`)
                         return await dataSources.db.BudgetStatement.updateBudgetStatementFTE(input);

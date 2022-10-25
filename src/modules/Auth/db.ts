@@ -17,8 +17,8 @@ export class AuthModel {
         this.knex = knex;
     };
 
-    async getUser(userName: string): Promise<User[]> {
-        return this.knex('User').where('userName', userName)
+    async getUser(username: string): Promise<User[]> {
+        return this.knex('User').where('username', username)
     };
 
     async getResourceId(userId: number) {
@@ -62,17 +62,17 @@ export class AuthModel {
             });
     };
 
-    async changeUserPassword(userName: string, password: string): Promise<any> {
-        return this.knex('User').where('userName', userName).update('password', password).returning('*')
+    async changeUserPassword(username: string, password: string): Promise<any> {
+        return this.knex('User').where('username', username).update('password', password).returning('*')
     };
 
-    async createUser(cuId: string, userName: string, password: string): Promise<any> {
-        const user = await this.knex('User').insert({ userName, password }).returning("*");
+    async createUser(cuId: string, username: string, password: string): Promise<any> {
+        const user = await this.knex('User').insert({ username, password }).returning("*");
         const userRole = await this.knex('UserRole').insert({ userId: user[0].id, roleId: 1, resource: 'CoreUnit', resourceId: cuId }).returning('*');
         return {
             id: user[0].id,
             cuId: userRole[0].resourceId,
-            userName: user[0].userName
+            username: user[0].username
         }
 
     }
