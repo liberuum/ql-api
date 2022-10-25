@@ -58,6 +58,10 @@ export const typeDefs = gql`
         contributor(filter: ContributorFilter): [Contributor]
     }
 
+    extend type Mip41 {
+        contributor: [Contributor]
+    }
+
 `;
 
 export const resolvers = {
@@ -88,6 +92,13 @@ export const resolvers = {
         }
     },
     ContributorCommitment: {
+        contributor: async (parent, __, { dataSources }) => {
+            const { contributorId } = parent;
+            const result = await dataSources.db.CoreUnit.getContributor('id', contributorId);
+            return result;
+        }
+    },
+    Mip41: {
         contributor: async (parent, __, { dataSources }) => {
             const { contributorId } = parent;
             const result = await dataSources.db.CoreUnit.getContributor('id', contributorId);
