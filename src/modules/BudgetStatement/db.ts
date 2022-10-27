@@ -107,6 +107,18 @@ type FTE = {
     ftes: number
 }
 
+export interface BudgetStatementComment {
+    id: string
+    budgetStatementId: string
+    timestamp: string
+    comment: string
+}
+
+export interface BudgetStatementCommentAuthor {
+    id: string
+    name: string
+}
+
 export class BudgetStatementModel {
     knex: Knex;
     coreUnitModel: object;
@@ -267,6 +279,55 @@ export class BudgetStatementModel {
         return this.knex('BudgetStatementTransferRequest').where(`${paramName}`, paramValue)
     };
 
+    async getBudgetStatementComments(budgetStatementId: string | undefined): Promise<BudgetStatementComment[]> {
+        if (budgetStatementId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementComment')
+                .orderBy('id')
+        } else {
+            return this.knex('BudgetStatementComment').where('budgetStatementId', budgetStatementId)
+        }
+    };
+
+    async getBudgetStatementComment(
+        paramName: string,
+        paramValue: number | string,
+        secondParamName: string | undefined,
+        secondParamValue: number | string | undefined): Promise<BudgetStatementComment[]> {
+        if (secondParamName === undefined && secondParamValue === undefined) {
+            return this.knex('BudgetStatementComment').where(`${paramName}`, paramValue);
+        } else {
+            return this.knex('BudgetStatementComment').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
+        }
+    };
+
+    async getBudgetStatementCommentAuthors(bsCommentId: string | undefined): Promise<BudgetStatementCommentAuthor[]> {
+        if (bsCommentId === undefined) {
+            return this.knex
+                .select('*')
+                .from('BudgetStatementCommentAuthor')
+                .orderBy('id')
+        } else {
+            return this.knex('BudgetStatementCommentAuthor').where('bsCommentId', bsCommentId)
+        }
+    };
+
+    async getBudgetStatementCommentAuthor(paramName: string,
+        paramValue: number | string,
+        secondParamName: string | undefined,
+        secondParamValue: number | string | undefined): Promise<BudgetStatementCommentAuthor[]> {
+        if (secondParamName === undefined && secondParamValue === undefined) {
+            return this.knex('BudgetStatementCommentAuthor').where(`${paramName}`, paramValue);
+        } else {
+            return this.knex('BudgetStatementCommentAuthor').where(`${paramName}`, paramValue).andWhere(`${secondParamName}`, secondParamValue)
+        }
+    };
+
+    async getBsComment_BsAuthor(bsCommentId: string): Promise<any> {
+        return this.knex('BudgetStatementComment_BudgetStatementCommentAuthor').where('bsCommentId', bsCommentId);
+    }
+
     // ------------------- Adding data --------------------------------
 
     async addBatchtLineItems(rows: object[]) {
@@ -338,8 +399,7 @@ export class BudgetStatementModel {
         } catch (error) {
             await trx.rollback()
         }
-    }
-
+    };
 };
 
 export default (knex: Knex, deps: { [key: string]: object }) => new BudgetStatementModel(knex, deps['CoreUnit'], deps['Auth'])
