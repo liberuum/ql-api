@@ -42,7 +42,7 @@ export class AuthModel {
                 'RolePermission.permission': 'Update',
                 'RolePermission.resource': resourceType,
             })
-            .orWhere({ resourceId: null || resourceId })
+            .orWhere({ "resourceId": resourceId || null })
     };
 
     async canManage(userId: number, resourceType: string): Promise<any> {
