@@ -349,6 +349,17 @@ export class BudgetStatementModel {
         return this.knex('BudgetStatementFtes').insert({ budgetStatementId: input.budgetStatementId, month: input.month, ftes: input.ftes })
     };
 
+    async addBudgetStatementCommentAuthor(name: string): Promise<BudgetStatementCommentAuthor[]> {
+        return this.knex('BudgetStatementCommentAuthor').insert({ name }).returning('*');
+    }
+
+    async addBudgetStatementComment(budgetStatementId: number, comment: string): Promise<BudgetStatementComment[]> {
+        return this.knex('BudgetStatementComment').insert({ budgetStatementId, timestamp: new Date().toISOString(), comment }).returning('*');
+    }
+
+    async addCommentAuthor(bsCommentId: number, bsCommentAuthorId: number) {
+        await this.knex('BudgetStatementComment_BudgetStatementCommentAuthor').insert({ bsCommentId, bsCommentAuthorId })
+    }
     // ------------------- Updating data --------------------------------
 
     async updateLineItem(lineItem: lineItem) {
@@ -400,6 +411,11 @@ export class BudgetStatementModel {
             await trx.rollback()
         }
     };
+
+    async budgetStatementCommentDelete(commentId: number) {
+        await this.knex("BudgetStatementComment_BudgetStatementCommentAuthor").where('bsCommentId', commentId).del();
+        return await this.knex('BudgetStatementComment').where('id', commentId).del().returning('*');
+    }
 };
 
 export default (knex: Knex, deps: { [key: string]: object }) => new BudgetStatementModel(knex, deps['CoreUnit'], deps['Auth'])

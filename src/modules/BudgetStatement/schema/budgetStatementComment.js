@@ -37,6 +37,21 @@ export const typeDefs = [gql`
         budgetStatementCommentAuthor(filter: BudgetStatementCommentAuthorFilter): [BudgetStatementCommentAuthor]
     }
 
+    type Mutation {
+        budgetStatementCommentCreate(input: BudgetStatementCommentInput): [BudgetStatementComment]
+        budgetStatementCommentDelete(input: BudgetStatementCommentDeleteInput): [BudgetStatementComment]
+    }
+
+    input BudgetStatementCommentInput {
+        budgetStatementId: ID!
+        comment: String
+        commentAuthorName: String
+    }
+
+    input BudgetStatementCommentDeleteInput {
+        id: ID
+    }
+
 `];
 
 
@@ -86,6 +101,57 @@ export const resolvers = {
                 return await dataSources.db.BudgetStatement.getBudgetStatementCommentAuthor('id', comment_author.bsCommentAuthorId)
             } else {
                 return []
+            }
+        }
+    },
+    Mutation: {
+        budgetStatementCommentCreate: async (_, { input }, { user, auth, dataSources }) => {
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to create budget statment comments")
+                } else {
+                    const allowed = await dataSources.db.Auth.canUpdate(user.id, 'CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        if (input.length < 1) {
+                            throw new Error('"No input data')
+                        }
+                        console.log(`adding comment to budgetStatement id: ${input.budgetStatementId}`);
+                        // add to author table if user !exist
+                        let author = await dataSources.db.BudgetStatement.getBudgetStatementCommentAuthor('name', input.commentAuthorName)
+                        if (author.length < 1) {
+                            author = await dataSources.db.BudgetStatement.addBudgetStatementCommentAuthor(input.commentAuthorName)
+                        }
+                        // add comment
+                        const addedComment = await dataSources.db.BudgetStatement.addBudgetStatementComment(input.budgetStatementId, input.comment);
+                        // get comment Id and user Id and add to comment_author table relationship
+                        await dataSources.db.BudgetStatement.addCommentAuthor(addedComment[0].id, author[0].id)
+                        return addedComment;
+                    } else {
+                        throw new AuthenticationError('You are not authorized to create budget statement comments')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatements')
+            }
+        },
+        budgetStatementCommentDelete: async (_, { input }, { user, auth, dataSources }) => {
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login to create budget statment comments")
+                } else {
+                    const allowed = await dataSources.db.Auth.canUpdate(user.id, 'CoreUnit', user.cuId)
+                    if (allowed[0].count > 0) {
+                        if (input.length < 1) {
+                            throw new Error('"No input data')
+                        }
+                        console.log(`deleting comment id: ${input.id}`);
+                        return await dataSources.db.BudgetStatement.budgetStatementCommentDelete(input.id)
+                    } else {
+                        throw new AuthenticationError('You are not authorized to create budget statement comments')
+                    }
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to update budgetStatements')
             }
         }
     }
