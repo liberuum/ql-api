@@ -7,10 +7,13 @@ export const typeDefs = gql`
         id: ID!
         cuId: ID!
         contributorId: ID!
+        "Date on which this commitment period started"
         startDate: String!
+        "Level of commitment"
         commitment: Commitment
         cuCode: String!
         contributor: [Contributor]
+        "Role title"
         jobTitle: String
     }
 
@@ -56,9 +59,13 @@ export const typeDefs = gql`
     }
 
     type Query {
+        "Retrieve the full Contributor Commitment table"
         contributorCommitments: [ContributorCommitment]
+        "Retrieve specific data from the Contributor Commitment table"
         contributorCommitment(filter: ContributorCommitmentFilter): [ContributorCommitment]
+        "Retrieve ALL Contributors"
         contributors(limit: Int, offset: Int): [Contributor]
+        "Retrieve specific Contributor entries"
         contributor(filter: ContributorFilter): [Contributor]
     }
 

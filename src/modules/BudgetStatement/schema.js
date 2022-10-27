@@ -15,7 +15,9 @@ export const typeDefs = [gql`
         publicationUrl: String
         "Core Unit code as defined with the Core Units' MIP39"
         cuCode: String!
+        "Length of the MKR incentive programme - as defined within the Core Units MIP40"
         mkrProgramLength: Float
+        "Audit Reports provided by the Budget Statements Auditors - If applicable"
         auditReport: [AuditReport]
         "Number of full-time employees in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
@@ -51,7 +53,7 @@ export const typeDefs = [gql`
         id: ID!
         budgetStatementId: ID
         month: String
-        "Full-time employees"
+        "Full-time equivalents"
         ftes: Float
     }
 
