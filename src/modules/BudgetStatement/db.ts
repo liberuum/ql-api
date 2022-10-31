@@ -346,7 +346,7 @@ export class BudgetStatementModel {
     };
 
     async addBudgetStatementFTE(input: FTE) {
-        return this.knex('BudgetStatementFtes').insert({ budgetStatementId: input.budgetStatementId, month: input.month, ftes: input.ftes })
+        return this.knex('BudgetStatementFtes').insert({ budgetStatementId: input.budgetStatementId, month: input.month, ftes: input.ftes }).returning('*')
     };
 
     async addBudgetStatementCommentAuthor(name: string): Promise<BudgetStatementCommentAuthor[]> {
