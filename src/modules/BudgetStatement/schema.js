@@ -17,13 +17,13 @@ export const typeDefs = [gql`
         cuCode: String!
         "Length of the MKR incentive programme - as defined within the Core Units MIP40"
         mkrProgramLength: Float
-        "Audit Reports provided by the Budget Statements Auditors - If applicable"
+        "Audit Reports provided by the Budget Statement Auditors - If applicable"
         auditReport: [AuditReport]
-        "Number of full-time employees in the corresponding budget statement"
+        "Number of full-time equivalents in the corresponding Budget Statement period"
         budgetStatementFTEs: [BudgetStatementFTEs]
-        "Details on the amount of MKR vested in the corresponding budget statement"
+        "Details on the amount of MKR vested in the corresponding budget statement period"
         budgetStatementMKRVest: [BudgetStatementMKRVest]
-        "Details on the wallets used for budget statement wallets"
+        "Details on the wallets used within the corresponding Budget Statement"
         budgetStatementWallet: [BudgetStatementWallet]
     }
 
@@ -60,6 +60,7 @@ export const typeDefs = [gql`
     type BudgetStatementMKRVest {
         id: ID!
         budgetStatementId: ID!
+        "Date that the MKR becomes accessible by contributors"
         vestingDate: String!
         "Current MKR amount"
         mkrAmount: Float
@@ -100,17 +101,26 @@ export const typeDefs = [gql`
         budgetStatementWalletId: ID!
         month: String
         position: Int
+        "If applicable - The subgroup of the corresponding expense"
         group: String
+        "Budget category provided by the Core Unit"
         budgetCategory: String
+        "Forecasted expense amount - Forecasts provided by the corresponding Core Unit"
         forecast: Float
+        "Actual expense amount"
         actual: Float
+        "If applicable - Optional comment provided by Core Unit"
         comments: String
+        "Higher level budget categorisation - Also known as Expense Type as defined by the Strategic Finance Core Unit"
         canonicalBudgetCategory: CanonicalBudgetCategory
+        "Boolean value - Headcount (workforce) expenses"
         headcountExpense: Boolean
+        "Budget cap for the corresponding line item - as defined within the Core Unit MIP40"
         budgetCap: Float
         payment: Float
     }
 
+    "AKA Expense Type as defined within the Strategic Finance Chart of Accounts"
     enum CanonicalBudgetCategory {
         CompensationAndBenefits
         AdminExpense
@@ -152,10 +162,12 @@ export const typeDefs = [gql`
         publicationUrl: String
     }
 
+    "Optional field used to filter Budget Statement response"
     input BudgetStatementFilter {
         id: ID
         cuId: ID
         month: String
+        "Status of the budget as defined by the Core Unit"
         budgetStatus: BudgetStatus
         publicationUrl: String
         cuCode: String
@@ -226,16 +238,22 @@ export const typeDefs = [gql`
     }
 
     extend type Query {
+        "Access specific Budget Statements using a filter"
         budgetStatement(filter: BudgetStatementFilter): [BudgetStatement]
+        "Access ALL Budget Statements"
         budgetStatements(limit: Int, offset: Int): [BudgetStatement!]
+        "Access specific Audit Reports using a filter"
         auditReport(filter: AuditReportFilter): [AuditReport]
+        "Access ALL Audit Reports"
         auditReports: [AuditReport]
         budgetStatementFTEs: [BudgetStatementFTEs]
         budgetStatementFTE(filter: BudgetStatementFTEsFilter): [BudgetStatementFTEs]
         budgetStatementMKRVests: [BudgetStatementMKRVest]
+        "Access information on a specific MKR vesting schedule using filters"
         budgetStatementMKRVest(filter: BudgetStatementMKRVestFilter): [BudgetStatementMKRVest]
+        "Access information on ALL wallets used in Budget Statements across the DAO"
         budgetStatementWallets: [BudgetStatementWallet]
-        budgetStatementWallet(filter: BudgetStatementWalletFilter): [BudgetStatementWallet]
+        budgetStatementWallet(filter: BudgetStatementWalletFilter): [BudgetStatementWallet] 
         budgetStatementLineItems(limit: Int, offset: Int): [BudgetStatementLineItem]
         budgetStatementLineItem(filter: BudgetStatementLineItemFilter): [BudgetStatementLineItem]
         budgetStatementPayments: [BudgetStatementPayment]
@@ -245,7 +263,7 @@ export const typeDefs = [gql`
     }
 
     extend type CoreUnit {
-        "Access details on the budget statements of a Core Unit"
+        "Access Budget Statements of a Core Unit"
         budgetStatements: [BudgetStatement]
     }
 
