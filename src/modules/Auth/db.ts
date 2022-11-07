@@ -1,9 +1,10 @@
 import { Knex } from "knex";
+import { orderBy } from "lodash";
 
 export interface User {
     id: string
-    cuId: string
     username: string
+    isActive: string
 }
 
 export interface count {
@@ -75,6 +76,48 @@ export class AuthModel {
             username: user[0].username
         }
 
+    };
+
+    async getUsers(userId: number | undefined): Promise<User[]> {
+        if (userId !== undefined) {
+            return await this.knex
+                .select('User.id', 'username', 'roleName', 'UserRole.roleId', 'permission', 'UserRole.resource', 'UserRole.resourceId')
+                .from('User')
+                .join('UserRole', function () {
+                    this
+                        .on('UserRole.userId', '=', 'User.id')
+                })
+                .join('Role', function () {
+                    this
+                        .on('Role.id', '=', 'UserRole.roleId')
+                })
+                .join('RolePermission', function () {
+                    this
+                        .on('RolePermission.roleId', '=', 'UserRole.roleId')
+                        .andOn('UserRole.resource', '=', 'RolePermission.resource')
+                })
+                .orderBy('User.id', 'asc')
+                .where('User.id', userId)
+
+        } else {
+            return await this.knex
+                .select('User.id', 'username', 'roleName', 'UserRole.roleId', 'permission', 'UserRole.resource', 'UserRole.resourceId')
+                .from('User')
+                .join('UserRole', function () {
+                    this
+                        .on('UserRole.userId', '=', 'User.id')
+                })
+                .join('Role', function () {
+                    this
+                        .on('Role.id', '=', 'UserRole.roleId')
+                })
+                .join('RolePermission', function () {
+                    this
+                        .on('RolePermission.roleId', '=', 'UserRole.roleId')
+                        .andOn('UserRole.resource', '=', 'RolePermission.resource')
+                })
+                .orderBy('User.id', 'asc')
+        }
     }
 };
 
