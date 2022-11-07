@@ -1,12 +1,16 @@
 import { gql } from "apollo-server-core";
 
 export const typeDefs = [gql`
-    "Table tracking change events in the Database"
+    "Table tracking changes in the database"
     type ChangeTrackingEvent {
         id: ID!
+        "Date of change"
         created_at: DateTime!,
+        "Type of change"
         event: String!,
+        "Parameters of change"
         params: JSON!,
+        "Description of the change made"
         description: String!
     }
 
