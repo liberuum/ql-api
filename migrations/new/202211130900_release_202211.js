@@ -7,8 +7,9 @@ export async function up(knex) {
     //Add the CoreUnit.legacyBudgetStatementUrl attribute to the Budget Statment table
     await knex.schema.alterTable('CoreUnit', function (table) {
         table.string('legacyBudgetStatementUrl');
-      })
+    })
 
+    //Add System to the Role table
     await knex.schema.alterTable('Role', function (table) {
     table.boolean('system');
     })
@@ -22,7 +23,7 @@ export async function up(knex) {
     knex.insert({
         roleId: 2,
         resource: 'CoreUnit',
-        Permission: 'Audit'
+        permission: 'Audit'
     }).into('RolePermission');
 
 
@@ -32,22 +33,28 @@ export async function up(knex) {
 // Down migration drops the ..... tables
 export async function down(knex) {
 
-    console.log('Deleting Auditor role...')
+    console.log('Deleting Auditor role...');
 
     knex('Role')
     .where({ roleName: 'Auditor' })
-    .del()
+    .del();
 
-    console.log('Deleting Role.system attribute...')
+    console.log('Deleting Audit permission...');
+
+    knex('RolePermission')
+    .where({ permission: 'Audit' })
+    .del();
+    
+    console.log('Deleting Role.system attribute...');
 
     await knex.schema.alterTable('Role', function (table) {
         table.dropColumn('system');
-      })
+      });
 
     console.log('Deleting CoreUnit.legacyBudgetStatementUrl attribute...')
 
     await knex.schema.alterTable('CoreUnit', function (table) {
         table.dropColumn('legacyBudgetSatementUrl');
-      })
+      });
     
 };
