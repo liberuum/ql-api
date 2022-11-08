@@ -41,10 +41,17 @@ export const typeDefs = [gql`
         newPassword: String!
     }
 
-    type Query {
-        users: [User]
+    input UsersFilter {
+        id: ID
+        username: String
+        # isActive: String
     }
     
+    type Query {
+        user(filter: UsersFilter): [User]
+        users: [User]
+    }
+
     type Mutation {
         userCreate(input: UserInput): User!
         userLogin(input: AuthInput!): UserPayload!
@@ -54,6 +61,30 @@ export const typeDefs = [gql`
 
 export const resolvers = {
     Query: {
+        user: async (_, { filter }, { user, auth, dataSources }) => {
+            try {
+                if (!user && !auth) {
+                    throw new AuthenticationError("Not authenticated, login!")
+                } else {
+                    const queryParams = Object.keys(filter);
+                    if (queryParams.length > 1) {
+                        throw "Choose no more than 1 parameters"
+                    }
+                    const paramName = queryParams[0];
+                    const paramValue = filter[queryParams[0]];
+                    const allowed = await dataSources.db.Auth.canManage(user.id, 'System')
+                    if (allowed[0].count > 0) {
+                        const result = await dataSources.db.Auth.getUsers(paramName, paramValue);
+                        return parseToSchemaUser(result)
+                    } else {
+                        throw new AuthenticationError('You are not authorized to perform this query')
+                    }
+
+                }
+            } catch (error) {
+                throw new AuthenticationError(error ? error : 'You are not authorized to perform this query')
+            }
+        },
         users: async (_, __, { user, auth, dataSources }) => {
             try {
                 if (!user && !auth) {
@@ -182,7 +213,7 @@ const parseToSchemaUser = (result) => {
                 }
             })
             userObj.roles.push(role)
-            if(role2.id !== ''){
+            if (role2.id !== '') {
                 userObj.roles.push(role2)
             }
 
