@@ -78,8 +78,8 @@ export class AuthModel {
 
     };
 
-    async getUsers(userId: number | undefined): Promise<User[]> {
-        if (userId !== undefined) {
+    async getUsers(paramName: string | undefined, paramValue: number | string | undefined): Promise<User[]> {
+        if (paramName !== undefined && paramValue !== undefined) {
             return await this.knex
                 .select('User.id', 'username', 'roleName', 'UserRole.roleId', 'permission', 'UserRole.resource', 'UserRole.resourceId')
                 .from('User')
@@ -97,7 +97,7 @@ export class AuthModel {
                         .andOn('UserRole.resource', '=', 'RolePermission.resource')
                 })
                 .orderBy('User.id', 'asc')
-                .where('User.id', userId)
+                .where(paramName === 'id' ? 'User.id' : `${paramName}`, paramValue)
 
         } else {
             return await this.knex
