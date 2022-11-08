@@ -20,7 +20,7 @@ import {
         cuCode: String!
         mkrProgramLength: Float
         auditReport: [AuditReport]
-        "Number of full-time employees in the corresponding budget statement"
+        "Number of full-time equivalents in the corresponding budget statement"
         budgetStatementFTEs: [BudgetStatementFTEs]
         "Details on the amount of MKR vested in the corresponding budget statement"
         budgetStatementMKRVest: [BudgetStatementMKRVest]
@@ -49,7 +49,7 @@ const resolvers = _.merge(
         id: ID!
         budgetStatementId: ID
         month: String
-        "Full-time employees"
+        "Full-time equivalents"
         ftes: Float
     }
 
