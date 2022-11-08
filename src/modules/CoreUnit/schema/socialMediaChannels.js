@@ -5,7 +5,7 @@ export const typeDefs = gql`
     "The social media channels of a Core Unit - If applicable "
     type SocialMediaChannels {
         id: ID!
-        cuCode: String
+        cuId: String
         forumTag: String
         twitter: String
         youtube: String
@@ -34,7 +34,7 @@ export const typeDefs = gql`
     "Allows for filtering of Core Units using Social Media channel values"
     input SocialMediaChannelsFilter {
         id: ID
-        cuCode: String
+        cuId: String
         forumTag: String
         twitter: String
         youtube: String

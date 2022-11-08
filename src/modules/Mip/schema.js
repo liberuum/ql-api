@@ -131,12 +131,6 @@ export const typeDefs = [gql`
         id: ID!
         cuMipId: ID!
         contributorId: ID
-        facilitatorName: String
-        discordHandle: String
-        twitterHandle: String
-        forumHandle: String
-        githubAccount: String
-        contributor: [Contributor]
     }
 
     input MipReplaceFilter {
@@ -173,6 +167,9 @@ export const typeDefs = [gql`
     input Mip40Filter {
         id: ID
         cuMipId: ID
+        mip40Spn: String
+        mkrOnly: Boolean
+        mkrProgramLength: Float
     }
 
     "Allows for filtering of Core Unit MIP40's using the MIP40BudgetPeriod table"
@@ -394,13 +391,6 @@ export const resolvers = {
         mip40Wallet: async (parent, __, { dataSources }) => {
             const { id } = parent;
             const result = await dataSources.db.Mip.getMip40Wallets(id);
-            return result;
-        }
-    },
-    Mip41: {
-        contributor: async (parent, __, { dataSources }) => {
-            const { contributorId } = parent;
-            const result = await dataSources.db.CoreUnit.getContributorById(contributorId);
             return result;
         }
     },

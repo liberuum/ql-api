@@ -27,16 +27,16 @@ function buildExpressApp() {
     const app = express();
     app.use(compression());
     app.use(expressjwt(jwtConfig));
-    
+
     return app;
 }
 
-async function startApolloServer(app: express.Express, apiModules:ApiModules, options:ListenOptions) {
+async function startApolloServer(app: express.Express, apiModules: ApiModules, options: ListenOptions) {
     const httpServer = http.createServer(app);
-    
-    const schema = makeExecutableSchema({ 
+
+    const schema = makeExecutableSchema({
         typeDefs: apiModules.typeDefs,
-        resolvers: apiModules.resolvers 
+        resolvers: apiModules.resolvers
     });
 
     const server = new ApolloServer({
@@ -55,7 +55,7 @@ async function startApolloServer(app: express.Express, apiModules:ApiModules, op
                 } else {
                     return null;
                 }
-            } catch (error:any) {
+            } catch (error: any) {
                 throw new AuthenticationError(error.message)
             }
 
@@ -70,7 +70,7 @@ async function startApolloServer(app: express.Express, apiModules:ApiModules, op
 };
 
 dotenv.config();
-const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 4000; 
+const port = process.env.PORT ? Number.parseInt(process.env.PORT) : 4000;
 const apiModules = await initApi();
 
 startApolloServer(buildExpressApp(), apiModules, { port });

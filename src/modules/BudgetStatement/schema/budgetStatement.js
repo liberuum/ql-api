@@ -1,9 +1,6 @@
-import _ from 'lodash';
+import { gql, AuthenticationError } from 'apollo-server-core';
 
-import {
-    typeDefs as BudgetStatement,
-    resolvers as BudgetStatementResolvers
-} from './schema/budgetStatement.js';
+export const typeDefs = [gql`
 
     type BudgetStatement {
         "Auto generated id field"
@@ -28,15 +25,20 @@ import {
         budgetStatementWallet: [BudgetStatementWallet]
     }
 
-const typeDefs = [
-    BudgetStatement,
-    BudgetStatementComment
-];
+    enum BudgetStatus {
+        Final
+        Draft
+        SubmittedToAuditor
+        AwaitingCorrections
+    } 
 
-const resolvers = _.merge(
-    BudgetStatementResolvers,
-    BudgetStatementCommentResolvers
-);
+    type AuditReport {
+        id: ID!
+        budgetStatementId: ID!
+        auditStatus: AuditStatus
+        reportUrl: String
+        timestamp: Timestamp
+    }
 
     enum AuditStatus {
         Approved
@@ -457,7 +459,7 @@ export const resolvers = {
     CoreUnit: {
         budgetStatements: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.BudgetStatement.getBudgetStatementByCuId(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatement('cuId', id);
             return result;
         },
     },
@@ -486,7 +488,7 @@ export const resolvers = {
     BudgetStatementWallet: {
         budgetStatementLineItem: async (parent, __, { dataSources }) => {
             const { id } = parent;
-            const result = await dataSources.db.BudgetStatement.getLineItemsByWalletId(id);
+            const result = await dataSources.db.BudgetStatement.getBudgetStatementLineItem('budgetStatementWalletId', id);
             return result;
         },
         budgetStatementPayment: async (parent, __, { dataSources }) => {

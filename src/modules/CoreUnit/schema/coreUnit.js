@@ -27,7 +27,6 @@ export const typeDefs = gql`
         contributorCommitment: [ContributorCommitment]
         "Access details on the relevant GitHub contributions of a Core Unit"
         cuGithubContribution: [CuGithubContribution]
-        
         cuUpdates: [CuUpdate]
     }
 
@@ -75,7 +74,6 @@ export const typeDefs = gql`
         updateDate: DateTime
         updateUrl: String
     }
-
 
     input CoreUnitInput {
         code: String!
